@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { VerifyCredentialSearch } from "@/components/VerifyCredentialSearch";
 
 export default function HomePage() {
   return (
@@ -43,7 +44,7 @@ export default function HomePage() {
             Prove your legitimacy. Unlock opportunities. Access competitions.
           </p>
 
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex items-center justify-center gap-4 mb-12">
             <Link href="/signup">
               <Button variant="accent" size="lg">Apply for Accreditation</Button>
             </Link>
@@ -52,6 +53,14 @@ export default function HomePage() {
                 Sign In
               </Button>
             </Link>
+          </div>
+
+          {/* Verify credential search */}
+          <div className="pt-8 border-t border-cs-800 max-w-md mx-auto">
+            <div className="text-[8px] font-mono text-cs-600 uppercase tracking-widest mb-3">
+              ◇ Verify a StartupCred Credential
+            </div>
+            <VerifyCredentialSearch />
           </div>
         </div>
       </main>

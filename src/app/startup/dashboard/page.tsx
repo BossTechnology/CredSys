@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
@@ -8,28 +9,41 @@ import { CredBadge } from "@/components/ui/CredBadge";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 import { AlertBox } from "@/components/ui/AlertBox";
 import { formatDate } from "@/lib/utils";
-import type { AccreditationRequest } from "@/lib/supabase/types";
+import type { AccreditationStatus } from "@/lib/supabase/types";
 
 export default async function StartupDashboardPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
+  const admin = createAdminClient();
   const [{ data: profile }, { data: requests }] = await Promise.all([
-    supabase.from("profiles").select("*").eq("user_id", user.id).single(),
-    supabase
+    admin.from("profiles").select("*").eq("user_id", user.id).single(),
+    admin
       .from("accreditation_requests")
-      .select("*, evaluator:evaluator_id(org_name,email)")
+      .select("*")
       .eq("startup_id", user.id)
       .order("created_at", { ascending: false }),
   ]);
 
-  const latest = requests?.[0] as AccreditationRequest | undefined;
-  const isAccredited = latest?.status === "accredited";
+  const allRequests = requests ?? [];
+  const latest = allRequests[0];
+  const status = latest?.status as AccreditationStatus | undefined;
+  const isAccredited = status === "accredited";
+
+  // Get evaluator name if assigned
+  let evaluatorName: string | null = null;
+  if (latest?.evaluator_id) {
+    const { data: ev } = await admin
+      .from("profiles")
+      .select("org_name")
+      .eq("user_id", latest.evaluator_id)
+      .single();
+    evaluatorName = ev?.org_name ?? null;
+  }
 
   return (
     <div className="max-w-[840px] mx-auto px-7 py-8">
-      {/* Page header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold">{profile?.org_name ?? "My Startup"}</h1>
         <p className="text-[8px] font-mono text-cs-400 uppercase tracking-widest mt-1">
@@ -37,14 +51,12 @@ export default async function StartupDashboardPage() {
         </p>
       </div>
 
-      {/* Pending activation warning */}
       {!profile?.is_active && (
         <AlertBox variant="accent" title="Account pending activation." className="mb-4">
           Our team is reviewing your profile. You will be notified when your account is activated.
         </AlertBox>
       )}
 
-      {/* Accreditation status */}
       <SectionDivider label="Accreditation Status" className="mb-3" />
 
       {!latest ? (
@@ -58,13 +70,12 @@ export default async function StartupDashboardPage() {
         </div>
       ) : (
         <div className="border border-cs-200 bg-white">
-          {/* Status row */}
           <div className="px-4 py-3 flex items-center justify-between border-b border-cs-200">
             <div>
               <div className="text-[8px] font-mono text-cs-400 uppercase tracking-widest mb-1">
                 Current Status
               </div>
-              <Badge variant={latest.status} />
+              <Badge variant={status!} />
             </div>
             <div className="text-right">
               <div className="text-[8px] font-mono text-cs-400 uppercase tracking-widest mb-1">
@@ -74,30 +85,26 @@ export default async function StartupDashboardPage() {
                 {formatDate(latest.created_at)}
               </div>
             </div>
-            {latest.evaluator && (
+            {evaluatorName && (
               <div className="text-right">
                 <div className="text-[8px] font-mono text-cs-400 uppercase tracking-widest mb-1">
                   Evaluator
                 </div>
                 <div className="text-[8px] font-mono font-semibold">
-                  {(latest.evaluator as { org_name: string }).org_name}
+                  {evaluatorName}
                 </div>
               </div>
             )}
           </div>
 
-          {/* Workflow bar */}
-          {["assigned", "interview", "implementing", "verifying", "accredited"].includes(
-            latest.status
-          ) && (
+          {status && ["assigned", "interview", "implementing", "verifying", "accredited"].includes(status) && (
             <div className="px-4 py-3">
-              <WorkflowStatusBar currentStatus={latest.status} />
+              <WorkflowStatusBar currentStatus={status} />
             </div>
           )}
         </div>
       )}
 
-      {/* StartupCred Badge */}
       {isAccredited && latest?.unique_code && (
         <>
           <SectionDivider label="Your StartupCred Badge" variant="accent" className="mt-6 mb-3" />
@@ -117,17 +124,16 @@ export default async function StartupDashboardPage() {
         </>
       )}
 
-      {/* Request history */}
-      {requests && requests.length > 1 && (
+      {allRequests.length > 1 && (
         <>
           <SectionDivider label="Request History" className="mt-6 mb-3" />
           <div className="border border-cs-200 divide-y divide-cs-100">
-            {requests.map((req) => (
+            {allRequests.map((req) => (
               <div key={req.id} className="px-4 py-2 flex items-center justify-between">
                 <span className="text-[8px] font-mono text-cs-500">
                   {formatDate(req.created_at)}
                 </span>
-                <Badge variant={(req as AccreditationRequest).status} />
+                <Badge variant={req.status as AccreditationStatus} />
               </div>
             ))}
           </div>

@@ -1,5 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
-import { SectionDivider } from "@/components/ui/SectionDivider";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -7,48 +6,54 @@ import { formatDateShort } from "@/lib/utils";
 import { AssignEvaluatorForm } from "@/components/admin/AssignEvaluatorForm";
 import type { AccreditationStatus } from "@/lib/supabase/types";
 
+type Row = {
+  id: string;
+  status: AccreditationStatus;
+  startup_id: string;
+  evaluator_id: string | null;
+  startup_org_name: string;
+  startup_email: string;
+  updated_at: string;
+  evaluator_org_name: string | null;
+};
+
 export default async function AdminAccreditationsPage({
   searchParams,
 }: {
   searchParams: Promise<{ filter?: string }>;
 }) {
   const { filter } = await searchParams;
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   let query = supabase
     .from("accreditation_requests")
-    .select("*, startup:startup_id(org_name,email), evaluator:evaluator_id(org_name)")
+    .select("id,status,startup_id,evaluator_id,startup_org_name,startup_email,updated_at")
     .order("updated_at", { ascending: false });
 
   if (filter === "unassigned") {
     query = query.is("evaluator_id", null).eq("status", "submitted");
   }
 
-  const [{ data: requests }, { data: evaluators }] = await Promise.all([
+  const [{ data: requests }, { data: profiles }] = await Promise.all([
     query,
-    supabase
-      .from("profiles")
-      .select("user_id,org_name")
-      .eq("role", "evaluator")
-      .eq("is_active", true),
+    supabase.from("profiles").select("user_id,org_name,role,is_active"),
   ]);
 
-  type Row = {
-    id: string;
-    status: AccreditationStatus;
-    startup: { org_name: string; email: string };
-    evaluator: { org_name: string } | null;
-    updated_at: string;
-  };
+  const profileMap = new Map((profiles ?? []).map((p) => [p.user_id, p]));
+  const rows: Row[] = (requests ?? []).map((r) => ({
+    ...r,
+    evaluator_org_name: r.evaluator_id ? profileMap.get(r.evaluator_id)?.org_name ?? null : null,
+  }));
+  const evaluators = (profiles ?? []).filter((p) => p.role === "evaluator" && p.is_active);
 
   const columns: Column<Row>[] = [
     {
-      key: "startup",
+      key: "startup_org_name",
       label: "Startup",
       render: (_, row) => (
         <div>
-          <div className="font-semibold text-[8px]">{row.startup?.org_name}</div>
-          <div className="text-cs-400 text-[7px] font-mono">{row.startup?.email}</div>
+          <div className="font-semibold text-[8px]">{row.startup_org_name}</div>
+          <div className="text-cs-400 text-[7px] font-mono">{row.startup_email}</div>
         </div>
       ),
     },
@@ -58,11 +63,11 @@ export default async function AdminAccreditationsPage({
       render: (v) => <Badge variant={v as AccreditationStatus} />,
     },
     {
-      key: "evaluator",
+      key: "evaluator_org_name",
       label: "Evaluator",
-      render: (_, row) =>
-        row.evaluator ? (
-          <span className="text-[8px] font-semibold">{row.evaluator.org_name}</span>
+      render: (v) =>
+        v ? (
+          <span className="text-[8px] font-semibold">{String(v)}</span>
         ) : (
           <span className="text-cs-red text-[7px] font-mono">— Unassigned</span>
         ),
@@ -79,13 +84,13 @@ export default async function AdminAccreditationsPage({
       label: "Actions",
       render: (_, row) => (
         <div className="flex items-center gap-2">
-          {!row.evaluator && (
+          {!row.evaluator_id && (
             <AssignEvaluatorForm
               requestId={row.id}
-              evaluators={evaluators ?? []}
+              evaluators={evaluators}
             />
           )}
-          {row.evaluator && (
+          {row.evaluator_id && (
             <Button variant="ghost" size="sm">Reassign</Button>
           )}
         </div>
@@ -93,8 +98,8 @@ export default async function AdminAccreditationsPage({
     },
   ];
 
-  const total = requests?.length ?? 0;
-  const unassigned = requests?.filter((r) => !r.evaluator_id).length ?? 0;
+  const total = rows.length;
+  const unassigned = rows.filter((r) => !r.evaluator_id).length;
 
   return (
     <div className="max-w-[1280px] mx-auto px-7 py-6">
@@ -113,10 +118,10 @@ export default async function AdminAccreditationsPage({
 
       <DataTable
         columns={columns}
-        data={(requests ?? []) as Row[]}
+        data={rows}
         rowKey="id"
         title={`Accreditation Pipeline · All Statuses · ${total} Shown`}
-        isAlertRow={(row) => !row.evaluator}
+        isAlertRow={(row) => !row.evaluator_id}
         emptyMessage="No accreditation requests found."
       />
     </div>

@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { Badge } from "@/components/ui/Badge";
@@ -25,7 +25,7 @@ const STATUS_BADGE_MAP: Record<CompetitionStatus, "active" | "pending" | "accred
 } as never;
 
 export default async function AdminCompetitionsPage() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const { data: competitions } = await supabase
     .from("competitions")

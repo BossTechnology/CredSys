@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { formatDate } from "@/lib/utils";
@@ -14,7 +14,7 @@ type CredRow = {
 };
 
 export default async function CredListPage() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const { data: accredited } = await supabase
     .from("accreditation_requests")
@@ -42,7 +42,14 @@ export default async function CredListPage() {
       key: "unique_code",
       label: "Credential ID",
       render: (v) => (
-        <span className="font-mono text-[8px] text-sb-text font-semibold">{String(v)}</span>
+        <a
+          href={`/verify/${v}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-mono text-[8px] text-sb-text font-semibold hover:underline"
+        >
+          {String(v)} ↗
+        </a>
       ),
     },
     {

@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { Button } from "@/components/ui/Button";
@@ -21,7 +21,7 @@ export default async function AdminEvaluatorsPage({
   searchParams: Promise<{ filter?: string }>;
 }) {
   const { filter } = await searchParams;
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   let query = supabase
     .from("profiles")
