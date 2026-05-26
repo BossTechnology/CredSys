@@ -1,11 +1,8 @@
-"use client";
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Input, Textarea, Select } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { SectionDivider } from "@/components/ui/SectionDivider";
-import { createClient } from "@/lib/supabase/client";
+import { submitAccreditationRequest } from "@/app/actions/apply";
+import Link from "next/link";
 
 const INDUSTRY_OPTIONS = [
   { value: "fintech", label: "Fintech" },
@@ -28,46 +25,6 @@ const STAGE_OPTIONS = [
 ];
 
 export default function ApplyPage() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { setError("Not authenticated."); setLoading(false); return; }
-
-    const fd = new FormData(e.currentTarget);
-
-    const { error: insertError } = await supabase
-      .from("accreditation_requests")
-      .insert({
-        startup_id: user.id,
-        status: "submitted",
-        startup_name: fd.get("startup_name") as string,
-        startup_email: user.email,
-        startup_org_name: fd.get("startup_name") as string,
-        industry: fd.get("industry") as string,
-        stage: fd.get("stage") as string,
-        description: fd.get("description") as string,
-        website: fd.get("website") as string,
-        country: fd.get("country") as string,
-        team_size: fd.get("team_size") ? Number(fd.get("team_size")) : null,
-      });
-
-    if (insertError) {
-      setError(insertError.message);
-      setLoading(false);
-      return;
-    }
-
-    router.push("/startup/dashboard");
-  }
-
   return (
     <div className="max-w-[600px] mx-auto px-7 py-8">
       <div className="mb-6">
@@ -77,8 +34,7 @@ export default function ApplyPage() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-        {/* Section 1: Basic info */}
+      <form action={submitAccreditationRequest} className="flex flex-col gap-5">
         <SectionDivider label="01 — Startup Information" />
         <div className="border border-cs-200 bg-white p-4 flex flex-col gap-3">
           <Input name="startup_name" label="Startup Name" placeholder="Acme Startup Inc." required />
@@ -103,7 +59,6 @@ export default function ApplyPage() {
           <Input name="team_size" type="number" label="Team Size" placeholder="5" min={1} />
         </div>
 
-        {/* Section 2: Description */}
         <SectionDivider label="02 — About Your Startup" />
         <div className="border border-cs-200 bg-white p-4 flex flex-col gap-3">
           <Textarea
@@ -130,7 +85,6 @@ export default function ApplyPage() {
           />
         </div>
 
-        {/* Section 3: Evidence */}
         <SectionDivider label="03 — Supporting Evidence" />
         <div className="border border-cs-200 bg-white p-4 flex flex-col gap-3">
           <Input
@@ -154,24 +108,15 @@ export default function ApplyPage() {
           />
         </div>
 
-        {error && (
-          <div className="bg-cs-red-100 border border-cs-red px-3 py-2 text-[8px] font-mono text-cs-red">
-            {error}
-          </div>
-        )}
-
         <div className="flex gap-3">
-          <Button type="submit" loading={loading} size="lg">
+          <Button type="submit" size="lg">
             Submit Accreditation Request
           </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="lg"
-            onClick={() => router.back()}
-          >
-            Cancel
-          </Button>
+          <Link href="/startup/dashboard">
+            <Button type="button" variant="ghost" size="lg">
+              Cancel
+            </Button>
+          </Link>
         </div>
       </form>
     </div>
