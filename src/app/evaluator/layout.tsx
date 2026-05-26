@@ -1,7 +1,14 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { redirect } from "next/navigation";
 import { PortalNav } from "@/components/navigation/PortalNav";
 import { signOut } from "@/app/actions/auth";
+
+const ROLE_ROUTES: Record<string, string> = {
+  startup: "/startup/dashboard",
+  accelerator: "/accelerator/dashboard",
+  admin: "/admin/overview",
+};
 
 export default async function EvaluatorLayout({
   children,
@@ -12,13 +19,16 @@ export default async function EvaluatorLayout({
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
+  const admin = createAdminClient();
+  const { data: profile } = await admin
     .from("profiles")
     .select("org_name, role, is_active")
     .eq("user_id", user.id)
     .single();
 
-  if (profile?.role !== "evaluator") redirect("/login");
+  if (profile?.role && profile.role !== "evaluator") {
+    redirect(ROLE_ROUTES[profile.role] ?? "/login");
+  }
 
   const navItems = [
     { label: "Dashboard", href: "/evaluator/dashboard" },

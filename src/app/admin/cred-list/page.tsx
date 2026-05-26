@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { formatDate } from "@/lib/utils";
@@ -14,7 +14,7 @@ type CredRow = {
 };
 
 export default async function CredListPage() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const { data: accredited } = await supabase
     .from("accreditation_requests")

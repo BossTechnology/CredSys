@@ -1,9 +1,9 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { SectionDivider, MetricStrip } from "@/components/ui/SectionDivider";
 import { StatGrid, StatCard, KBRCard, QuickAction } from "@/components/ui/Dashboard";
 
 export default async function AdminOverviewPage() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const [
     { count: totalEvaluators },

@@ -1,6 +1,5 @@
-"use client";
-
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export interface Column<T> {
   key: keyof T | string;
@@ -15,7 +14,7 @@ interface DataTableProps<T> {
   rowKey: keyof T;
   title?: string;
   subtitle?: string;
-  onRowClick?: (row: T) => void;
+  rowHref?: (row: T) => string;
   isAlertRow?: (row: T) => boolean;
   emptyMessage?: string;
 }
@@ -26,7 +25,7 @@ export function DataTable<T extends Record<string, unknown>>({
   rowKey,
   title,
   subtitle,
-  onRowClick,
+  rowHref,
   isAlertRow,
   emptyMessage = "No records found.",
 }: DataTableProps<T>) {
@@ -47,9 +46,9 @@ export function DataTable<T extends Record<string, unknown>>({
       <table className="w-full border-collapse">
         <thead>
           <tr>
-            {columns.map((col) => (
+            {columns.map((col, i) => (
               <th
-                key={String(col.key)}
+                key={String(col.key) + "_" + i}
                 className={cn(
                   "bg-cs-100 text-cs-400 text-[6.5px] font-mono uppercase tracking-widest px-3 py-1 text-left border-b-2 border-cs-200 font-semibold",
                   col.className
@@ -73,35 +72,36 @@ export function DataTable<T extends Record<string, unknown>>({
           ) : (
             data.map((row, idx) => {
               const alert = isAlertRow?.(row);
+              const href = rowHref?.(row);
+              const rowContent = columns.map((col, i) => {
+                const value = row[col.key as keyof T];
+                return (
+                  <td
+                    key={String(col.key) + "_" + i}
+                    className={cn(
+                      "px-3 py-2 text-[8px] border-r border-cs-50 last:border-r-0 align-middle",
+                      col.className
+                    )}
+                  >
+                    {col.render
+                      ? col.render(value, row)
+                      : value === null || value === undefined
+                      ? "—"
+                      : String(value)}
+                  </td>
+                );
+              });
+
+              const rowClass = cn(
+                "border-b border-cs-50 last:border-b-0",
+                idx % 2 === 0 ? "bg-white" : "bg-cs-50",
+                alert && "bg-cs-red-100",
+                href && "cursor-pointer hover:bg-cs-100"
+              );
+
               return (
-                <tr
-                  key={String(row[rowKey])}
-                  onClick={() => onRowClick?.(row)}
-                  className={cn(
-                    "border-b border-cs-50 last:border-b-0",
-                    idx % 2 === 0 ? "bg-white" : "bg-cs-50",
-                    alert && "bg-cs-red-100",
-                    onRowClick && "cursor-pointer hover:bg-cs-100"
-                  )}
-                >
-                  {columns.map((col) => {
-                    const value = col.key.toString().includes(".")
-                      ? col.key.toString().split(".").reduce((obj: unknown, key) => (obj as Record<string, unknown>)?.[key], row)
-                      : row[col.key as keyof T];
-                    return (
-                      <td
-                        key={String(col.key)}
-                        className={cn(
-                          "px-3 py-2 text-[8px] border-r border-cs-50 last:border-r-0",
-                          col.className
-                        )}
-                      >
-                        {col.render
-                          ? col.render(value, row)
-                          : String(value ?? "—")}
-                      </td>
-                    );
-                  })}
+                <tr key={String(row[rowKey])} className={rowClass}>
+                  {rowContent}
                 </tr>
               );
             })
