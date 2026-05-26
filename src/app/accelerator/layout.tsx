@@ -35,6 +35,7 @@ export default async function AcceleratorLayout({
     { label: "Dashboard", href: "/accelerator/dashboard" },
     { label: "Portfolio", href: "/accelerator/portfolio" },
     { label: "Competitions", href: "/accelerator/competitions" },
+    { label: "Profile", href: "/accelerator/profile" },
   ];
 
   return (
