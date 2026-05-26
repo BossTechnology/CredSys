@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+@theme {
+  /* CredSys CHASS1S Design System — Style Guide v1.0 */
+
+  /* Gray Scale */
+  --color-cs-50: #FAFAFA;
+  --color-cs-100: #F4F4F4;
+  --color-cs-150: #EEEEEE;
+  --color-cs-200: #E0E0E0;
+  --color-cs-300: #C4C4C4;
+  --color-cs-400: #9A9A9A;
+  --color-cs-500: #6B6B6B;
+  --color-cs-600: #4A4A4A;
+  --color-cs-700: #333333;
+  --color-cs-800: #1A1A1A;
+
+  /* StartupBoss Accent */
+  --color-sb-light: #EDE9FD;
+  --color-sb-default: #D9D3FA;
+  --color-sb-medium: #C4BBF7;
+  --color-sb-dark: #9F93E8;
+  --color-sb-text: #5B4DBE;
+
+  /* Red — Edits, Alerts */
+  --color-cs-red-100: #FFF0F0;
+  --color-cs-red-200: #FFD6D6;
+  --color-cs-red: #CC0000;
+  --color-cs-red-dark: #B30000;
+
+  /* Cream — Edit Mode Backgrounds */
+  --color-cs-cream: #FBF8F3;
+  --color-cs-cream-dark: #F2EBE4;
+  --color-cs-cream-border: #E8DFD0;
+
+  /* Fonts */
+  --font-mono: "JetBrains Mono", "Courier New", monospace;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  /* Container widths */
+  --container-sm: 600px;
+  --container-md: 840px;
+  --container-lg: 1280px;
+
+  /* Spacing scale (cs-1 through cs-12) */
+  --spacing-cs-1: 4px;
+  --spacing-cs-2: 8px;
+  --spacing-cs-3: 12px;
+  --spacing-cs-4: 16px;
+  --spacing-cs-5: 20px;
+  --spacing-cs-6: 24px;
+  --spacing-cs-8: 32px;
+  --spacing-cs-10: 40px;
+  --spacing-cs-12: 48px;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-family: var(--font-body);
+    background-color: #FAFAFA;
+    color: #000000;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* JetBrains Mono for technical labels */
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+}
+
+@layer components {
+  /* Portal nav — white variant */
+  .nav-portal {
+    @apply h-12 bg-white border-b border-cs-200 flex items-center px-7;
+  }
+
+  /* Admin nav — black variant */
+  .nav-admin {
+    @apply h-12 bg-black flex items-center px-7;
+  }
+
+  /* Section divider — black bar */
+  .section-bar {
+    @apply bg-black text-white text-xs font-mono uppercase tracking-widest px-4 py-1 flex items-center gap-3;
+  }
+
+  /* Section bar — accent variant */
+  .section-bar-accent {
+    @apply bg-sb-default text-sb-text text-xs font-mono uppercase tracking-widest px-4 py-1 flex items-center;
+  }
+
+  /* Section bar — red alert */
+  .section-bar-alert {
+    @apply bg-cs-red-100 text-cs-red text-xs font-mono uppercase tracking-widest px-4 py-1 flex items-center;
+  }
+
+  /* Dense data table */
+  .cs-table {
+    @apply w-full border-collapse;
+  }
+
+  .cs-table thead th {
+    @apply bg-cs-100 text-cs-400 text-[6.5px] font-mono uppercase tracking-widest px-3 py-1 text-left border-b-2 border-cs-200;
+  }
+
+  .cs-table tbody tr:nth-child(even) {
+    @apply bg-cs-50;
+  }
+
+  .cs-table tbody tr:nth-child(odd) {
+    @apply bg-white;
+  }
+
+  .cs-table tbody tr:hover {
+    @apply bg-cs-100;
+  }
+
+  .cs-table tbody tr.alert-row {
+    @apply bg-cs-red-100;
+  }
+
+  .cs-table tbody td {
+    @apply px-3 py-2 text-[8px] border-r border-cs-50 last:border-r-0;
+  }
+
+  /* Pending activation banner */
+  .activation-banner {
+    @apply bg-sb-light border border-sb-default text-sb-text text-xs px-4 py-2;
+  }
+
+  /* Metric strip */
+  .metric-strip {
+    @apply bg-white border border-cs-200 px-4 py-2 flex items-center gap-6 text-xs font-mono;
+  }
+}
