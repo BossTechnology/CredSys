@@ -107,6 +107,25 @@ export async function sendRejected(to: string, startupName: string, reason?: str
   });
 }
 
+// E6 — Under review notification
+export async function sendUnderReview(to: string, startupName: string) {
+  await send({
+    to,
+    subject: "CredSys — Your application is under review",
+    html: `
+      <div style="font-family:monospace;background:#000;color:#fff;padding:24px;max-width:480px">
+        <div style="font-size:20px;font-weight:bold;letter-spacing:0.1em">CRED SYS</div>
+        <hr style="border-color:#333;margin:16px 0"/>
+        <p style="font-size:12px;color:#ccc">Hi <strong>${startupName}</strong>,</p>
+        <p style="font-size:12px;color:#ccc;margin-top:8px">
+          Your accreditation application is now <strong style="color:#D9D3FA">under active review</strong>.
+          An interview will be scheduled shortly.
+        </p>
+        <p style="font-size:10px;color:#6B6B6B;margin-top:24px">GetCRED. Build Trust. Become Unstoppable.</p>
+      </div>`,
+  });
+}
+
 // E7 — New assignment for evaluator
 export async function sendNewAssignment(
   to: string,
@@ -128,6 +147,84 @@ export async function sendNewAssignment(
         <div style="background:#1A1A1A;padding:12px;margin:16px 0;font-size:10px;color:#9A9A9A">
           Request ID: <span style="color:#fff">${requestId}</span>
         </div>
+        <p style="font-size:10px;color:#6B6B6B;margin-top:24px">GetCRED. Build Trust. Become Unstoppable.</p>
+      </div>`,
+  });
+}
+
+// E8 — Competition entry confirmed
+export async function sendCompetitionEntered(
+  to: string,
+  startupName: string,
+  competitionTitle: string
+) {
+  await send({
+    to,
+    subject: `CredSys — Entry confirmed: ${competitionTitle}`,
+    html: `
+      <div style="font-family:monospace;background:#000;color:#fff;padding:24px;max-width:480px">
+        <div style="font-size:20px;font-weight:bold;letter-spacing:0.1em">CRED SYS</div>
+        <hr style="border-color:#333;margin:16px 0"/>
+        <p style="font-size:12px;color:#ccc">Hi <strong>${startupName}</strong>,</p>
+        <p style="font-size:12px;color:#ccc;margin-top:8px">
+          Your entry to <strong style="color:#D9D3FA">${competitionTitle}</strong> has been confirmed.
+          You will be notified once scoring begins.
+        </p>
+        <p style="font-size:10px;color:#6B6B6B;margin-top:24px">GetCRED. Build Trust. Become Unstoppable.</p>
+      </div>`,
+  });
+}
+
+// E9 — Entry scored notification
+export async function sendEntryScored(
+  to: string,
+  startupName: string,
+  competitionTitle: string,
+  score: number
+) {
+  await send({
+    to,
+    subject: `CredSys — Your entry has been scored: ${competitionTitle}`,
+    html: `
+      <div style="font-family:monospace;background:#000;color:#fff;padding:24px;max-width:480px">
+        <div style="font-size:20px;font-weight:bold;letter-spacing:0.1em">CRED SYS</div>
+        <hr style="border-color:#333;margin:16px 0"/>
+        <p style="font-size:12px;color:#ccc">Hi <strong>${startupName}</strong>,</p>
+        <p style="font-size:12px;color:#ccc;margin-top:8px">
+          Your entry to <strong>${competitionTitle}</strong> has been evaluated.
+        </p>
+        <div style="background:#1A1A1A;border-left:4px solid #D9D3FA;padding:12px;margin:16px 0">
+          <div style="font-size:10px;color:#9A9A9A">YOUR SCORE</div>
+          <div style="font-size:24px;font-weight:bold;color:#D9D3FA">${score}<span style="font-size:14px;color:#6B6B6B">/100</span></div>
+        </div>
+        <p style="font-size:10px;color:#6B6B6B;margin-top:24px">GetCRED. Build Trust. Become Unstoppable.</p>
+      </div>`,
+  });
+}
+
+// E10 — Competition completed / results published
+export async function sendCompetitionResults(
+  to: string,
+  startupName: string,
+  competitionTitle: string,
+  rank: number | null
+) {
+  await send({
+    to,
+    subject: `CredSys — Results published: ${competitionTitle}`,
+    html: `
+      <div style="font-family:monospace;background:#000;color:#fff;padding:24px;max-width:480px">
+        <div style="font-size:20px;font-weight:bold;letter-spacing:0.1em">CRED SYS</div>
+        <hr style="border-color:#333;margin:16px 0"/>
+        <p style="font-size:12px;color:#ccc">Hi <strong>${startupName}</strong>,</p>
+        <p style="font-size:12px;color:#ccc;margin-top:8px">
+          The results for <strong>${competitionTitle}</strong> have been published.
+        </p>
+        ${rank ? `
+        <div style="background:#1A1A1A;border-left:4px solid #D9D3FA;padding:12px;margin:16px 0">
+          <div style="font-size:10px;color:#9A9A9A">FINAL RANK</div>
+          <div style="font-size:24px;font-weight:bold;color:#D9D3FA">#${rank}</div>
+        </div>` : ""}
         <p style="font-size:10px;color:#6B6B6B;margin-top:24px">GetCRED. Build Trust. Become Unstoppable.</p>
       </div>`,
   });

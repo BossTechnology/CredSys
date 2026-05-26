@@ -33,6 +33,7 @@ export default async function EvaluatorLayout({
   const navItems = [
     { label: "Dashboard", href: "/evaluator/dashboard" },
     { label: "Assignments", href: "/evaluator/assignments" },
+    { label: "Scoring", href: "/evaluator/scoring" },
     { label: "Profile", href: "/evaluator/profile" },
   ];
 

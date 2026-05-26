@@ -5,12 +5,12 @@ import { PortalNav } from "@/components/navigation/PortalNav";
 import { signOut } from "@/app/actions/auth";
 
 const ROLE_ROUTES: Record<string, string> = {
+  startup: "/startup/dashboard",
   evaluator: "/evaluator/dashboard",
-  accelerator: "/accelerator/dashboard",
   admin: "/admin/overview",
 };
 
-export default async function StartupLayout({
+export default async function AcceleratorLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -26,21 +26,21 @@ export default async function StartupLayout({
     .eq("user_id", user.id)
     .single();
 
-  if (profile?.role && profile.role !== "startup") {
+  if (profile?.role && profile.role !== "accelerator") {
     redirect(ROLE_ROUTES[profile.role] ?? "/login");
   }
+  if (!profile?.role) redirect("/login");
 
   const navItems = [
-    { label: "Dashboard", href: "/startup/dashboard" },
-    { label: "Apply", href: "/startup/apply" },
-    { label: "Competitions", href: "/startup/competitions" },
-    { label: "Profile", href: "/startup/profile" },
+    { label: "Dashboard", href: "/accelerator/dashboard" },
+    { label: "Portfolio", href: "/accelerator/portfolio" },
+    { label: "Competitions", href: "/accelerator/competitions" },
   ];
 
   return (
     <div className="min-h-screen bg-cs-50 flex flex-col">
       <PortalNav
-        portalLabel="Startup Portal"
+        portalLabel="Accelerator Portal"
         orgName={profile?.org_name}
         items={navItems}
         onSignOut={async () => { "use server"; await signOut(); }}
