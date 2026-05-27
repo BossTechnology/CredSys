@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createServiceClient } from "@/lib/supabase/service";
 import { redirect } from "next/navigation";
 import { PortalNav } from "@/components/navigation/PortalNav";
 import { signOut } from "@/app/actions/auth";
@@ -19,7 +19,7 @@ export default async function StartupLayout({
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const admin = createAdminClient();
+  const admin = createServiceClient();
   const { data: profile } = await admin
     .from("profiles")
     .select("org_name, role")
@@ -33,6 +33,7 @@ export default async function StartupLayout({
   const navItems = [
     { label: "Dashboard", href: "/startup/dashboard" },
     { label: "Apply", href: "/startup/apply" },
+    { label: "Competitions", href: "/startup/competitions" },
     { label: "Profile", href: "/startup/profile" },
   ];
 

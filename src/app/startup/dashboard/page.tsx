@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createServiceClient } from "@/lib/supabase/service";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
@@ -16,7 +16,7 @@ export default async function StartupDashboardPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const admin = createAdminClient();
+  const admin = createServiceClient();
   const [{ data: profile }, { data: requests }] = await Promise.all([
     admin.from("profiles").select("*").eq("user_id", user.id).single(),
     admin
@@ -120,6 +120,30 @@ export default async function StartupDashboardPage() {
               <p>Issued: {formatDate(latest.accredited_at ?? latest.updated_at)}</p>
               {latest.expires_at && <p>Expires: {formatDate(latest.expires_at)}</p>}
             </div>
+          </div>
+
+          {/* Embeddable badge section */}
+          <div className="mt-4 border border-cs-200 bg-white p-4">
+            <p className="text-[8px] font-mono font-semibold text-cs-600 uppercase tracking-widest mb-3">
+              Embed on Your Website
+            </p>
+            <img
+              src={`/api/badge/${latest.unique_code}`}
+              alt="StartupCred Badge"
+              className="mb-3 border border-cs-100"
+              style={{ width: 320, height: 100 }}
+            />
+            <div className="bg-cs-50 border border-cs-200 px-3 py-2 rounded-none">
+              <p className="text-[7px] font-mono text-cs-400 uppercase tracking-widest mb-1">HTML Embed Code</p>
+              <code className="text-[7.5px] font-mono text-cs-700 break-all select-all block leading-relaxed">
+                {`<a href="${process.env.NEXT_PUBLIC_APP_URL ?? "https://cred-sys.vercel.app"}/verify/${latest.unique_code}" target="_blank" rel="noopener noreferrer"><img src="${process.env.NEXT_PUBLIC_APP_URL ?? "https://cred-sys.vercel.app"}/api/badge/${latest.unique_code}" alt="StartupCred Accredited" width="320" height="100"/></a>`}
+              </code>
+            </div>
+            <p className="text-[7px] font-mono text-cs-400 mt-2">
+              ↗ <a href={`/verify/${latest.unique_code}`} target="_blank" rel="noopener noreferrer" className="underline hover:text-black">
+                View public verification page
+              </a>
+            </p>
           </div>
         </>
       )}

@@ -75,7 +75,118 @@
 }
 
 @layer components {
-  /* Portal nav — white variant */
+  /* =============================================
+     BUTTONS
+     ============================================= */
+  .btn-primary {
+    @apply inline-flex items-center justify-center bg-black text-white
+           text-[8px] font-mono font-semibold uppercase tracking-widest
+           px-4 py-2 transition-opacity hover:opacity-80 disabled:opacity-40
+           disabled:cursor-not-allowed;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center bg-white text-black
+           border border-black text-[8px] font-mono font-semibold uppercase
+           tracking-widest px-4 py-2 transition-colors
+           hover:bg-black hover:text-white disabled:opacity-40
+           disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center bg-transparent text-cs-500
+           text-[8px] font-mono uppercase tracking-widest px-4 py-2
+           transition-colors hover:text-black disabled:opacity-40
+           disabled:cursor-not-allowed;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center bg-cs-red text-white
+           text-[8px] font-mono font-semibold uppercase tracking-widest
+           px-4 py-2 transition-opacity hover:opacity-80 disabled:opacity-40
+           disabled:cursor-not-allowed;
+  }
+
+  .btn-accent {
+    @apply inline-flex items-center justify-center bg-sb-default text-sb-text
+           text-[8px] font-mono font-semibold uppercase tracking-widest
+           px-4 py-2 transition-opacity hover:opacity-80 disabled:opacity-40
+           disabled:cursor-not-allowed;
+  }
+
+  /* Size modifiers */
+  .btn-sm  { @apply px-3 py-1 text-[7px]; }
+  .btn-lg  { @apply px-6 py-3 text-[9px]; }
+
+  /* =============================================
+     INPUTS
+     ============================================= */
+  .cs-input {
+    @apply w-full border border-cs-200 bg-white text-[11px] font-mono
+           text-black px-3 py-2 outline-none placeholder:text-cs-400
+           focus:border-black transition-colors;
+  }
+
+  .cs-input-cream {
+    @apply w-full border border-cs-cream-border bg-cs-cream text-[11px]
+           font-mono text-black px-3 py-2 outline-none
+           placeholder:text-cs-400 focus:border-cs-700 transition-colors;
+  }
+
+  .cs-label {
+    @apply block text-[7.5px] font-mono text-cs-600 uppercase tracking-widest mb-1;
+  }
+
+  /* =============================================
+     STATUS BADGES
+     ============================================= */
+  .status-badge {
+    @apply inline-block text-[6.5px] font-mono uppercase tracking-widest
+           px-2 py-0.5 font-semibold;
+  }
+
+  .status-accredited     { @apply bg-sb-light text-sb-text; }
+  .status-pending        { @apply bg-cs-100 text-cs-600; }
+  .status-rejected       { @apply bg-cs-red-100 text-cs-red; }
+  .status-expired        { @apply bg-cs-150 text-cs-500; }
+  .status-active         { @apply bg-black text-white; }
+  .status-draft          { @apply bg-cs-100 text-cs-500; }
+  .status-scoring        { @apply bg-sb-light text-sb-text; }
+  .status-completed      { @apply bg-cs-800 text-white; }
+
+  /* =============================================
+     SURFACES & CARDS
+     ============================================= */
+  .cs-surface {
+    @apply bg-white border border-cs-200;
+  }
+
+  .cs-surface-inset {
+    @apply bg-cs-50 border border-cs-200;
+  }
+
+  .cs-card {
+    @apply bg-white border border-cs-200 px-4 py-3;
+  }
+
+  /* =============================================
+     PAGE LAYOUT
+     ============================================= */
+  .page-container {
+    @apply max-w-[1280px] mx-auto px-7 py-6;
+  }
+
+  .page-container-sm {
+    @apply max-w-[600px] mx-auto px-7 py-8;
+  }
+
+  .page-container-md {
+    @apply max-w-[840px] mx-auto px-7 py-6;
+  }
+
+  /* =============================================
+     PORTAL NAV — white variant
+     ============================================= */
   .nav-portal {
     @apply h-12 bg-white border-b border-cs-200 flex items-center px-7;
   }

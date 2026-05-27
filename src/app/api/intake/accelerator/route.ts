@@ -1,0 +1,81 @@
+import { NextResponse }        from "next/server";
+import { createServiceClient } from "@/lib/supabase/service";
+import { sendAccountSetup }    from "@/lib/email/templates/e1-account-setup";
+
+export async function POST(request: Request) {
+  let body: Record<string, unknown>;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  const {
+    org_name, email, industry, country,
+    website, description,
+  } = body as Record<string, string>;
+
+  if (!org_name?.trim() || !email?.trim()) {
+    return NextResponse.json(
+      { error: "org_name and email are required." },
+      { status: 400 }
+    );
+  }
+
+  const service = createServiceClient();
+
+  // Duplicate check
+  const { data: existing } = await service
+    .from("accelerators")
+    .select("id")
+    .eq("email", email.trim().toLowerCase())
+    .maybeSingle();
+
+  if (existing) {
+    return NextResponse.json(
+      { error: "This email is already registered. Please sign in." },
+      { status: 409 }
+    );
+  }
+
+  // Create accelerator entity (starts inactive — admin activates)
+  const { data: accelerator, error: accelError } = await service
+    .from("accelerators")
+    .insert({
+      org_name:    org_name.trim(),
+      email:       email.trim().toLowerCase(),
+      industry:    industry    || null,
+      country:     country     || null,
+      website:     website     || null,
+      description: description  || null,
+      is_active:   false,
+    })
+    .select("id")
+    .single();
+
+  if (accelError || !accelerator) {
+    console.error("[intake/accelerator] insert error:", accelError);
+    return NextResponse.json({ error: "Failed to register accelerator." }, { status: 500 });
+  }
+
+  // Create setup token
+  const { data: tokenRow, error: tokenError } = await service
+    .from("account_setup_tokens")
+    .insert({ email: email.trim().toLowerCase(), role: "accelerator", entity_id: accelerator.id })
+    .select("token")
+    .single();
+
+  if (tokenError || !tokenRow) {
+    console.error("[intake/accelerator] token error:", tokenError);
+    return NextResponse.json({ error: "Failed to generate setup token." }, { status: 500 });
+  }
+
+  // Send E1 email
+  const portalUrl = process.env.NEXT_PUBLIC_PORTAL_URL ?? "https://startupboss.org";
+  const setupUrl  = `${portalUrl}/en/setup?token=${tokenRow.token}`;
+  sendAccountSetup(email.trim(), org_name.trim(), setupUrl).catch(
+    (e) => console.error("[intake/accelerator] email error:", e)
+  );
+
+  return NextResponse.json({ success: true }, { status: 201 });
+}

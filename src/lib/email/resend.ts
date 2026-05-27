@@ -1,134 +1,36 @@
-import { Resend } from "resend";
+/**
+ * sendEmail — thin Resend wrapper.
+ * All email templates import this and call it directly.
+ */
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM = "CredSys <noreply@startupboss.org>";
-
-interface EmailPayload {
-  to: string;
-  subject: string;
-  html: string;
+interface SendEmailParams {
+  to:       string;
+  subject:  string;
+  html:     string;
+  cc?:      string;
+  replyTo?: string;
 }
 
-async function send(payload: EmailPayload) {
-  const { error } = await resend.emails.send({
-    from: FROM,
-    to: payload.to,
-    subject: payload.subject,
-    html: payload.html,
+export async function sendEmail(params: SendEmailParams): Promise<void> {
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Content-Type":  "application/json",
+      "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
+    },
+    body: JSON.stringify({
+      from:     `StartupBoss.org <${process.env.FROM_EMAIL ?? "noreply@startupboss.org"}>`,
+      to:       [params.to],
+      subject:  params.subject,
+      html:     params.html,
+      ...(params.cc      && { cc:       [params.cc]      }),
+      ...(params.replyTo && { reply_to: params.replyTo   }),
+    }),
   });
-  if (error) console.error("[Resend]", error);
-}
 
-// E2 — Submission confirmed
-export async function sendSubmissionConfirmed(to: string, startupName: string) {
-  await send({
-    to,
-    subject: "CredSys — Your accreditation request was received",
-    html: `
-      <div style="font-family:monospace;background:#000;color:#fff;padding:24px;max-width:480px">
-        <div style="font-size:20px;font-weight:bold;letter-spacing:0.1em">CRED SYS</div>
-        <div style="color:#9A9A9A;font-size:10px;margin-top:4px">STARTUPBOSS.ORG</div>
-        <hr style="border-color:#333;margin:16px 0"/>
-        <p style="font-size:12px;color:#ccc">Hi <strong>${startupName}</strong>,</p>
-        <p style="font-size:12px;color:#ccc;margin-top:8px">
-          We received your accreditation request. Our team will review it and assign an evaluator shortly.
-        </p>
-        <p style="font-size:10px;color:#6B6B6B;margin-top:24px">GetCRED. Build Trust. Become Unstoppable.</p>
-      </div>`,
-  });
-}
-
-// E3 — Evaluator assigned
-export async function sendEvaluatorAssigned(
-  to: string,
-  startupName: string,
-  evaluatorOrg: string
-) {
-  await send({
-    to,
-    subject: "CredSys — Evaluator assigned to your request",
-    html: `
-      <div style="font-family:monospace;background:#000;color:#fff;padding:24px;max-width:480px">
-        <div style="font-size:20px;font-weight:bold;letter-spacing:0.1em">CRED SYS</div>
-        <hr style="border-color:#333;margin:16px 0"/>
-        <p style="font-size:12px;color:#ccc">Hi <strong>${startupName}</strong>,</p>
-        <p style="font-size:12px;color:#ccc;margin-top:8px">
-          <strong style="color:#D9D3FA">${evaluatorOrg}</strong> has been assigned to evaluate your accreditation request.
-          They will contact you to schedule an interview.
-        </p>
-        <p style="font-size:10px;color:#6B6B6B;margin-top:24px">GetCRED. Build Trust. Become Unstoppable.</p>
-      </div>`,
-  });
-}
-
-// E4 — Accreditation approved
-export async function sendAccredited(
-  to: string,
-  startupName: string,
-  uniqueCode: string
-) {
-  await send({
-    to,
-    subject: "🎉 CredSys — You are now ACCREDITED",
-    html: `
-      <div style="font-family:monospace;background:#000;color:#fff;padding:24px;max-width:480px">
-        <div style="font-size:20px;font-weight:bold;letter-spacing:0.1em">CRED SYS</div>
-        <hr style="border-color:#333;margin:16px 0"/>
-        <p style="font-size:12px;color:#ccc">Congratulations, <strong>${startupName}</strong>!</p>
-        <p style="font-size:12px;color:#ccc;margin-top:8px">
-          Your startup has been <strong style="color:#D9D3FA">ACCREDITED</strong> on StartupBoss.
-        </p>
-        <div style="background:#1A1A1A;border-left:4px solid #D9D3FA;padding:12px;margin:16px 0">
-          <div style="font-size:10px;color:#9A9A9A">CREDENTIAL ID</div>
-          <div style="font-size:16px;font-weight:bold;color:#D9D3FA">${uniqueCode}</div>
-        </div>
-        <p style="font-size:10px;color:#6B6B6B;margin-top:24px">GetCRED. Build Trust. Become Unstoppable.</p>
-      </div>`,
-  });
-}
-
-// E5 — Rejected
-export async function sendRejected(to: string, startupName: string, reason?: string) {
-  await send({
-    to,
-    subject: "CredSys — Accreditation request update",
-    html: `
-      <div style="font-family:monospace;background:#000;color:#fff;padding:24px;max-width:480px">
-        <div style="font-size:20px;font-weight:bold;letter-spacing:0.1em">CRED SYS</div>
-        <hr style="border-color:#333;margin:16px 0"/>
-        <p style="font-size:12px;color:#ccc">Hi <strong>${startupName}</strong>,</p>
-        <p style="font-size:12px;color:#ccc;margin-top:8px">
-          After careful review, your accreditation request was not approved at this time.
-        </p>
-        ${reason ? `<p style="font-size:12px;color:#CC0000;margin-top:8px">${reason}</p>` : ""}
-        <p style="font-size:12px;color:#ccc;margin-top:8px">You may re-apply after addressing the feedback.</p>
-        <p style="font-size:10px;color:#6B6B6B;margin-top:24px">GetCRED. Build Trust. Become Unstoppable.</p>
-      </div>`,
-  });
-}
-
-// E7 — New assignment for evaluator
-export async function sendNewAssignment(
-  to: string,
-  evaluatorName: string,
-  startupName: string,
-  requestId: string
-) {
-  await send({
-    to,
-    subject: `CredSys — New assignment: ${startupName}`,
-    html: `
-      <div style="font-family:monospace;background:#000;color:#fff;padding:24px;max-width:480px">
-        <div style="font-size:20px;font-weight:bold;letter-spacing:0.1em">CRED SYS</div>
-        <hr style="border-color:#333;margin:16px 0"/>
-        <p style="font-size:12px;color:#ccc">Hi <strong>${evaluatorName}</strong>,</p>
-        <p style="font-size:12px;color:#ccc;margin-top:8px">
-          You have been assigned to evaluate <strong>${startupName}</strong>.
-        </p>
-        <div style="background:#1A1A1A;padding:12px;margin:16px 0;font-size:10px;color:#9A9A9A">
-          Request ID: <span style="color:#fff">${requestId}</span>
-        </div>
-        <p style="font-size:10px;color:#6B6B6B;margin-top:24px">GetCRED. Build Trust. Become Unstoppable.</p>
-      </div>`,
-  });
+  if (!res.ok) {
+    const body = await res.text();
+    console.error("[sendEmail] Resend error", res.status, body);
+    throw new Error(`Resend API error ${res.status}: ${body}`);
+  }
 }

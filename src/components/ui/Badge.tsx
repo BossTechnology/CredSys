@@ -10,50 +10,54 @@ type BadgeVariant =
   | "pending";
 
 const variantStyles: Record<BadgeVariant, string> = {
-  accredited: "bg-sb-default text-sb-text",
-  active: "bg-black text-white",
-  implementing: "bg-black text-white",
-  assigned: "bg-black text-white",
-  interview: "bg-black text-white",
-  verifying: "bg-black text-white",
-  controlled: "bg-black text-white",
-  draft: "bg-cs-200 text-cs-600",
-  submitted: "bg-cs-200 text-cs-600",
-  pending: "bg-cs-200 text-cs-600",
+  // New spec statuses
+  pending_evaluator_assignment: "bg-cs-100 text-cs-600",
+  evaluator_assigned:           "bg-black text-white",
+  meeting_scheduled:            "bg-black text-white",
+  chass1s_shared:               "bg-black text-white",
+  implementation_in_progress:   "bg-black text-white",
+  ready_for_verification:       "bg-sb-light text-sb-text",
+  verification_in_progress:     "bg-sb-light text-sb-text",
+  accredited:                   "bg-sb-default text-sb-text",
+  rejected:                     "bg-cs-red text-white",
+  expired:                      "bg-cs-150 text-cs-500",
+  // Generic variants
+  active:       "bg-black text-white",
+  pending:      "bg-cs-100 text-cs-600",
+  controlled:   "bg-black text-white",
   uncontrolled: "bg-cs-red text-white",
-  rejected: "bg-cs-red text-white",
-  expired: "bg-cs-red text-white",
-  edit_mode: "bg-cs-cream border border-cs-cream-border text-cs-700",
+  edit_mode:    "bg-cs-cream border border-cs-cream-border text-cs-700",
 };
 
 const variantLabels: Record<BadgeVariant, string> = {
-  accredited: "✓ ACCREDITED",
-  active: "ACTIVE",
-  implementing: "IMPLEMENTING",
-  assigned: "ASSIGNED",
-  interview: "INTERVIEW",
-  verifying: "VERIFYING",
-  controlled: "CONTROLLED",
-  draft: "DRAFT",
-  submitted: "SUBMITTED",
-  pending: "PENDING",
-  uncontrolled: "UNCONTROLLED",
-  rejected: "REJECTED",
-  expired: "EXPIRED",
-  edit_mode: "EDIT MODE",
+  pending_evaluator_assignment: "Pending",
+  evaluator_assigned:           "Assigned",
+  meeting_scheduled:            "Meeting",
+  chass1s_shared:               "CHASS1S",
+  implementation_in_progress:   "Implementing",
+  ready_for_verification:       "Ready",
+  verification_in_progress:     "Verifying",
+  accredited:                   "✓ Accredited",
+  rejected:                     "Rejected",
+  expired:                      "Expired",
+  active:       "Active",
+  pending:      "Pending",
+  controlled:   "Controlled",
+  uncontrolled: "Uncontrolled",
+  edit_mode:    "Edit Mode",
 };
 
 interface BadgeProps {
-  variant: BadgeVariant;
+  variant:    BadgeVariant;
   className?: string;
-  children?: React.ReactNode;
+  children?:  React.ReactNode;
 }
 
 export function Badge({ variant, className, children }: BadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center px-2 py-0.5 text-[6.5px] font-mono font-semibold uppercase tracking-wider rounded-sm",
+        "inline-flex items-center px-2 py-0.5 text-[6.5px] font-mono font-semibold uppercase tracking-wider",
         variantStyles[variant],
         className
       )}

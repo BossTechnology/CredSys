@@ -1,14 +1,8 @@
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { redirect } from "next/navigation";
-import { AdminNav } from "@/components/navigation/AdminNav";
-import { signOut } from "@/app/actions/auth";
-
-const ROLE_ROUTES: Record<string, string> = {
-  startup: "/startup/dashboard",
-  evaluator: "/evaluator/dashboard",
-  accelerator: "/accelerator/dashboard",
-};
+import { createClient }        from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
+import { redirect }            from "next/navigation";
+import { AdminNav }            from "@/components/navigation/AdminNav";
+import { signOut }             from "@/app/actions/auth";
 
 export default async function AdminLayout({
   children,
@@ -17,23 +11,32 @@ export default async function AdminLayout({
 }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  if (!user) redirect("/en/login");
 
-  const admin = createAdminClient();
-  const { data: profile } = await admin
-    .from("profiles")
+  const service = createServiceClient();
+  const { data: profile } = await service
+    .from("user_profiles")
     .select("role")
     .eq("user_id", user.id)
     .single();
 
-  if (profile?.role && profile.role !== "admin") {
-    redirect(ROLE_ROUTES[profile.role] ?? "/login");
+  if (!profile || profile.role !== "admin") {
+    const dest: Record<string, string> = {
+      startup:     "/app/startup/dashboard",
+      evaluator:   "/app/evaluator/dashboard",
+      accelerator: "/app/accelerator/dashboard",
+    };
+    redirect(dest[profile?.role ?? ""] ?? "/en/login");
   }
-  if (!profile?.role) redirect("/login");
+
+  async function handleSignOut() {
+    "use server";
+    await signOut();
+  }
 
   return (
     <div className="min-h-screen bg-cs-50 flex flex-col">
-      <AdminNav onSignOut={async () => { "use server"; await signOut(); }} />
+      <AdminNav onSignOut={handleSignOut} />
       <main className="flex-1">{children}</main>
     </div>
   );
