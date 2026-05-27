@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useRef, useCallback } from "react";
 import { saveVerification }        from "@/app/actions/verification";
 import type { BLIPSVerification, ADDISVerification } from "@/lib/supabase/types";
 
@@ -93,9 +93,59 @@ export function VerificationPanel({
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
+  // Keep a ref to the latest state so the auto-save closure always sees current values
+  const latestBlips = useRef(blips);
+  const latestAddis = useRef(addis);
+  const latestNotes = useRef(notes);
+  latestBlips.current = blips;
+  latestAddis.current = addis;
+  latestNotes.current = notes;
+
   const blipsCount = BLIPS_CRITERIA.filter((c) => blips[c.key]).length;
   const addisCount = ADDIS_CRITERIA.filter((c) => addis[c.key]).length;
   const allVerified = blipsCount === 5 && addisCount === 5;
+
+  // Auto-save whenever any checkbox changes
+  const triggerSave = useCallback((
+    nextBlips: BLIPSVerification,
+    nextAddis: ADDISVerification,
+  ) => {
+    setSaved(false);
+    setError(null);
+    const fd = new FormData();
+    fd.set("request_id", requestId);
+    // BLIPS
+    for (const c of BLIPS_CRITERIA) {
+      if (nextBlips[c.key]) fd.set(`blips_${c.key}`, "on");
+    }
+    // ADDIS
+    for (const c of ADDIS_CRITERIA) {
+      if (nextAddis[c.key]) fd.set(`addis_${c.key}`, "on");
+    }
+    fd.set("evaluator_notes", latestNotes.current);
+
+    startTransition(async () => {
+      const result = await saveVerification(fd);
+      if (result.error) {
+        setError(result.error);
+      } else {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
+      }
+    });
+  }, [requestId]);
+
+  function handleBlipsChange(key: keyof BLIPSVerification, value: boolean) {
+    const next = { ...latestBlips.current, [key]: value };
+    setBlips(next);
+    triggerSave(next, latestAddis.current);
+  }
+
+  function handleAddisChange(key: keyof ADDISVerification, value: boolean) {
+    const next = { ...latestAddis.current, [key]: value };
+    setAddis(next);
+    triggerSave(latestBlips.current, next);
+  }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -111,7 +161,7 @@ export function VerificationPanel({
         setError(result.error);
       } else {
         setSaved(true);
-        setTimeout(() => setSaved(false), 3000);
+        setTimeout(() => setSaved(false), 2000);
       }
     });
   }
@@ -139,7 +189,7 @@ export function VerificationPanel({
               letter={c.letter}
               label={c.label}
               checked={!!blips[c.key]}
-              onChange={(v) => setBlips((prev) => ({ ...prev, [c.key]: v }))}
+              onChange={(v) => handleBlipsChange(c.key, v)}
               readOnly={readOnly}
             />
           ))}
@@ -162,7 +212,7 @@ export function VerificationPanel({
               letter={c.letter}
               label={c.label}
               checked={!!addis[c.key]}
-              onChange={(v) => setAddis((prev) => ({ ...prev, [c.key]: v }))}
+              onChange={(v) => handleAddisChange(c.key, v)}
               readOnly={readOnly}
             />
           ))}
@@ -210,9 +260,14 @@ export function VerificationPanel({
           >
             {isPending ? "Saving…" : "Save Progress"}
           </button>
-          {saved && (
+          {isPending && (
+            <span className="text-[7.5px] font-mono text-cs-400 animate-pulse">
+              Saving…
+            </span>
+          )}
+          {!isPending && saved && (
             <span className="text-[7.5px] font-mono text-sb-text">
-              ✓ Saved
+              ✓ Auto-saved
             </span>
           )}
           {error && (
