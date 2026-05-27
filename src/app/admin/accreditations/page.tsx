@@ -1,21 +1,30 @@
-import { createAdminClient } from "@/lib/supabase/admin";
-import { DataTable, type Column } from "@/components/ui/DataTable";
-import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
-import { formatDateShort } from "@/lib/utils";
-import { AssignEvaluatorForm } from "@/components/admin/AssignEvaluatorForm";
-import type { AccreditationStatus } from "@/lib/supabase/types";
+import { createServiceClient }     from "@/lib/supabase/service";
+import { assignEvaluatorToRequest } from "@/app/actions/admin";
 
-type Row = {
-  id: string;
-  status: AccreditationStatus;
-  startup_id: string;
-  evaluator_id: string | null;
-  startup_org_name: string;
-  startup_email: string;
-  updated_at: string;
-  evaluator_org_name: string | null;
+function fmt(iso: string | null | undefined) {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" });
+}
+
+const STATUS_COLOR: Record<string, string> = {
+  pending_evaluator_assignment: "text-yellow-600 bg-yellow-50",
+  evaluator_assigned:           "text-blue-600 bg-blue-50",
+  meeting_scheduled:            "text-blue-600 bg-blue-50",
+  chass1s_shared:               "text-blue-600 bg-blue-50",
+  implementation_in_progress:   "text-blue-600 bg-blue-50",
+  ready_for_verification:       "text-purple-600 bg-purple-50",
+  verification_in_progress:     "text-purple-600 bg-purple-50",
+  accredited:                   "text-sb-default bg-[#1a1030]",
+  rejected:                     "text-red-600 bg-red-50",
+  expired:                      "text-cs-400 bg-cs-100",
 };
+
+const FILTERS = [
+  { label: "All",        value: ""           },
+  { label: "Unassigned", value: "unassigned" },
+  { label: "Active",     value: "active"     },
+  { label: "Accredited", value: "accredited" },
+];
 
 export default async function AdminAccreditationsPage({
   searchParams,
@@ -23,107 +32,142 @@ export default async function AdminAccreditationsPage({
   searchParams: Promise<{ filter?: string }>;
 }) {
   const { filter } = await searchParams;
-  const supabase = createAdminClient();
+  const service = createServiceClient();
 
-  let query = supabase
+  let query = service
     .from("accreditation_requests")
-    .select("id,status,startup_id,evaluator_id,startup_org_name,startup_email,updated_at")
+    .select("id, startup_name, startup_email, industry, status, evaluator_id, created_at, updated_at")
     .order("updated_at", { ascending: false });
 
   if (filter === "unassigned") {
-    query = query.is("evaluator_id", null).eq("status", "submitted");
+    query = query.eq("status", "pending_evaluator_assignment") as typeof query;
+  } else if (filter === "active") {
+    query = query.in("status", [
+      "evaluator_assigned", "meeting_scheduled", "chass1s_shared",
+      "implementation_in_progress", "ready_for_verification", "verification_in_progress",
+    ]) as typeof query;
+  } else if (filter === "accredited") {
+    query = query.eq("status", "accredited") as typeof query;
   }
 
-  const [{ data: requests }, { data: profiles }] = await Promise.all([
+  const [{ data: requests }, { data: evaluators }] = await Promise.all([
     query,
-    supabase.from("profiles").select("user_id,org_name,role,is_active"),
+    service.from("evaluators").select("id, org_name").eq("is_active", true).order("org_name"),
   ]);
 
-  const profileMap = new Map((profiles ?? []).map((p) => [p.user_id, p]));
-  const rows: Row[] = (requests ?? []).map((r) => ({
-    ...r,
-    evaluator_org_name: r.evaluator_id ? profileMap.get(r.evaluator_id)?.org_name ?? null : null,
-  }));
-  const evaluators = (profiles ?? []).filter((p) => p.role === "evaluator" && p.is_active);
-
-  const columns: Column<Row>[] = [
-    {
-      key: "startup_org_name",
-      label: "Startup",
-      render: (_, row) => (
-        <div>
-          <div className="font-semibold text-[8px]">{row.startup_org_name}</div>
-          <div className="text-cs-400 text-[7px] font-mono">{row.startup_email}</div>
-        </div>
-      ),
-    },
-    {
-      key: "status",
-      label: "Status",
-      render: (v) => <Badge variant={v as AccreditationStatus} />,
-    },
-    {
-      key: "evaluator_org_name",
-      label: "Evaluator",
-      render: (v) =>
-        v ? (
-          <span className="text-[8px] font-semibold">{String(v)}</span>
-        ) : (
-          <span className="text-cs-red text-[7px] font-mono">— Unassigned</span>
-        ),
-    },
-    {
-      key: "updated_at",
-      label: "Updated",
-      render: (v) => (
-        <span className="font-mono text-cs-500 text-[7px]">{formatDateShort(v as string)}</span>
-      ),
-    },
-    {
-      key: "id",
-      label: "Actions",
-      render: (_, row) => (
-        <div className="flex items-center gap-2">
-          {!row.evaluator_id && (
-            <AssignEvaluatorForm
-              requestId={row.id}
-              evaluators={evaluators}
-            />
-          )}
-          {row.evaluator_id && (
-            <Button variant="ghost" size="sm">Reassign</Button>
-          )}
-        </div>
-      ),
-    },
-  ];
-
-  const total = rows.length;
-  const unassigned = rows.filter((r) => !r.evaluator_id).length;
+  const evalMap = new Map((evaluators ?? []).map((e) => [e.id, e.org_name]));
+  const total   = requests?.length ?? 0;
 
   return (
-    <div className="max-w-[1280px] mx-auto px-7 py-6">
-      <div className="mb-5">
-        <h1 className="text-2xl font-bold">Accreditations</h1>
-        <p className="text-[8px] font-mono text-cs-400 uppercase tracking-widest mt-1">
-          Pipeline Management
-        </p>
+    <div className="max-w-[1060px] mx-auto px-7 py-8">
+
+      {/* Header */}
+      <div className="flex items-start justify-between mb-8">
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-2 h-2 bg-white" />
+            <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">Admin</span>
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight">Accreditations</h1>
+          <p className="text-[8px] font-mono text-cs-400 mt-1">{total} requests</p>
+        </div>
+        <div className="flex gap-2">
+          {FILTERS.map((tab) => (
+            <a
+              key={tab.label}
+              href={tab.value ? `/admin/accreditations?filter=${tab.value}` : "/admin/accreditations"}
+              className={`text-[7.5px] font-mono uppercase tracking-widest px-3 py-1.5 border transition-colors ${
+                (filter ?? "") === tab.value
+                  ? "bg-black text-white border-black"
+                  : "bg-white text-cs-500 border-cs-200 hover:border-black"
+              }`}
+            >
+              {tab.label}
+            </a>
+          ))}
+        </div>
       </div>
 
-      {unassigned > 0 && (
-        <div className="bg-cs-red-100 border-l-4 border-cs-red px-4 py-2 text-[8px] font-mono text-cs-red mb-4">
-          ACTION REQUIRED — {unassigned} Unassigned Request{unassigned > 1 ? "s" : ""}
+      {/* Table */}
+      <div className="bg-white border border-cs-200">
+        <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
+          <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+            Requests · {total}
+          </span>
         </div>
-      )}
 
-      <DataTable
-        columns={columns}
-        data={rows}
-        rowKey="id"
-        title={`Accreditation Pipeline · All Statuses · ${total} Shown`}
-        isAlertRow={(row) => !row.evaluator_id}
-        emptyMessage="No accreditation requests found."
-      />
+        {total === 0 ? (
+          <div className="px-5 py-10 text-center">
+            <p className="text-[8px] font-mono text-cs-400">No requests found.</p>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-[1fr_100px_140px_200px_80px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
+              {["Startup", "Industry", "Status", "Evaluator", "Submitted"].map((h) => (
+                <div key={h} className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
+              ))}
+            </div>
+            <div className="divide-y divide-cs-100">
+              {(requests ?? []).map((req) => {
+                const assignedName = req.evaluator_id ? evalMap.get(req.evaluator_id) : null;
+                const needsAssign  = req.status === "pending_evaluator_assignment";
+
+                return (
+                  <div
+                    key={req.id}
+                    className={`grid grid-cols-[1fr_100px_140px_200px_80px] gap-4 px-5 py-3 items-start ${
+                      needsAssign ? "bg-yellow-50" : ""
+                    }`}
+                  >
+                    <div>
+                      <div className="text-[8px] font-semibold">{req.startup_name}</div>
+                      <div className="text-[7px] font-mono text-cs-400">{req.startup_email}</div>
+                    </div>
+
+                    <div className="text-[7.5px] font-mono text-cs-500 capitalize pt-0.5">
+                      {req.industry ?? "—"}
+                    </div>
+
+                    <div className="pt-0.5">
+                      <span className={`text-[6.5px] font-mono font-bold uppercase tracking-widest px-1.5 py-0.5 ${STATUS_COLOR[req.status] ?? "text-cs-400 bg-cs-100"}`}>
+                        {req.status.replace(/_/g, " ")}
+                      </span>
+                    </div>
+
+                    <div>
+                      {assignedName ? (
+                        <span className="text-[7.5px] font-mono text-cs-500">{assignedName}</span>
+                      ) : needsAssign ? (
+                        <form action={assignEvaluatorToRequest} className="flex gap-1.5 items-center">
+                          <input type="hidden" name="request_id" value={req.id} />
+                          <select
+                            name="evaluator_id"
+                            required
+                            className="text-[7px] font-mono border border-cs-200 bg-white px-1.5 py-1 focus:outline-none focus:border-black flex-1 min-w-0"
+                          >
+                            <option value="">Select…</option>
+                            {(evaluators ?? []).map((e) => (
+                              <option key={e.id} value={e.id}>{e.org_name}</option>
+                            ))}
+                          </select>
+                          <button type="submit" className="btn-primary btn-sm shrink-0">
+                            Assign
+                          </button>
+                        </form>
+                      ) : (
+                        <span className="text-[7px] font-mono text-cs-300">—</span>
+                      )}
+                    </div>
+
+                    <div className="text-[7px] font-mono text-cs-400 pt-0.5">{fmt(req.created_at)}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        )}
+      </div>
+
     </div>
   );
 }

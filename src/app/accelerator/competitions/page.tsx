@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createServiceClient } from "@/lib/supabase/service";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 import { Badge } from "@/components/ui/Badge";
 import { formatDate } from "@/lib/utils";
@@ -19,7 +19,7 @@ const STATUS_COLOR: Record<CompetitionStatus, string> = {
 };
 
 export default async function AcceleratorCompetitionsPage() {
-  const admin = createAdminClient();
+  const admin = createServiceClient();
 
   const { data: competitions } = await admin
     .from("competitions")

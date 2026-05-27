@@ -1,0 +1,91 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "howItWorks": "Cómo Funciona",
+    "getCred": "GetCRED",
+    "credList": "Lista CRED",
+    "login": "Iniciar Sesión",
+    "signup": "Comenzar"
+  },
+  "home": {
+    "heroTitle": "Construye Credibilidad. Obtén Acreditación.",
+    "heroSubtitle": "CredSys es la plataforma de acreditación para startups en StartupBoss.org. Demuestra tu legitimidad a inversores, aceleradoras y socios.",
+    "ctaPrimary": "Solicitar Acreditación",
+    "ctaSecondary": "Ver Startups Acreditados",
+    "howItWorksTitle": "Cómo Funciona CRED",
+    "step1Title": "Aplica",
+    "step1Desc": "Envía tu solicitud de acreditación con los detalles de tu startup.",
+    "step2Title": "Evaluación",
+    "step2Desc": "Un evaluador experto revisa tu negocio usando el framework CHASS1S.",
+    "step3Title": "Obtén CRED",
+    "step3Desc": "Recibe tu ID de credencial y compártelo para demostrar tu credibilidad."
+  },
+  "auth": {
+    "signIn": "Iniciar Sesión",
+    "signUp": "Crear Cuenta",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "noAccount": "¿No tienes cuenta?",
+    "hasAccount": "¿Ya tienes una cuenta?",
+    "signOut": "Cerrar Sesión",
+    "roleStartup": "Startup",
+    "roleEvaluator": "Evaluador",
+    "roleAccelerator": "Aceleradora"
+  },
+  "intake": {
+    "startupTitle": "Solicitar Acreditación",
+    "startupSubtitle": "Envía tu startup al proceso de acreditación CRED.",
+    "evaluatorTitle": "Convertirte en Evaluador",
+    "evaluatorSubtitle": "Únete a la red de evaluadores de CredSys.",
+    "orgName": "Nombre de la Organización",
+    "email": "Correo Electrónico",
+    "industry": "Industria",
+    "country": "País",
+    "website": "Sitio Web",
+    "description": "Descripción",
+    "submit": "Enviar Solicitud",
+    "submitting": "Enviando...",
+    "successTitle": "Solicitud Recibida",
+    "successMessage": "Revisa tu correo para un enlace de configuración de cuenta."
+  },
+  "credList": {
+    "title": "Startups Acreditados",
+    "subtitle": "Startups verificados en la plataforma CredSys",
+    "searchPlaceholder": "Buscar por nombre o ID de credencial...",
+    "noResults": "No se encontraron startups acreditados.",
+    "credentialId": "ID de Credencial",
+    "accreditedOn": "Acreditado el",
+    "verify": "Verificar"
+  },
+  "status": {
+    "pending_evaluator_assignment": "Pendiente de Asignación",
+    "evaluator_assigned":           "Evaluador Asignado",
+    "meeting_scheduled":            "Reunión Programada",
+    "chass1s_shared":               "CHASS1S Compartido",
+    "implementation_in_progress":   "Implementación",
+    "ready_for_verification":       "Listo para Verificación",
+    "verification_in_progress":     "Verificación",
+    "accredited":                   "Acreditado",
+    "rejected":                     "Rechazado",
+    "expired":                      "Expirado"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "save": "Guardar Cambios",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "view": "Ver",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "submit": "Enviar",
+    "yes": "Sí",
+    "no": "No",
+    "na": "N/A",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "pending": "Pendiente"
+  }
+}

@@ -16,20 +16,15 @@ function cookieMethods(cookieStore: Awaited<ReturnType<typeof cookies>>): Cookie
   };
 }
 
+/**
+ * User-context client — uses anon key + cookie session.
+ * Use this when you need to act as the authenticated user (RLS enforced).
+ */
 export async function createClient() {
   const cookieStore = await cookies();
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { cookies: cookieMethods(cookieStore) }
-  );
-}
-
-export async function createServiceClient() {
-  const cookieStore = await cookies();
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
     { cookies: cookieMethods(cookieStore) }
   );
 }

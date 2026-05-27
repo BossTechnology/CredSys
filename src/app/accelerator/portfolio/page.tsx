@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createServiceClient } from "@/lib/supabase/service";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 import { DataTable, type Column } from "@/components/ui/DataTable";
 import { Badge } from "@/components/ui/Badge";
@@ -17,7 +17,7 @@ type PortfolioRow = {
 };
 
 export default async function AcceleratorPortfolioPage() {
-  const admin = createAdminClient();
+  const admin = createServiceClient();
 
   const { data: startups } = await admin
     .from("accreditation_requests")

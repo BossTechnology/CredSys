@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createServiceClient } from "@/lib/supabase/service";
 import { redirect } from "next/navigation";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 import { StatGrid, StatCard, QuickAction } from "@/components/ui/Dashboard";
@@ -12,7 +12,7 @@ export default async function AcceleratorDashboardPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const admin = createAdminClient();
+  const admin = createServiceClient();
 
   const [
     { data: profile },

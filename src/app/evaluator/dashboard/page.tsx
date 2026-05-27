@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createServiceClient } from "@/lib/supabase/service";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
@@ -25,7 +25,7 @@ export default async function EvaluatorDashboardPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const admin = createAdminClient();
+  const admin = createServiceClient();
   const { data: assignments } = await admin
     .from("accreditation_requests")
     .select("id,status,startup_id,startup_org_name,startup_email,industry,updated_at")
@@ -36,7 +36,7 @@ export default async function EvaluatorDashboardPage() {
   const total = rows.length;
   const active = rows.filter((a) => !["accredited", "rejected", "expired"].includes(a.status)).length;
   const accredited = rows.filter((a) => a.status === "accredited").length;
-  const pending = rows.filter((a) => a.status === "assigned").length;
+  const pending = rows.filter((a) => a.status === "evaluator_assigned").length;
 
   const columns: Column<Row>[] = [
     {
@@ -102,7 +102,7 @@ export default async function EvaluatorDashboardPage() {
         rowKey="id"
         title="My Assignments"
         subtitle={`${total} Total`}
-        isAlertRow={(row) => row.status === "assigned"}
+        isAlertRow={(row) => row.status === "evaluator_assigned"}
         emptyMessage="No assignments yet. You will be notified when a startup is assigned to you."
       />
     </div>

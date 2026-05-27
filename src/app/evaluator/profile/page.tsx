@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createServiceClient } from "@/lib/supabase/service";
 import { redirect } from "next/navigation";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 import { Input, Textarea, Select } from "@/components/ui/Input";
@@ -24,7 +24,7 @@ export default async function EvaluatorProfilePage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const admin = createAdminClient();
+  const admin = createServiceClient();
   const [{ data: profile }, { count: assignmentCount }, { count: scoredCount }] =
     await Promise.all([
       admin.from("profiles").select("*").eq("user_id", user.id).single(),

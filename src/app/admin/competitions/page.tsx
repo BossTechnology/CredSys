@@ -1,115 +1,159 @@
-import { createAdminClient } from "@/lib/supabase/admin";
-import { SectionDivider } from "@/components/ui/SectionDivider";
-import { DataTable, type Column } from "@/components/ui/DataTable";
-import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
-import { formatDateShort } from "@/lib/utils";
-import type { CompetitionStatus } from "@/lib/supabase/types";
+import { createServiceClient } from "@/lib/supabase/service";
+import { createCompetition }    from "@/app/actions/competitions";
+import Link                     from "next/link";
 
-type CompetitionRow = {
-  id: string;
-  title: string;
-  industry: string | null;
-  status: CompetitionStatus;
-  start_date: string | null;
-  end_date: string | null;
-  entry_count?: number;
-  created_at: string;
+function fmt(iso: string | null | undefined) {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleDateString("en", {
+    month: "short", day: "numeric", year: "numeric",
+  });
+}
+
+const STATUS_COLOR: Record<string, string> = {
+  draft:     "text-cs-400 bg-cs-100",
+  active:    "text-green-700 bg-green-50",
+  scoring:   "text-yellow-700 bg-yellow-50",
+  closed:    "text-cs-400 bg-cs-100",
+  completed: "text-sb-default bg-[#1a1030]",
 };
 
-const STATUS_BADGE_MAP: Record<CompetitionStatus, "active" | "pending" | "accredited" | "expired"> = {
-  active: "active",
-  draft: "pending",
-  scoring: "implementing",
-  completed: "accredited",
-} as never;
+const INDUSTRIES = [
+  "fintech", "edtech", "healthtech", "agritech",
+  "ecommerce", "saas", "cleantech", "logistics", "other",
+];
 
 export default async function AdminCompetitionsPage() {
-  const supabase = createAdminClient();
+  const service = createServiceClient();
 
-  const { data: competitions } = await supabase
-    .from("competitions")
-    .select("*")
-    .order("created_at", { ascending: false });
+  const [
+    { data: competitions },
+    { data: accelerators },
+  ] = await Promise.all([
+    service
+      .from("competitions")
+      .select("id, name, description, industry, status, start_date, end_date, accelerator_id, created_at")
+      .order("created_at", { ascending: false }),
+    service
+      .from("accelerators")
+      .select("id, org_name")
+      .eq("is_active", true),
+  ]);
 
-  const total = competitions?.length ?? 0;
+  const total  = competitions?.length ?? 0;
   const active = competitions?.filter((c) => c.status === "active").length ?? 0;
 
-  const columns: Column<CompetitionRow>[] = [
-    {
-      key: "title",
-      label: "Competition",
-      render: (_, row) => (
-        <div>
-          <div className="font-semibold text-[8px]">{row.title}</div>
-          {row.industry && (
-            <div className="text-cs-400 text-[7px] font-mono">{row.industry}</div>
-          )}
-        </div>
-      ),
-    },
-    {
-      key: "status",
-      label: "Status",
-      render: (v) => <Badge variant={STATUS_BADGE_MAP[v as CompetitionStatus] as never} />,
-    },
-    {
-      key: "start_date",
-      label: "Start",
-      render: (v) => (
-        <span className="font-mono text-cs-500 text-[7px]">
-          {v ? formatDateShort(v as string) : "—"}
-        </span>
-      ),
-    },
-    {
-      key: "end_date",
-      label: "End",
-      render: (v) => (
-        <span className="font-mono text-cs-500 text-[7px]">
-          {v ? formatDateShort(v as string) : "—"}
-        </span>
-      ),
-    },
-    {
-      key: "id",
-      label: "Actions",
-      render: (_, row) => (
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm">Manage →</Button>
-          {row.status === "active" && (
-            <Button variant="ghost" size="sm">Score</Button>
-          )}
-        </div>
-      ),
-    },
-  ];
+  const accelMap = new Map((accelerators ?? []).map((a) => [a.id, a.org_name]));
 
   return (
-    <div className="max-w-[1280px] mx-auto px-7 py-6">
-      <div className="flex items-start justify-between mb-5">
+    <div className="max-w-[1000px] mx-auto px-7 py-8">
+
+      {/* Header */}
+      <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold">Competitions</h1>
-          <p className="text-[8px] font-mono text-cs-400 uppercase tracking-widest mt-1">
-            Competition Management
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-2 h-2 bg-sb-default" />
+            <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+              Admin
+            </span>
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight">Competitions</h1>
+          <p className="text-[8px] font-mono text-cs-400 mt-1">
+            {total} total · {active} active
           </p>
         </div>
-        <Button variant="accent">+ New Competition</Button>
       </div>
 
-      <div className="flex gap-3 text-[8px] font-mono mb-4">
-        <span><strong>{total}</strong> Total</span>
-        <span className="text-cs-300">·</span>
-        <span className="text-sb-text"><strong>{active}</strong> Active</span>
+      {/* Create form */}
+      <div className="bg-white border border-cs-200 mb-8">
+        <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
+          <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+            Create Competition
+          </span>
+        </div>
+        <form action={createCompetition} className="p-5 grid grid-cols-2 gap-4">
+          <div className="col-span-2">
+            <label className="cs-label">Name *</label>
+            <input name="name" type="text" required className="cs-input" placeholder="Demo Day 2026" />
+          </div>
+          <div className="col-span-2">
+            <label className="cs-label">Description</label>
+            <textarea name="description" rows={2} className="cs-input resize-none" placeholder="Brief description…" />
+          </div>
+          <div>
+            <label className="cs-label">Industry</label>
+            <select name="industry" className="cs-input">
+              <option value="">All industries</option>
+              {INDUSTRIES.map((i) => (
+                <option key={i} value={i}>{i.charAt(0).toUpperCase() + i.slice(1)}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="cs-label">Accelerator</label>
+            <select name="accelerator_id" className="cs-input">
+              <option value="">None</option>
+              {(accelerators ?? []).map((a) => (
+                <option key={a.id} value={a.id}>{a.org_name}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="cs-label">Start Date</label>
+            <input name="start_date" type="date" className="cs-input" />
+          </div>
+          <div>
+            <label className="cs-label">End Date</label>
+            <input name="end_date" type="date" className="cs-input" />
+          </div>
+          <div className="col-span-2">
+            <button type="submit" className="btn-primary btn-sm">
+              Create Competition
+            </button>
+          </div>
+        </form>
       </div>
 
-      <DataTable
-        columns={columns}
-        data={(competitions ?? []) as CompetitionRow[]}
-        rowKey="id"
-        title="Competition Roster"
-        emptyMessage="No competitions yet."
-      />
+      {/* List */}
+      <div className="bg-white border border-cs-200">
+        <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
+          <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+            All Competitions · {total}
+          </span>
+        </div>
+        {total === 0 ? (
+          <div className="px-5 py-10 text-center">
+            <p className="text-[8px] font-mono text-cs-400">No competitions yet.</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-cs-100">
+            {(competitions ?? []).map((comp) => (
+              <div key={comp.id} className="px-5 py-4 flex items-start justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[8.5px] font-bold">{comp.name}</span>
+                    <span className={`text-[6.5px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 ${STATUS_COLOR[comp.status] ?? "text-cs-400 bg-cs-100"}`}>
+                      {comp.status}
+                    </span>
+                  </div>
+                  <div className="flex gap-5 text-[7px] font-mono text-cs-400">
+                    {comp.industry && <span className="uppercase">{comp.industry}</span>}
+                    {comp.accelerator_id && <span>{accelMap.get(comp.accelerator_id) ?? "—"}</span>}
+                    {comp.start_date && <span>Opens: {fmt(comp.start_date)}</span>}
+                    {comp.end_date   && <span>Closes: {fmt(comp.end_date)}</span>}
+                  </div>
+                </div>
+                <Link
+                  href={`/admin/competitions/${comp.id}`}
+                  className="text-[7.5px] font-mono text-sb-default hover:underline uppercase tracking-widest shrink-0"
+                >
+                  Manage →
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
     </div>
   );
 }

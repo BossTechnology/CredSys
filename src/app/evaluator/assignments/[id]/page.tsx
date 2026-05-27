@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createServiceClient } from "@/lib/supabase/service";
 import { redirect, notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -10,17 +10,21 @@ import { advanceAccreditationStatus } from "@/app/actions/accreditation";
 import type { AccreditationStatus } from "@/lib/supabase/types";
 
 const NEXT_STATUS: Partial<Record<AccreditationStatus, AccreditationStatus>> = {
-  assigned: "interview",
-  interview: "implementing",
-  implementing: "verifying",
-  verifying: "accredited",
+  evaluator_assigned:         "meeting_scheduled",
+  meeting_scheduled:          "chass1s_shared",
+  chass1s_shared:             "implementation_in_progress",
+  implementation_in_progress: "ready_for_verification",
+  ready_for_verification:     "verification_in_progress",
+  verification_in_progress:   "accredited",
 };
 
 const ACTION_LABELS: Partial<Record<AccreditationStatus, string>> = {
-  assigned: "Start Interview",
-  interview: "Begin Implementation Review",
-  implementing: "Move to Verification",
-  verifying: "Approve & Accredit",
+  evaluator_assigned:         "Schedule Meeting",
+  meeting_scheduled:          "Share CHASS1S Framework",
+  chass1s_shared:             "Begin Implementation",
+  implementation_in_progress: "Mark Ready for Verification",
+  ready_for_verification:     "Start Verification",
+  verification_in_progress:   "Approve & Accredit",
 };
 
 export default async function AssignmentDetailPage({
@@ -33,7 +37,7 @@ export default async function AssignmentDetailPage({
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const admin = createAdminClient();
+  const admin = createServiceClient();
   const { data: req } = await admin
     .from("accreditation_requests")
     .select("*")

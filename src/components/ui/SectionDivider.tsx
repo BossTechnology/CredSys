@@ -77,3 +77,39 @@ export function PageHeader({ title, subtitle, metrics }: PageHeaderProps) {
     </div>
   );
 }
+
+// =============================================
+// ProfileCard — org info summary strip
+// =============================================
+
+interface ProfileCardItem {
+  label: string;
+  value?: string | number | null;
+}
+
+interface ProfileCardProps {
+  items:      ProfileCardItem[];
+  className?: string;
+}
+
+export function ProfileCard({ items, className }: ProfileCardProps) {
+  return (
+    <div
+      className={cn(
+        "border border-cs-200 bg-white px-4 py-3 flex flex-wrap gap-x-8 gap-y-2",
+        className
+      )}
+    >
+      {items.map((item) =>
+        item.value != null ? (
+          <div key={item.label}>
+            <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest">
+              {item.label}
+            </div>
+            <div className="text-[8.5px] font-semibold mt-0.5">{item.value}</div>
+          </div>
+        ) : null
+      )}
+    </div>
+  );
+}

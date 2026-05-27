@@ -1,0 +1,91 @@
+{
+  "nav": {
+    "home": "Home",
+    "howItWorks": "How It Works",
+    "getCred": "GetCRED",
+    "credList": "CRED List",
+    "login": "Sign In",
+    "signup": "Get Started"
+  },
+  "home": {
+    "heroTitle": "Build Trust. Get Accredited.",
+    "heroSubtitle": "CredSys is the accreditation platform for startups on StartupBoss.org. Prove your legitimacy to investors, accelerators, and partners.",
+    "ctaPrimary": "Apply for Accreditation",
+    "ctaSecondary": "See Accredited Startups",
+    "howItWorksTitle": "How CRED Works",
+    "step1Title": "Apply",
+    "step1Desc": "Submit your accreditation request with your startup details.",
+    "step2Title": "Evaluate",
+    "step2Desc": "An expert evaluator reviews your business using the CHASS1S framework.",
+    "step3Title": "Get CRED",
+    "step3Desc": "Receive your credential ID and share it to prove your credibility."
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Create Account",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "signOut": "Sign Out",
+    "roleStartup": "Startup",
+    "roleEvaluator": "Evaluator",
+    "roleAccelerator": "Accelerator"
+  },
+  "intake": {
+    "startupTitle": "Apply for Accreditation",
+    "startupSubtitle": "Submit your startup for the CRED accreditation process.",
+    "evaluatorTitle": "Become an Evaluator",
+    "evaluatorSubtitle": "Join the CredSys evaluator network.",
+    "orgName": "Organization Name",
+    "email": "Email Address",
+    "industry": "Industry",
+    "country": "Country",
+    "website": "Website",
+    "description": "Description",
+    "submit": "Submit Application",
+    "submitting": "Submitting...",
+    "successTitle": "Application Received",
+    "successMessage": "Check your email for a link to set up your account."
+  },
+  "credList": {
+    "title": "Accredited Startups",
+    "subtitle": "Verified startups on the CredSys platform",
+    "searchPlaceholder": "Search by name or credential ID...",
+    "noResults": "No accredited startups found.",
+    "credentialId": "Credential ID",
+    "accreditedOn": "Accredited",
+    "verify": "Verify"
+  },
+  "status": {
+    "pending_evaluator_assignment": "Pending Assignment",
+    "evaluator_assigned":           "Evaluator Assigned",
+    "meeting_scheduled":            "Meeting Scheduled",
+    "chass1s_shared":               "CHASS1S Shared",
+    "implementation_in_progress":   "Implementation",
+    "ready_for_verification":       "Ready for Verification",
+    "verification_in_progress":     "Verification",
+    "accredited":                   "Accredited",
+    "rejected":                     "Rejected",
+    "expired":                      "Expired"
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save Changes",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "yes": "Yes",
+    "no": "No",
+    "na": "N/A",
+    "active": "Active",
+    "inactive": "Inactive",
+    "pending": "Pending"
+  }
+}
