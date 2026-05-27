@@ -36,10 +36,20 @@ const nextConfig: NextConfig = {
     return [
       // ----------------------------------------------------------
       // Legacy portal → /app/* zones
+      // Only redirect known authenticated sub-paths; do NOT use
+      // catch-all wildcards here because /startup/[code] is the
+      // public credential verification page and must NOT be caught.
       // ----------------------------------------------------------
-      { source: "/startup/:path*",     destination: "/app/startup/:path*",     permanent: false },
-      { source: "/evaluator/:path*",   destination: "/app/evaluator/:path*",   permanent: false },
-      { source: "/accelerator/:path*", destination: "/app/accelerator/:path*", permanent: false },
+      { source: "/startup/dashboard",     destination: "/app/startup/dashboard",     permanent: false },
+      { source: "/startup/accreditation", destination: "/app/startup/accreditation", permanent: false },
+      { source: "/startup/profile",       destination: "/app/startup/profile",       permanent: false },
+      { source: "/startup/competitions",  destination: "/app/startup/competitions",  permanent: false },
+      { source: "/evaluator/dashboard",   destination: "/app/evaluator/dashboard",   permanent: false },
+      { source: "/evaluator/assignments", destination: "/app/evaluator/assignments", permanent: false },
+      { source: "/evaluator/assignments/:id", destination: "/app/evaluator/assignments/:id", permanent: false },
+      { source: "/evaluator/profile",     destination: "/app/evaluator/profile",     permanent: false },
+      { source: "/accelerator/dashboard", destination: "/app/accelerator/dashboard", permanent: false },
+      { source: "/accelerator/profile",   destination: "/app/accelerator/profile",   permanent: false },
 
       // ----------------------------------------------------------
       // Legacy auth → locale-prefixed
