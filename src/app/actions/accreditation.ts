@@ -35,7 +35,22 @@ export async function advanceAccreditationStatus(formData: FormData) {
     .update(updatePayload)
     .eq("id", requestId);
 
-  // Send email and mark sent
+  // Always create cred_page immediately on accreditation — independent of email delivery
+  if (nextStatus === "accredited" && updatePayload.unique_code) {
+    const { error: credPageError } = await supabase.from("cred_pages").insert({
+      startup_id:               request.startup_id,
+      accreditation_request_id: requestId,
+      unique_code:              updatePayload.unique_code,
+      is_active:                true,
+      accredited_at:            updatePayload.accredited_at,
+      expires_at:               updatePayload.expires_at,
+    });
+    if (credPageError) {
+      console.error("[advanceAccreditationStatus] cred_pages insert error", credPageError);
+    }
+  }
+
+  // Send email and mark sent — failures here never block credential creation
   try {
     if (nextStatus === "accredited" && updatePayload.unique_code) {
       await sendAccredited(
@@ -47,16 +62,6 @@ export async function advanceAccreditationStatus(formData: FormData) {
         .from("accreditation_requests")
         .update({ e4_sent: true })
         .eq("id", requestId);
-
-      // Create cred_page entry
-      await supabase.from("cred_pages").insert({
-        startup_id:               request.startup_id,
-        accreditation_request_id: requestId,
-        unique_code:              updatePayload.unique_code,
-        is_active:                true,
-        accredited_at:            updatePayload.accredited_at,
-        expires_at:               updatePayload.expires_at,
-      });
     } else if (nextStatus === "rejected") {
       await sendRejected(request.startup_email, request.startup_name);
       await supabase
