@@ -1,0 +1,183 @@
+import { createClient }        from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
+import { redirect }            from "next/navigation";
+import Link                    from "next/link";
+
+function fmt(iso: string) {
+  return new Date(iso).toLocaleDateString("en", {
+    month: "short", day: "numeric", year: "numeric",
+  });
+}
+
+const STATUS_COLOR: Record<string, string> = {
+  evaluator_assigned:         "text-blue-600 bg-blue-50",
+  meeting_scheduled:          "text-blue-600 bg-blue-50",
+  chass1s_shared:             "text-blue-600 bg-blue-50",
+  implementation_in_progress: "text-blue-600 bg-blue-50",
+  ready_for_verification:     "text-purple-600 bg-purple-50",
+  verification_in_progress:   "text-purple-600 bg-purple-50",
+  accredited:                 "text-green-700 bg-green-50",
+  rejected:                   "text-red-600 bg-red-50",
+  expired:                    "text-cs-400 bg-cs-100",
+};
+
+const TERMINAL = ["accredited", "rejected", "expired"];
+
+const FILTERS = [
+  { label: "All",    value: ""         },
+  { label: "Active", value: "active"   },
+  { label: "Done",   value: "done"     },
+];
+
+export default async function EvaluatorAssignmentsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ filter?: string }>;
+}) {
+  const { filter } = await searchParams;
+
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/en/login");
+
+  const service = createServiceClient();
+
+  const { data: profile } = await service
+    .from("user_profiles")
+    .select("entity_id")
+    .eq("user_id", user.id)
+    .single();
+
+  if (!profile?.entity_id) redirect("/en/login");
+
+  let query = service
+    .from("accreditation_requests")
+    .select("id, status, startup_name, startup_email, industry, created_at, updated_at")
+    .eq("evaluator_id", profile.entity_id)
+    .order("updated_at", { ascending: false });
+
+  if (filter === "active") {
+    query = query.not("status", "in", '("accredited","rejected","expired")') as typeof query;
+  } else if (filter === "done") {
+    query = query.in("status", ["accredited", "rejected", "expired"]) as typeof query;
+  }
+
+  const { data: rows } = await query;
+  const assignments = rows ?? [];
+  const total = assignments.length;
+
+  return (
+    <div className="max-w-[1060px] mx-auto px-7 py-8">
+
+      {/* Header */}
+      <div className="flex items-start justify-between mb-8">
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-2 h-2 bg-sb-default" />
+            <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+              Evaluator Portal
+            </span>
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight">Assignments</h1>
+          <p className="text-[8px] font-mono text-cs-400 mt-1">{total} requests</p>
+        </div>
+
+        {/* Filter tabs */}
+        <div className="flex gap-2">
+          {FILTERS.map((tab) => (
+            <a
+              key={tab.label}
+              href={tab.value ? `/app/evaluator/assignments?filter=${tab.value}` : "/app/evaluator/assignments"}
+              className={`text-[7.5px] font-mono uppercase tracking-widest px-3 py-1.5 border transition-colors ${
+                (filter ?? "") === tab.value
+                  ? "bg-black text-white border-black"
+                  : "bg-white text-cs-500 border-cs-200 hover:border-black"
+              }`}
+            >
+              {tab.label}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="bg-white border border-cs-200">
+        <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
+          <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+            Assigned Startups · {total}
+          </span>
+        </div>
+
+        {total === 0 ? (
+          <div className="px-5 py-12 text-center">
+            <p className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+              {filter === "active"
+                ? "No active assignments."
+                : filter === "done"
+                ? "No completed assignments yet."
+                : "No assignments yet. You will be notified when a startup is assigned to you."}
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-[1fr_110px_160px_110px_70px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
+              {["Startup", "Industry", "Status", "Updated", ""].map((h) => (
+                <div key={h} className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
+              ))}
+            </div>
+
+            <div className="divide-y divide-cs-100">
+              {assignments.map((a) => {
+                const isActive = !TERMINAL.includes(a.status);
+                return (
+                  <div
+                    key={a.id}
+                    className={`grid grid-cols-[1fr_110px_160px_110px_70px] gap-4 px-5 py-3 items-center ${
+                      a.status === "evaluator_assigned" ? "bg-blue-50/40" : ""
+                    }`}
+                  >
+                    <div>
+                      <div className="text-[8px] font-semibold">{a.startup_name}</div>
+                      <div className="text-[7px] font-mono text-cs-400">{a.startup_email}</div>
+                    </div>
+
+                    <div className="text-[7.5px] font-mono text-cs-500 capitalize">
+                      {a.industry ?? "—"}
+                    </div>
+
+                    <div>
+                      <span className={`text-[6.5px] font-mono font-bold uppercase tracking-widest px-1.5 py-0.5 ${STATUS_COLOR[a.status] ?? "text-cs-400 bg-cs-100"}`}>
+                        {a.status.replace(/_/g, " ")}
+                      </span>
+                    </div>
+
+                    <div className="text-[7px] font-mono text-cs-400">{fmt(a.updated_at)}</div>
+
+                    <div>
+                      {isActive ? (
+                        <Link
+                          href={`/app/evaluator/assignments/${a.id}`}
+                          className="text-[7.5px] font-mono font-bold text-black underline underline-offset-2 hover:text-sb-text transition-colors"
+                        >
+                          Review →
+                        </Link>
+                      ) : (
+                        <Link
+                          href={`/app/evaluator/assignments/${a.id}`}
+                          className="text-[7.5px] font-mono text-cs-400 hover:text-black transition-colors"
+                        >
+                          View →
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        )}
+      </div>
+
+    </div>
+  );
+}
