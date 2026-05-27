@@ -42,9 +42,11 @@ export default function GetCredPage() {
   const params  = useParams<{ locale: string }>();
   const locale  = (params.locale ?? "en") as Locale;
 
-  const [step,    setStep]    = useState<"form" | "success">("form");
-  const [loading, setLoading] = useState(false);
-  const [error,   setError]   = useState<string | null>(null);
+  const [step,      setStep]      = useState<"form" | "success">("form");
+  const [loading,   setLoading]   = useState(false);
+  const [error,     setError]     = useState<string | null>(null);
+  const [emailSent, setEmailSent] = useState(true);
+  const [setupUrl,  setSetupUrl]  = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -67,6 +69,8 @@ export default function GetCredPage() {
       if (!res.ok) {
         setError(json.error ?? "Something went wrong.");
       } else {
+        setEmailSent(json.emailSent !== false);
+        setSetupUrl(json.setupUrl ?? null);
         setStep("success");
       }
     } catch {
@@ -86,10 +90,30 @@ export default function GetCredPage() {
             <h1 className="text-2xl font-bold tracking-tight mb-3">
               Application Received
             </h1>
-            <p className="text-sm text-cs-500 leading-relaxed mb-6">
-              Check your inbox for an activation link. Click it to set up
-              your password and access your startup dashboard.
-            </p>
+
+            {emailSent ? (
+              <p className="text-sm text-cs-500 leading-relaxed mb-6">
+                Check your inbox for an activation link. Click it to set up
+                your password and access your startup dashboard.
+              </p>
+            ) : (
+              <div className="mb-6">
+                <p className="text-sm text-cs-500 leading-relaxed mb-4">
+                  Your application was saved, but we had trouble sending the
+                  activation email. Use the link below to set up your account
+                  directly — it&apos;s valid for 7 days.
+                </p>
+                {setupUrl && (
+                  <a
+                    href={setupUrl}
+                    className="inline-block bg-black text-white text-[8px] font-mono uppercase tracking-widest px-5 py-2.5 hover:bg-cs-800 transition-colors"
+                  >
+                    Activate My Account →
+                  </a>
+                )}
+              </div>
+            )}
+
             <Link
               href={`/${locale}`}
               className="text-[8px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
