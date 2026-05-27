@@ -27,7 +27,7 @@ export async function activateAccelerator(formData: FormData) {
     .update({ is_active: !deactivate })
     .eq("id", acceleratorId);
 
-  revalidatePath("/admin/evaluators");
+  revalidatePath("/admin/accelerators");
   revalidatePath("/admin/overview");
 }
 

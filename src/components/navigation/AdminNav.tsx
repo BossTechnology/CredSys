@@ -9,11 +9,12 @@ interface AdminNavProps {
 }
 
 const NAV_ITEMS = [
-  { label: "Overview", href: "/admin/overview" },
-  { label: "Evaluators", href: "/admin/evaluators" },
+  { label: "Overview",       href: "/admin/overview"       },
+  { label: "Evaluators",     href: "/admin/evaluators"     },
+  { label: "Accelerators",   href: "/admin/accelerators"   },
   { label: "Accreditations", href: "/admin/accreditations" },
-  { label: "Competitions", href: "/admin/competitions" },
-  { label: "Cred List", href: "/admin/cred-list" },
+  { label: "Competitions",   href: "/admin/competitions"   },
+  { label: "Cred List",      href: "/admin/cred-list"      },
 ];
 
 export function AdminNav({ onSignOut }: AdminNavProps) {
