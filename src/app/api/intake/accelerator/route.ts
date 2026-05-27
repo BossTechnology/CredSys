@@ -70,12 +70,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Failed to generate setup token." }, { status: 500 });
   }
 
-  // Send E1 email
+  // Send E1 email — await so we can surface delivery failures
   const portalUrl = process.env.NEXT_PUBLIC_PORTAL_URL ?? "https://startupboss.org";
   const setupUrl  = `${portalUrl}/en/setup?token=${tokenRow.token}`;
-  sendAccountSetup(email.trim(), org_name.trim(), setupUrl).catch(
-    (e) => console.error("[intake/accelerator] email error:", e)
-  );
+  let emailSent = true;
+  try {
+    await sendAccountSetup(email.trim(), org_name.trim(), setupUrl);
+  } catch (e) {
+    emailSent = false;
+    console.error("[intake/accelerator] email delivery failed:", e);
+  }
 
-  return NextResponse.json({ success: true }, { status: 201 });
+  return NextResponse.json({ success: true, emailSent, setupUrl: emailSent ? undefined : setupUrl }, { status: 201 });
 }
