@@ -19,7 +19,7 @@ interface CredRow {
   } | null;
 }
 
-export const revalidate = 60; // ISR — refresh every 60 s
+export const dynamic = "force-dynamic";
 
 export default async function CredListPage({ params }: CredListPageProps) {
   const { locale } = await params;
