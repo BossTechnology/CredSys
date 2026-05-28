@@ -11,8 +11,8 @@ export async function POST(request: Request) {
   }
 
   const {
-    org_name, email, industry, country,
-    website, description,
+    org_name, email, contact_person, phone_whatsapp,
+    industry, country, website, description, org_type,
   } = body as Record<string, string>;
 
   if (!org_name?.trim() || !email?.trim()) {
@@ -42,13 +42,16 @@ export async function POST(request: Request) {
   const { data: evaluator, error: evalError } = await service
     .from("evaluators")
     .insert({
-      org_name:    org_name.trim(),
-      email:       email.trim().toLowerCase(),
-      industry:    industry    || null,
-      country:     country     || null,
-      website:     website     || null,
-      description: description  || null,
-      is_active:   false,
+      org_name:       org_name.trim(),
+      email:          email.trim().toLowerCase(),
+      contact_person: contact_person || null,
+      phone_whatsapp: phone_whatsapp || null,
+      industry:       industry       || null,
+      country:        country        || null,
+      website:        website        || null,
+      description:    description    || null,
+      org_type:       org_type       || null,
+      is_active:      false,
     })
     .select("id")
     .single();

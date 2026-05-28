@@ -2,55 +2,35 @@ import Link from "next/link";
 import type { Locale } from "@/lib/i18n/types";
 
 interface MarketingNavProps {
-  locale:   Locale;
-  dict:     {
-    nav: {
-      home: string;
-      howItWorks: string;
-      credList: string;
-      login: string;
-      signup: string;
-    };
-  };
+  locale: Locale;
 }
 
-export function MarketingNav({ locale, dict }: MarketingNavProps) {
+export function MarketingNav({ locale }: MarketingNavProps) {
+  const isEs = locale === "es";
+
   return (
-    <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6">
-      <Link
-        href={`/${locale}`}
-        className="text-sm font-bold tracking-tight text-black shrink-0"
-      >
-        StartupBoss.org
+    <nav className="h-14 bg-white border-b border-cs-200 flex items-center px-7 gap-6">
+      {/* Logo */}
+      <Link href={`/${locale}`} className="shrink-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://static.wixstatic.com/media/e97957_81e0036baad24cdea1bc10797ede2c6e~mv2.png/v1/crop/x_0,y_13,w_440,h_55/fill/w_306,h_38,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/StartupBoss_Logo1.png"
+          alt="StartupBoss.org"
+          width={180}
+          height={22}
+          className="object-contain"
+        />
       </Link>
 
-      <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
-        CredSys
-      </span>
+      <div className="flex-1" />
 
-      <div className="flex-1 flex items-center gap-5 ml-2">
-        <Link href={`/${locale}/how-it-works`} className="text-[8px] font-mono text-cs-500 uppercase tracking-widest hover:text-black transition-colors">
-          {dict.nav.howItWorks}
-        </Link>
-        <Link href={`/${locale}/cred-list`} className="text-[8px] font-mono text-cs-500 uppercase tracking-widest hover:text-black transition-colors">
-          {dict.nav.credList}
-        </Link>
-      </div>
-
-      <div className="flex items-center gap-4">
-        <Link
-          href={`/${locale}/login`}
-          className="text-[8px] font-mono text-cs-500 uppercase tracking-widest hover:text-black transition-colors"
-        >
-          {dict.nav.login}
-        </Link>
-        <Link
-          href={`/${locale}/getcred`}
-          className="bg-black text-white text-[8px] font-mono uppercase tracking-widest px-4 py-2 hover:opacity-80 transition-opacity"
-        >
-          {dict.nav.signup}
-        </Link>
-      </div>
+      {/* Sign In */}
+      <Link
+        href={`/${locale}/login`}
+        className="text-[8px] font-mono text-cs-500 uppercase tracking-widest hover:text-black transition-colors"
+      >
+        {isEs ? "Iniciar Sesión" : "Sign In"}
+      </Link>
     </nav>
   );
 }

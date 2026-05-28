@@ -58,7 +58,7 @@ export default async function HowItWorksPage({ params }: HowItWorksPageProps) {
 
   return (
     <>
-      <MarketingNav locale={locale} dict={{ nav: dict.nav }} />
+      <MarketingNav locale={locale} />
 
       <main>
         {/* Hero */}
