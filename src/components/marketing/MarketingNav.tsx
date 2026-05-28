@@ -1,4 +1,5 @@
-import Link from "next/link";
+import Image from "next/image";
+import Link  from "next/link";
 import type { Locale } from "@/lib/i18n/types";
 
 interface MarketingNavProps {
@@ -12,13 +13,13 @@ export function MarketingNav({ locale }: MarketingNavProps) {
     <nav className="h-14 bg-white border-b border-cs-200 flex items-center px-7 gap-6">
       {/* Logo */}
       <Link href={`/${locale}`} className="shrink-0">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://static.wixstatic.com/media/e97957_81e0036baad24cdea1bc10797ede2c6e~mv2.png/v1/crop/x_0,y_13,w_440,h_55/fill/w_306,h_38,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/StartupBoss_Logo1.png"
+        <Image
+          src="/StartupBoss_Logo1.png"
           alt="StartupBoss.org"
           width={180}
           height={22}
           className="object-contain"
+          priority
         />
       </Link>
 
