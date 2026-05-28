@@ -1,6 +1,5 @@
 import { isValidLocale }  from "@/lib/i18n/types";
 import { redirect }       from "next/navigation";
-import { MarketingNav }   from "@/components/marketing/MarketingNav";
 import { HomepageHub }    from "@/components/marketing/HomepageHub";
 import { createServiceClient } from "@/lib/supabase/service";
 import type { Locale }    from "@/lib/i18n/types";
@@ -38,7 +37,6 @@ export default async function HomePage({ params, searchParams }: HomePageProps) 
 
   return (
     <>
-      <MarketingNav locale={locale as Locale} />
       <HomepageHub
         locale={locale as Locale}
         credList={credList}

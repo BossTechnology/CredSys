@@ -1,6 +1,7 @@
 "use client";
 
 import { useState }   from "react";
+import Image           from "next/image";
 import Link            from "next/link";
 import type { Locale } from "@/lib/i18n/types";
 
@@ -443,13 +444,18 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
         {/* LEFT PANEL — 490px, white */}
         <div style={{ width: "490px", flexShrink: 0, background: C_WHITE, padding: "24px 38px 32px", display: "flex", flexDirection: "column" }}>
 
-          {/* Logo — dev team: replace placeholder with <Image> from Next.js using /public/logo.png */}
+          {/* Logo */}
           <div style={{ marginBottom: "36px" }}>
-            <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "#e8e8e8", width: "200px", height: "34px" }}>
-              <span style={{ fontFamily: F_LIGHT, fontSize: "10px", color: "#aaa", letterSpacing: ".04em" }}>
-                [ Logo placeholder ]
-              </span>
-            </div>
+            <Link href={`/${locale}`}>
+              <Image
+                src="/logo.png"
+                alt="StartupBoss.org"
+                width={200}
+                height={34}
+                style={{ objectFit: "contain", display: "block" }}
+                priority
+              />
+            </Link>
           </div>
 
           {/* Tab navigation — 2 rows */}
