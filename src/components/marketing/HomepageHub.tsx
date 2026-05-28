@@ -439,19 +439,19 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
     <div style={{ display: "flex", flexDirection: "column", width: "100%", minHeight: "100vh" }}>
 
       {/* ── SPLIT ROW ── */}
-      <div style={{ display: "flex", flex: 1, minHeight: "100vh" }}>
+      <div style={{ display: "flex", flex: 1, minHeight: "100vh", alignItems: "flex-start" }}>
 
         {/* LEFT PANEL — 50% viewport, white */}
-        <div style={{ width: "50%", flexShrink: 0, background: C_WHITE, padding: "32px 48px 32px", display: "flex", flexDirection: "column" }}>
+        <div style={{ width: "50%", flexShrink: 0, background: C_WHITE, padding: "28px 48px 32px", display: "flex", flexDirection: "column" }}>
 
           {/* Logo */}
-          <div style={{ marginBottom: "36px" }}>
+          <div style={{ marginBottom: "18px" }}>
             <Link href={`/${locale}`}>
               <Image
                 src="/logo.png"
                 alt="StartupBoss.org"
-                width={335}
-                height={61}
+                width={380}
+                height={69}
                 style={{ objectFit: "contain", objectPosition: "left center", display: "block" }}
                 priority
               />
@@ -501,8 +501,8 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
           </div>
         </div>
 
-        {/* RIGHT PANEL — lavender + NEED CRED? image + black bottom bar */}
-        <div style={{ flex: 1, background: "#c4b5f0", position: "relative", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+        {/* RIGHT PANEL — lavender + NEED CRED? image + black bottom bar — sticky so it stays in view while left panel scrolls */}
+        <div style={{ flex: 1, background: "#c4b5f0", position: "sticky", top: 0, height: "100vh", display: "flex", flexDirection: "column", overflow: "hidden" }}>
           {/* Dev team: download the NEED CRED? image, save to /public/need-cred.jpg, use Next.js Image */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
