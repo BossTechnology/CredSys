@@ -14,7 +14,7 @@ export function MarketingNav({ locale }: MarketingNavProps) {
       {/* Logo */}
       <Link href={`/${locale}`} className="shrink-0">
         <Image
-          src="/StartupBoss_Logo1.png"
+          src="/logo.png"
           alt="StartupBoss.org"
           width={180}
           height={22}
