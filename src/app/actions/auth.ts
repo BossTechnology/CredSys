@@ -10,6 +10,7 @@ const ROLE_ROUTES: Record<UserRole, string> = {
   startup:     "/app/startup/dashboard",
   evaluator:   "/app/evaluator/dashboard",
   accelerator: "/app/accelerator/dashboard",
+  investor:    "/app/investor/dashboard",
   admin:       "/admin/overview",
 };
 

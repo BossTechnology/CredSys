@@ -208,6 +208,42 @@ export function AcceleratorNav({ onSignOut }: AcceleratorNavProps) {
 }
 
 // =============================================
+// InvestorNav
+// =============================================
+
+const INVESTOR_NAV = [
+  { label: "Dashboard", href: "/app/investor/dashboard" },
+  { label: "Watchlist", href: "/app/investor/watchlist" },
+  { label: "Sponsor",   href: "/app/investor/sponsor"   },
+  { label: "Profile",   href: "/app/investor/profile"   },
+];
+
+interface InvestorNavProps { onSignOut?: () => void }
+
+export function InvestorNav({ onSignOut }: InvestorNavProps) {
+  return (
+    <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0">
+      <Link href="/app/investor/dashboard" className="text-sm font-bold tracking-tight text-black shrink-0">
+        StartupBoss.org
+      </Link>
+      <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
+        Investor
+      </span>
+      <div className="flex-1 flex items-center gap-5 ml-2">
+        {INVESTOR_NAV.map((item) => (
+          <NavLink key={item.href} href={item.href} label={item.label} />
+        ))}
+      </div>
+      {onSignOut && (
+        <button onClick={onSignOut} className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors">
+          Sign Out
+        </button>
+      )}
+    </nav>
+  );
+}
+
+// =============================================
 // PendingBanner — shown when account awaits activation
 // =============================================
 

@@ -7,10 +7,11 @@ import { revalidatePath } from "next/cache";
 import type { UserRole } from "@/lib/supabase/types";
 
 const PROFILE_PATHS: Record<UserRole, string[]> = {
-  startup: ["/startup/profile", "/startup/dashboard"],
-  evaluator: ["/evaluator/profile", "/evaluator/dashboard"],
+  startup:     ["/startup/profile",     "/startup/dashboard"    ],
+  evaluator:   ["/evaluator/profile",   "/evaluator/dashboard"  ],
   accelerator: ["/accelerator/profile", "/accelerator/dashboard"],
-  admin: ["/admin/overview"],
+  investor:    ["/app/investor/profile", "/app/investor/dashboard"],
+  admin:       ["/admin/overview"],
 };
 
 export async function updateProfile(formData: FormData) {

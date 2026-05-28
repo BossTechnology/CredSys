@@ -73,6 +73,30 @@ export async function advanceAccreditationStatus(formData: FormData) {
     console.error("[advanceAccreditationStatus] email error", e);
   }
 
+  // Notify investors watching this startup
+  if (nextStatus === "accredited" && updatePayload.unique_code) {
+    try {
+      const { data: watchers } = await supabase
+        .from("investor_watchlist")
+        .select("investors(email, org_name)")
+        .eq("startup_id", request.startup_id)
+        .eq("notify_on_accredited", true);
+
+      if (watchers?.length) {
+        const { sendWatchlistAccredited } = await import("@/lib/email/templates/e14-watchlist-accredited");
+        const portalUrl = process.env.NEXT_PUBLIC_PORTAL_URL ?? "https://startupboss.org";
+        await Promise.allSettled(
+          watchers.map((w) => {
+            const inv = w.investors as unknown as { email: string };
+            return sendWatchlistAccredited(inv.email, request.startup_name, updatePayload.unique_code as string, portalUrl);
+          })
+        );
+      }
+    } catch (e) {
+      console.error("[accreditation] watchlist notification error", e);
+    }
+  }
+
   revalidatePath("/app/evaluator/dashboard");
   revalidatePath(`/app/evaluator/assignments/${requestId}`);
   revalidatePath("/admin/accreditations");
@@ -112,6 +136,35 @@ export async function assignEvaluator(formData: FormData) {
     sendEvaluatorAssigned(request.startup_email, request.startup_name, evaluator.org_name),
     sendNewAssignment(evaluator.email, evaluator.org_name, request.startup_name, requestId),
   ]).catch((e) => console.error("[assignEvaluator] email error", e));
+
+  // Notify investors watching this startup (evaluator assigned)
+  try {
+    const { data: req2 } = await supabase
+      .from("accreditation_requests")
+      .select("startup_id")
+      .eq("id", requestId)
+      .single();
+
+    if (req2?.startup_id) {
+      const { data: watchers } = await supabase
+        .from("investor_watchlist")
+        .select("investors(email)")
+        .eq("startup_id", req2.startup_id)
+        .eq("notify_on_evaluator_assigned", true);
+
+      if (watchers?.length) {
+        const { sendWatchlistEvaluatorAssigned } = await import("@/lib/email/templates/e15-watchlist-evaluator-assigned");
+        await Promise.allSettled(
+          watchers.map((w) => {
+            const inv = w.investors as unknown as { email: string };
+            return sendWatchlistEvaluatorAssigned(inv.email, request.startup_name);
+          })
+        );
+      }
+    }
+  } catch (e) {
+    console.error("[assignEvaluator] watchlist notification error", e);
+  }
 
   revalidatePath("/admin/accreditations");
   revalidatePath("/admin/overview");
