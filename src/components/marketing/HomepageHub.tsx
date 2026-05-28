@@ -441,8 +441,8 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
       {/* ── SPLIT ROW ── */}
       <div style={{ display: "flex", flex: 1, minHeight: "100vh" }}>
 
-        {/* LEFT PANEL — 490px, white */}
-        <div style={{ width: "490px", flexShrink: 0, background: C_WHITE, padding: "24px 38px 32px", display: "flex", flexDirection: "column" }}>
+        {/* LEFT PANEL — 50% viewport, white */}
+        <div style={{ width: "50%", flexShrink: 0, background: C_WHITE, padding: "32px 48px 32px", display: "flex", flexDirection: "column" }}>
 
           {/* Logo */}
           <div style={{ marginBottom: "36px" }}>
@@ -450,8 +450,8 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
               <Image
                 src="/logo.png"
                 alt="StartupBoss.org"
-                width={220}
-                height={40}
+                width={335}
+                height={61}
                 style={{ objectFit: "contain", objectPosition: "left center", display: "block" }}
                 priority
               />
