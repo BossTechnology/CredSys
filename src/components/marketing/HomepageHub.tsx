@@ -450,9 +450,9 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
               <Image
                 src="/logo.png"
                 alt="StartupBoss.org"
-                width={200}
-                height={34}
-                style={{ objectFit: "contain", display: "block" }}
+                width={220}
+                height={40}
+                style={{ objectFit: "contain", objectPosition: "left center", display: "block" }}
                 priority
               />
             </Link>

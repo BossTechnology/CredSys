@@ -17,7 +17,7 @@ export function MarketingNav({ locale }: MarketingNavProps) {
           src="/logo.png"
           alt="StartupBoss.org"
           width={180}
-          height={22}
+          height={33}
           className="object-contain"
           priority
         />
