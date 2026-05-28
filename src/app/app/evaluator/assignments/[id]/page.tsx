@@ -85,6 +85,13 @@ export default async function AssignmentDetailPage({
   const actionLabel= ACTION_LABELS[status];
   const isTerminal = TERMINAL.includes(status);
 
+  // Fetch related sponsorship
+  const { data: sponsorship } = await service
+    .from("accreditation_sponsorships")
+    .select("id, sponsor_type, billing_contact_name, billing_contact_email, billing_contact_phone, billing_contact_address, investors(org_name), accelerators(org_name)")
+    .eq("accreditation_request_id", id)
+    .maybeSingle();
+
   // Fetch cred_page for accredited requests
   let credCode: string | null = null;
   if (status === "accredited") {
@@ -166,6 +173,46 @@ export default async function AssignmentDetailPage({
           />
         </div>
       )}
+
+      {/* Sponsored Accreditation Banner */}
+      {sponsorship && (() => {
+        const inv = sponsorship.investors as unknown as { org_name: string } | null;
+        const acc = sponsorship.accelerators as unknown as { org_name: string } | null;
+        const sponsorName = inv?.org_name ?? acc?.org_name ?? "Sponsor";
+        return (
+          <div className="border border-blue-200 bg-blue-50 px-5 py-3 mb-6">
+            <div className="text-[7px] font-mono text-blue-600 uppercase tracking-widest mb-2 font-bold">
+              Sponsored Accreditation · {sponsorship.sponsor_type}
+            </div>
+            <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-[7.5px] font-mono">
+              <div>
+                <span className="text-cs-400 uppercase tracking-widest text-[6.5px]">Sponsor</span>
+                <div className="font-semibold">{sponsorName}</div>
+              </div>
+              <div>
+                <span className="text-cs-400 uppercase tracking-widest text-[6.5px]">Billing Contact</span>
+                <div className="font-semibold">{sponsorship.billing_contact_name}</div>
+              </div>
+              <div>
+                <span className="text-cs-400 uppercase tracking-widest text-[6.5px]">Billing Email</span>
+                <div>{sponsorship.billing_contact_email}</div>
+              </div>
+              {sponsorship.billing_contact_phone && (
+                <div>
+                  <span className="text-cs-400 uppercase tracking-widest text-[6.5px]">Phone</span>
+                  <div>{sponsorship.billing_contact_phone}</div>
+                </div>
+              )}
+              {sponsorship.billing_contact_address && (
+                <div className="col-span-2">
+                  <span className="text-cs-400 uppercase tracking-widest text-[6.5px]">Address</span>
+                  <div>{sponsorship.billing_contact_address}</div>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Startup snapshot */}
       <div className="border border-cs-200 bg-white mb-6">

@@ -4,6 +4,7 @@ import { redirect }            from "next/navigation";
 import Link                    from "next/link";
 import { Badge }               from "@/components/ui/Badge";
 import { WorkflowStatusBar }   from "@/components/ui/WorkflowStatusBar";
+import { acceptSponsorship, declineSponsorship } from "@/app/actions/sponsorship";
 import type { AccreditationStatus } from "@/lib/supabase/types";
 
 function fmt(iso: string | null | undefined) {
@@ -47,6 +48,14 @@ export default async function StartupDashboardPage() {
 
   const status   = request?.status as AccreditationStatus | undefined;
   const terminal = status ? TERMINAL.includes(status) : false;
+
+  // Pending sponsorship offers
+  const { data: sponsorshipOffers } = await service
+    .from("accreditation_sponsorships")
+    .select("id, sponsor_type, sponsor_investor_id, sponsor_accelerator_id, startup_name_input, notes, created_at, investors(org_name), accelerators(org_name)")
+    .or(`startup_email_input.eq.${startup?.email ?? ""},startup_id.eq.${profile.entity_id}`)
+    .eq("status", "pending_startup_acceptance")
+    .order("created_at", { ascending: false });
 
   // Credential page if accredited
   let credCode: string | null = null;
@@ -184,6 +193,53 @@ export default async function StartupDashboardPage() {
             </div>
           </div>
         </div>
+
+        {/* Sponsorship Offers */}
+        {(sponsorshipOffers ?? []).length > 0 && (
+          <div className="border border-cs-200 bg-white">
+            <div className="px-5 py-3 border-b border-cs-200 bg-cs-50">
+              <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+                Sponsorship Offers ({sponsorshipOffers!.length})
+              </span>
+            </div>
+            <div className="divide-y divide-cs-100">
+              {sponsorshipOffers!.map((offer) => {
+                const inv = offer.investors as unknown as { org_name: string } | null;
+                const acc = offer.accelerators as unknown as { org_name: string } | null;
+                const sponsorName = inv?.org_name ?? acc?.org_name ?? "Unknown Sponsor";
+                return (
+                  <div key={offer.id} className="p-5 flex flex-col gap-3">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <div className="text-[8px] font-semibold">{sponsorName}</div>
+                        <div className="text-[7px] font-mono text-cs-400 mt-0.5 uppercase tracking-widest">
+                          {offer.sponsor_type} · wants to sponsor your accreditation
+                        </div>
+                        {offer.notes && (
+                          <p className="text-[7.5px] text-cs-600 mt-1 leading-relaxed">{offer.notes}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <form action={acceptSponsorship}>
+                        <input type="hidden" name="sponsorship_id" value={offer.id} />
+                        <button type="submit" className="btn-accent btn-sm">
+                          Accept
+                        </button>
+                      </form>
+                      <form action={declineSponsorship}>
+                        <input type="hidden" name="sponsorship_id" value={offer.id} />
+                        <button type="submit" className="btn-danger btn-sm">
+                          Decline
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Right — startup info */}
         <div className="flex flex-col gap-4">

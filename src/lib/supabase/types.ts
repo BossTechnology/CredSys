@@ -1,6 +1,6 @@
 // CredSys — Database Types (aligned with 003_tables.sql spec schema)
 
-export type UserRole = "startup" | "evaluator" | "accelerator" | "admin";
+export type UserRole = "startup" | "evaluator" | "accelerator" | "investor" | "admin";
 
 export type AccreditationStatus =
   | "pending_evaluator_assignment"
@@ -229,6 +229,55 @@ export interface AccreditationRequest {
 // ============================================================
 // Credential Types
 // ============================================================
+
+export interface Investor {
+  id:               string;
+  org_name:         string;
+  email:            string;
+  contact_person:   string | null;
+  phone_whatsapp:   string | null;
+  website:          string | null;
+  investment_focus: string | null;
+  country:          string | null;
+  description:      string | null;
+  is_active:        boolean;
+  created_at:       string;
+  updated_at:       string;
+}
+
+export interface InvestorWatchlistEntry {
+  id:                           string;
+  investor_id:                  string;
+  startup_id:                   string;
+  added_at:                     string;
+  notify_on_accredited:         boolean;
+  notify_on_evaluator_assigned: boolean;
+  notify_on_status_change:      boolean;
+}
+
+export type SponsorshipStatus = "pending_startup_acceptance" | "accepted" | "declined" | "cancelled" | "completed";
+
+export interface AccreditationSponsorship {
+  id:                       string;
+  sponsor_type:             "investor" | "accelerator";
+  sponsor_investor_id:      string | null;
+  sponsor_accelerator_id:   string | null;
+  billing_contact_name:     string;
+  billing_contact_email:    string;
+  billing_contact_phone:    string | null;
+  billing_contact_address:  string | null;
+  startup_id:               string | null;
+  startup_name_input:       string;
+  startup_email_input:      string;
+  accreditation_request_id: string | null;
+  status:                   SponsorshipStatus;
+  accepted_at:              string | null;
+  declined_at:              string | null;
+  completed_at:             string | null;
+  notes:                    string | null;
+  created_at:               string;
+  updated_at:               string;
+}
 
 export interface CredPage {
   id:                       string;

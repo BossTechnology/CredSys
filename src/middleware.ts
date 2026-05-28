@@ -15,6 +15,7 @@ const ROLE_HOME: Record<string, string> = {
   startup:     "/app/startup/dashboard",
   evaluator:   "/app/evaluator/dashboard",
   accelerator: "/app/accelerator/dashboard",
+  investor:    "/app/investor/dashboard",
   admin:       "/admin/overview",
 };
 
@@ -26,6 +27,7 @@ const PROTECTED_ZONES: { prefix: string; role: string }[] = [
   { prefix: "/app/startup",     role: "startup"     },
   { prefix: "/app/evaluator",   role: "evaluator"   },
   { prefix: "/app/accelerator", role: "accelerator" },
+  { prefix: "/app/investor",    role: "investor"    },
   { prefix: "/admin",           role: "admin"       },
   // Legacy portal routes (active during phase transition 1→4)
   { prefix: "/startup",         role: "startup"     },
