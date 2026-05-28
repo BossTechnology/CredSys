@@ -553,8 +553,8 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
       </div>
 
       {/* Copyright */}
-      <div style={{ textAlign: "center", padding: "10px 40px 14px", background: C_WHITE, borderTop: "1px solid #f0f0f0" }}>
-        <p style={{ fontFamily: F_LIGHT, fontSize: "12px", color: C_MUTED }}>
+      <div style={{ textAlign: "center", padding: "10px 40px 14px", background: "#2e2e2e" }}>
+        <p style={{ fontFamily: F_LIGHT, fontSize: "12px", color: "#e0e0e0" }}>
           © 2025 Boss.Technology SAC | Powered by ❤ 🇵🇪 🇨🇴
         </p>
       </div>
