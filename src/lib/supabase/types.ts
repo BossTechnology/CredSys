@@ -46,42 +46,50 @@ export const ACCREDITATION_STATUS_ORDER: AccreditationStatus[] = [
 // ============================================================
 
 export interface Startup {
-  id:          string;
-  org_name:    string;
-  email:       string;
-  industry?:   string;
-  country?:    string;
-  website?:    string;
-  description?: string;
-  stage?:      string;
-  team_size?:  number;
-  created_at:  string;
-  updated_at:  string;
+  id:             string;
+  org_name:       string;
+  email:          string;
+  contact_person?: string;
+  phone_whatsapp?: string;
+  industry?:      string;
+  country?:       string;
+  website?:       string;
+  description?:   string;
+  stage?:         string;
+  team_size?:     number;
+  created_at:     string;
+  updated_at:     string;
 }
 
 export interface Evaluator {
-  id:          string;
-  org_name:    string;
-  email:       string;
-  industry?:   string;
-  country?:    string;
-  website?:    string;
-  description?: string;
-  is_active:   boolean;
-  created_at:  string;
-  updated_at:  string;
+  id:             string;
+  org_name:       string;
+  email:          string;
+  contact_person?: string;
+  phone_whatsapp?: string;
+  industry?:      string;
+  country?:       string;
+  website?:       string;
+  description?:   string;
+  org_type?:      string;
+  is_active:      boolean;
+  created_at:     string;
+  updated_at:     string;
 }
 
 export interface Accelerator {
-  id:          string;
-  org_name:    string;
-  email:       string;
-  industry?:   string;
-  country?:    string;
-  website?:    string;
-  description?: string;
-  is_active:   boolean;
-  created_at:  string;
+  id:             string;
+  org_name:       string;
+  email:          string;
+  contact_person?: string;
+  phone_whatsapp?: string;
+  industry?:      string;
+  country?:       string;
+  website?:       string;
+  description?:   string;
+  org_type?:      string;
+  is_active:      boolean;
+  created_at:     string;
   updated_at:  string;
 }
 

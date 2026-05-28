@@ -42,7 +42,7 @@ export default async function CredListPage({ params }: CredListPageProps) {
 
   return (
     <>
-      <MarketingNav locale={locale} dict={{ nav: dict.nav }} />
+      <MarketingNav locale={locale} />
 
       {/* Black accent strip */}
       <div className="bg-black px-7 py-1">
