@@ -27,7 +27,7 @@ export function AdminNav({ onSignOut }: AdminNavProps) {
         StartupBoss.org
       </Link>
 
-      <span className="text-[7px] font-mono text-cs-600 uppercase tracking-widest border-l border-cs-700 pl-4 shrink-0">
+      <span className="text-[14px] font-mono text-cs-600 uppercase tracking-widest border-l border-cs-700 pl-4 shrink-0">
         Admin
       </span>
 
@@ -37,7 +37,7 @@ export function AdminNav({ onSignOut }: AdminNavProps) {
             key={item.href}
             href={item.href}
             className={cn(
-              "text-[8px] font-mono uppercase tracking-widest pb-0.5 transition-colors",
+              "text-[13px] font-mono uppercase tracking-widest pb-0.5 transition-colors",
               pathname === item.href || pathname.startsWith(item.href + "/")
                 ? "text-white border-b border-white font-bold"
                 : "text-cs-500 hover:text-white"
@@ -51,7 +51,7 @@ export function AdminNav({ onSignOut }: AdminNavProps) {
       {onSignOut && (
         <button
           onClick={onSignOut}
-          className="text-[7.5px] font-mono text-cs-500 uppercase tracking-widest hover:text-white transition-colors"
+          className="text-[12px] font-mono text-cs-500 uppercase tracking-widest hover:text-white transition-colors"
         >
           Sign Out
         </button>

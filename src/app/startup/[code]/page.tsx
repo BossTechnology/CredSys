@@ -117,13 +117,13 @@ export default async function CredentialPage({
         <Link href="/en" className="text-sm font-bold tracking-tight text-black">
           StartupBoss.org
         </Link>
-        <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 ml-4">
+        <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 ml-4">
           CredSys · Public Verification
         </span>
         <div className="flex-1" />
         <Link
           href="/en/login"
-          className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
+          className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
         >
           Sign In
         </Link>
@@ -135,7 +135,7 @@ export default async function CredentialPage({
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-1 h-6 bg-sb-default" />
-            <span className="text-[8px] font-mono text-sb-text uppercase tracking-widest">
+            <span className="text-[13px] font-mono text-sb-text uppercase tracking-widest">
               CredSys Accreditation
             </span>
           </div>
@@ -169,7 +169,7 @@ export default async function CredentialPage({
         {/* Details grid */}
         <div className="bg-white border border-cs-200 mb-6">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-            <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
               Credential Details
             </span>
           </div>
@@ -184,13 +184,13 @@ export default async function CredentialPage({
                                         mono: false, alert: isExpired },
             ].map((f) => (
               <div key={f.label}>
-                <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-1">
+                <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-1">
                   {f.label}
                 </div>
                 <div className={
                   f.alert  ? "text-red-600 text-[10px] font-semibold" :
                   f.mono   ? "text-sb-text font-mono text-[12px] font-bold tracking-widest" :
-                             "text-black text-[11px] font-semibold capitalize"
+                             "text-black text-[14px] font-semibold capitalize"
                 }>
                   {f.value ?? "—"}
                 </div>
@@ -200,14 +200,14 @@ export default async function CredentialPage({
 
           {startup?.description && (
             <div className="border-t border-cs-200 px-6 py-4">
-              <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-1">About</div>
+              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-1">About</div>
               <p className="text-cs-600 text-[10px] leading-relaxed">{startup.description}</p>
             </div>
           )}
 
           {startup?.website && (
             <div className="border-t border-cs-200 px-6 py-4">
-              <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-1">Website</div>
+              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-1">Website</div>
               <a
                 href={startup.website}
                 target="_blank"
@@ -223,7 +223,7 @@ export default async function CredentialPage({
         {/* BLIPS / ADDIS summary */}
         <div className="bg-white border border-cs-200 mb-6">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-            <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
               Evaluation Summary
             </span>
           </div>
@@ -231,8 +231,8 @@ export default async function CredentialPage({
             {/* BLIPS */}
             <div className="px-6 py-5">
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[8px] font-mono font-bold uppercase tracking-widest">BLIPS</span>
-                <span className={`text-[7.5px] font-mono font-bold ${blipsCount === 5 ? "text-sb-text" : "text-cs-400"}`}>
+                <span className="text-[13px] font-mono font-bold uppercase tracking-widest">BLIPS</span>
+                <span className={`text-[12px] font-mono font-bold ${blipsCount === 5 ? "text-sb-text" : "text-cs-400"}`}>
                   {blipsCount}/5
                 </span>
               </div>
@@ -240,8 +240,8 @@ export default async function CredentialPage({
                 {blipsItems.map(({ key, label }) => {
                   const checked = !!req?.blips_verification?.[key];
                   return (
-                    <li key={key} className="flex items-center gap-2 text-[8px] font-mono">
-                      <span className={`w-3 h-3 shrink-0 flex items-center justify-center text-[7px] ${
+                    <li key={key} className="flex items-center gap-2 text-[13px] font-mono">
+                      <span className={`w-3 h-3 shrink-0 flex items-center justify-center text-[14px] ${
                         checked ? "bg-sb-default text-black font-bold" : "bg-cs-100 text-cs-400"
                       }`}>
                         {checked ? "✓" : "○"}
@@ -256,8 +256,8 @@ export default async function CredentialPage({
             {/* ADDIS */}
             <div className="px-6 py-5">
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[8px] font-mono font-bold uppercase tracking-widest">ADDIS</span>
-                <span className={`text-[7.5px] font-mono font-bold ${addisCount === 5 ? "text-sb-text" : "text-cs-400"}`}>
+                <span className="text-[13px] font-mono font-bold uppercase tracking-widest">ADDIS</span>
+                <span className={`text-[12px] font-mono font-bold ${addisCount === 5 ? "text-sb-text" : "text-cs-400"}`}>
                   {addisCount}/5
                 </span>
               </div>
@@ -265,8 +265,8 @@ export default async function CredentialPage({
                 {addisItems.map(({ key, label }) => {
                   const checked = !!req?.addis_verification?.[key];
                   return (
-                    <li key={key} className="flex items-center gap-2 text-[8px] font-mono">
-                      <span className={`w-3 h-3 shrink-0 flex items-center justify-center text-[7px] ${
+                    <li key={key} className="flex items-center gap-2 text-[13px] font-mono">
+                      <span className={`w-3 h-3 shrink-0 flex items-center justify-center text-[14px] ${
                         checked ? "bg-sb-default text-black font-bold" : "bg-cs-100 text-cs-400"
                       }`}>
                         {checked ? "✓" : "○"}
@@ -283,16 +283,16 @@ export default async function CredentialPage({
         {/* Embed badge */}
         <div className="bg-white border border-cs-200 mb-8">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-            <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
               Embed This Badge
             </span>
           </div>
           <div className="p-5">
-            <p className="text-[8px] font-mono text-cs-500 mb-3">
+            <p className="text-[13px] font-mono text-cs-500 mb-3">
               Copy the HTML below to display this credential on your website.
             </p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <pre className="bg-cs-50 border border-cs-200 px-4 py-3 text-[7.5px] font-mono text-cs-600 overflow-x-auto whitespace-pre-wrap break-all select-all">
+            <pre className="bg-cs-50 border border-cs-200 px-4 py-3 text-[12px] font-mono text-cs-600 overflow-x-auto whitespace-pre-wrap break-all select-all">
 {`<a href="${pageUrl}" target="_blank" rel="noopener">
   <img src="${badgeUrl}" alt="${startup?.org_name ?? ""} — CredSys Accredited" width="320" height="100" />
 </a>`}
@@ -301,7 +301,7 @@ export default async function CredentialPage({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-center gap-3 text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+        <div className="flex items-center justify-center gap-3 text-[12px] font-mono text-cs-400 uppercase tracking-widest">
           <span>Verified by</span>
           <Link href="/en" className="text-sb-text hover:underline">StartupBoss.org</Link>
           <span>·</span>

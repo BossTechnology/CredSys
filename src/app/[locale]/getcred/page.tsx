@@ -106,7 +106,7 @@ export default function GetCredPage() {
                 {setupUrl && (
                   <a
                     href={setupUrl}
-                    className="inline-block bg-black text-white text-[8px] font-mono uppercase tracking-widest px-5 py-2.5 hover:bg-cs-800 transition-colors"
+                    className="inline-block bg-black text-white text-[13px] font-mono uppercase tracking-widest px-5 py-2.5 hover:bg-cs-800 transition-colors"
                   >
                     Activate My Account →
                   </a>
@@ -116,7 +116,7 @@ export default function GetCredPage() {
 
             <Link
               href={`/${locale}`}
-              className="text-[8px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
+              className="text-[13px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
             >
               ← Back to home
             </Link>
@@ -132,7 +132,7 @@ export default function GetCredPage() {
 
       {/* Black accent strip */}
       <div className="bg-black px-7 py-1">
-        <span className="text-[7px] font-mono text-sb-default uppercase tracking-widest">
+        <span className="text-[14px] font-mono text-sb-default uppercase tracking-widest">
           GetCRED · Build Trust · Become Unstoppable
         </span>
       </div>
@@ -142,7 +142,7 @@ export default function GetCredPage() {
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-3 h-3 bg-sb-default" />
-            <span className="text-[8px] font-mono text-sb-text uppercase tracking-widest font-semibold">
+            <span className="text-[13px] font-mono text-sb-text uppercase tracking-widest font-semibold">
               Accreditation Application
             </span>
           </div>
@@ -160,7 +160,7 @@ export default function GetCredPage() {
           {/* Section 01 */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest border-b border-cs-200 pb-1 w-full">
+              <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest border-b border-cs-200 pb-1 w-full">
                 01 — Startup Information
               </span>
             </div>
@@ -213,7 +213,7 @@ export default function GetCredPage() {
           {/* Section 02 */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest border-b border-cs-200 pb-1 w-full">
+              <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest border-b border-cs-200 pb-1 w-full">
                 02 — About Your Startup
               </span>
             </div>
@@ -233,7 +233,7 @@ export default function GetCredPage() {
 
           {/* Error */}
           {error && (
-            <div className="border border-red-300 bg-red-50 px-4 py-3 text-[8px] font-mono text-red-700">
+            <div className="border border-red-300 bg-red-50 px-4 py-3 text-[13px] font-mono text-red-700">
               {error}
             </div>
           )}
@@ -245,7 +245,7 @@ export default function GetCredPage() {
             </button>
             <Link
               href={`/${locale}`}
-              className="text-[8px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
+              className="text-[13px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
             >
               Cancel
             </Link>

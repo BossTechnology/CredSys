@@ -59,17 +59,17 @@ function CriterionRow({
         className="accent-black w-3.5 h-3.5 shrink-0"
       />
       <div
-        className={`w-6 h-6 flex items-center justify-center shrink-0 text-[9px] font-bold font-mono ${
+        className={`w-6 h-6 flex items-center justify-center shrink-0 text-[13px] font-bold font-mono ${
           checked ? "bg-sb-default text-sb-text" : "bg-cs-100 text-cs-400"
         }`}
       >
         {letter}
       </div>
-      <span className={`text-[8px] font-mono ${checked ? "text-black font-semibold" : "text-cs-500"}`}>
+      <span className={`text-[13px] font-mono ${checked ? "text-black font-semibold" : "text-cs-500"}`}>
         {label}
       </span>
       {checked && (
-        <span className="ml-auto text-[6.5px] font-mono text-sb-text uppercase tracking-widest">
+        <span className="ml-auto text-[14px] font-mono text-sb-text uppercase tracking-widest">
           ✓ Verified
         </span>
       )}
@@ -175,10 +175,10 @@ export function VerificationPanel({
         {/* BLIPS */}
         <div className="border-r border-cs-200">
           <div className="px-4 py-2 bg-cs-50 border-b border-cs-200 flex items-center justify-between">
-            <span className="text-[7.5px] font-mono font-bold uppercase tracking-widest">
+            <span className="text-[12px] font-mono font-bold uppercase tracking-widest">
               BLIPS
             </span>
-            <span className={`text-[7px] font-mono ${blipsCount === 5 ? "text-sb-text font-bold" : "text-cs-400"}`}>
+            <span className={`text-[14px] font-mono ${blipsCount === 5 ? "text-sb-text font-bold" : "text-cs-400"}`}>
               {blipsCount}/5
             </span>
           </div>
@@ -198,10 +198,10 @@ export function VerificationPanel({
         {/* ADDIS */}
         <div>
           <div className="px-4 py-2 bg-cs-50 border-b border-cs-200 flex items-center justify-between">
-            <span className="text-[7.5px] font-mono font-bold uppercase tracking-widest">
+            <span className="text-[12px] font-mono font-bold uppercase tracking-widest">
               ADDIS
             </span>
-            <span className={`text-[7px] font-mono ${addisCount === 5 ? "text-sb-text font-bold" : "text-cs-400"}`}>
+            <span className={`text-[14px] font-mono ${addisCount === 5 ? "text-sb-text font-bold" : "text-cs-400"}`}>
               {addisCount}/5
             </span>
           </div>
@@ -221,7 +221,7 @@ export function VerificationPanel({
 
       {/* All verified banner */}
       {allVerified && (
-        <div className="mt-3 bg-sb-light border border-sb-default px-4 py-2 text-[7.5px] font-mono text-sb-text font-semibold">
+        <div className="mt-3 bg-sb-light border border-sb-default px-4 py-2 text-[12px] font-mono text-sb-text font-semibold">
           ✓ All 10 criteria verified — ready to accredit
         </div>
       )}
@@ -243,10 +243,10 @@ export function VerificationPanel({
 
       {readOnly && notes && (
         <div className="mt-4 border border-cs-200 bg-cs-50 px-4 py-3">
-          <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-1">
+          <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-1">
             Evaluator Notes
           </div>
-          <p className="text-[8px] text-cs-700 leading-relaxed">{notes}</p>
+          <p className="text-[13px] text-cs-700 leading-relaxed">{notes}</p>
         </div>
       )}
 
@@ -261,17 +261,17 @@ export function VerificationPanel({
             {isPending ? "Saving…" : "Save Progress"}
           </button>
           {isPending && (
-            <span className="text-[7.5px] font-mono text-cs-400 animate-pulse">
+            <span className="text-[12px] font-mono text-cs-400 animate-pulse">
               Saving…
             </span>
           )}
           {!isPending && saved && (
-            <span className="text-[7.5px] font-mono text-sb-text">
+            <span className="text-[12px] font-mono text-sb-text">
               ✓ Auto-saved
             </span>
           )}
           {error && (
-            <span className="text-[7.5px] font-mono text-red-600">{error}</span>
+            <span className="text-[12px] font-mono text-red-600">{error}</span>
           )}
         </div>
       )}

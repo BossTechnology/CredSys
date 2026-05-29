@@ -8,7 +8,7 @@ export default function VerifyNotFound() {
         <Link href="/" className="text-sm font-bold tracking-tight">
           StartupBoss.org
         </Link>
-        <span className="text-[8px] font-mono text-cs-600 uppercase tracking-widest border-l border-cs-700 pl-4 ml-4">
+        <span className="text-[13px] font-mono text-cs-600 uppercase tracking-widest border-l border-cs-700 pl-4 ml-4">
           Public Credential Verification
         </span>
       </nav>
@@ -17,7 +17,7 @@ export default function VerifyNotFound() {
         <div className="max-w-[480px]">
           <div className="inline-flex items-center gap-2 mb-6">
             <span className="w-1 h-6 bg-cs-red inline-block" />
-            <span className="text-[8px] font-mono text-cs-red uppercase tracking-widest">
+            <span className="text-[13px] font-mono text-cs-red uppercase tracking-widest">
               Not Verified
             </span>
           </div>
@@ -41,7 +41,7 @@ export default function VerifyNotFound() {
         </div>
       </main>
 
-      <div className="text-center py-3 text-[7px] font-mono text-cs-700 border-t border-cs-800">
+      <div className="text-center py-3 text-[14px] font-mono text-cs-700 border-t border-cs-800">
         boss.technology · chass1s.com · startupboss.org
       </div>
     </div>

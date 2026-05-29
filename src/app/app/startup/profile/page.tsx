@@ -93,18 +93,18 @@ export default async function StartupProfilePage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
-          <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
             Startup Portal
           </span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight">Profile</h1>
-        <p className="text-[8px] font-mono text-cs-400 mt-1">{user.email}</p>
+        <p className="text-[13px] font-mono text-cs-400 mt-1">{user.email}</p>
       </div>
 
       <form action={updateStartupProfile} className="flex flex-col gap-6">
         <div className="border border-cs-200 bg-white">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-            <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
               Organization Info
             </span>
           </div>

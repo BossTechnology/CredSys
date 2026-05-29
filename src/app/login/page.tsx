@@ -29,7 +29,7 @@ export default function LoginPage() {
             StartupBoss.org
           </Link>
           <div className="bg-black text-white px-4 py-2 mb-1">
-            <span className="text-[8px] font-mono uppercase tracking-widest">Sign In</span>
+            <span className="text-[13px] font-mono uppercase tracking-widest">Sign In</span>
           </div>
           <div className="h-0.5 bg-sb-default" />
         </div>
@@ -54,7 +54,7 @@ export default function LoginPage() {
           />
 
           {error && (
-            <div className="bg-cs-red-100 border border-cs-red px-3 py-2 text-[8px] font-mono text-cs-red">
+            <div className="bg-cs-red-100 border border-cs-red px-3 py-2 text-[13px] font-mono text-cs-red">
               {error}
             </div>
           )}
@@ -65,7 +65,7 @@ export default function LoginPage() {
         </form>
 
         <div className="mt-6 text-center">
-          <span className="text-[8px] font-mono text-cs-400">
+          <span className="text-[13px] font-mono text-cs-400">
             No account?{" "}
             <Link href="/signup" className="text-black underline">
               Apply for Accreditation

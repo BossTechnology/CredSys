@@ -47,7 +47,7 @@ export function WorkflowStatusBar({ currentStatus, className }: WorkflowStatusBa
       >
         <span
           className={cn(
-            "text-[8px] font-mono uppercase tracking-widest font-semibold",
+            "text-[13px] font-mono uppercase tracking-widest font-semibold",
             currentStatus === "rejected" ? "text-cs-red" : "text-cs-500"
           )}
         >
@@ -74,7 +74,7 @@ export function WorkflowStatusBar({ currentStatus, className }: WorkflowStatusBa
             <div className="flex flex-col items-center gap-1 min-w-[56px]">
               <div
                 className={cn(
-                  "w-6 h-6 flex items-center justify-center text-[7px] font-mono font-bold",
+                  "w-6 h-6 flex items-center justify-center text-[14px] font-mono font-bold",
                   done   && "bg-black text-white",
                   active && "bg-black text-white ring-2 ring-offset-1 ring-black",
                   future && "bg-cs-200 text-cs-500"
@@ -84,7 +84,7 @@ export function WorkflowStatusBar({ currentStatus, className }: WorkflowStatusBa
               </div>
               <span
                 className={cn(
-                  "text-[6px] font-mono uppercase tracking-widest text-center whitespace-nowrap",
+                  "text-[10px] font-mono uppercase tracking-widest text-center whitespace-nowrap",
                   active ? "text-black font-bold" : done ? "text-cs-600" : "text-cs-400"
                 )}
               >

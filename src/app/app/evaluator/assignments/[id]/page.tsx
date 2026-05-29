@@ -109,7 +109,7 @@ export default async function AssignmentDetailPage({
       {/* Back */}
       <Link
         href="/app/evaluator/dashboard"
-        className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors block mb-6"
+        className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors block mb-6"
       >
         ← Back to Dashboard
       </Link>
@@ -117,11 +117,11 @@ export default async function AssignmentDetailPage({
       {/* Header */}
       <div className="flex items-start justify-between gap-4 mb-6">
         <div>
-          <div className="text-[8px] font-mono text-cs-400 uppercase tracking-widest mb-1">
+          <div className="text-[13px] font-mono text-cs-400 uppercase tracking-widest mb-1">
             Assignment Detail
           </div>
           <h1 className="text-2xl font-bold tracking-tight">{req.startup_name}</h1>
-          <p className="text-[8px] font-mono text-cs-500 mt-1">{req.startup_email}</p>
+          <p className="text-[13px] font-mono text-cs-500 mt-1">{req.startup_email}</p>
         </div>
         <Badge variant={status} />
       </div>
@@ -137,17 +137,17 @@ export default async function AssignmentDetailPage({
       {status === "accredited" && credCode && (
         <div className="bg-sb-light border border-sb-default px-5 py-3 mb-6 flex items-center justify-between">
           <div>
-            <div className="text-[7px] font-mono text-sb-text uppercase tracking-widest mb-0.5">
+            <div className="text-[14px] font-mono text-sb-text uppercase tracking-widest mb-0.5">
               Accredited
             </div>
-            <div className="text-[8px] font-mono font-semibold tracking-widest">
+            <div className="text-[13px] font-mono font-semibold tracking-widest">
               {credCode.toUpperCase()}
             </div>
           </div>
           <Link
             href={`/startup/${credCode}`}
             target="_blank"
-            className="text-[7.5px] font-mono text-sb-text underline underline-offset-2 hover:opacity-80"
+            className="text-[12px] font-mono text-sb-text underline underline-offset-2 hover:opacity-80"
           >
             View Credential →
           </Link>
@@ -160,7 +160,7 @@ export default async function AssignmentDetailPage({
         status === "accredited") && (
         <div className="mb-6">
           <div className="flex items-center mb-3">
-            <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest border-b border-cs-200 pb-1 flex-1">
+            <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest border-b border-cs-200 pb-1 flex-1">
               BLIPS / ADDIS Verification
             </span>
           </div>
@@ -181,31 +181,31 @@ export default async function AssignmentDetailPage({
         const sponsorName = inv?.org_name ?? acc?.org_name ?? "Sponsor";
         return (
           <div className="border border-blue-200 bg-blue-50 px-5 py-3 mb-6">
-            <div className="text-[7px] font-mono text-blue-600 uppercase tracking-widest mb-2 font-bold">
+            <div className="text-[14px] font-mono text-blue-600 uppercase tracking-widest mb-2 font-bold">
               Sponsored Accreditation · {sponsorship.sponsor_type}
             </div>
-            <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-[7.5px] font-mono">
+            <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-[12px] font-mono">
               <div>
-                <span className="text-cs-400 uppercase tracking-widest text-[6.5px]">Sponsor</span>
+                <span className="text-cs-400 uppercase tracking-widest text-[14px]">Sponsor</span>
                 <div className="font-semibold">{sponsorName}</div>
               </div>
               <div>
-                <span className="text-cs-400 uppercase tracking-widest text-[6.5px]">Billing Contact</span>
+                <span className="text-cs-400 uppercase tracking-widest text-[14px]">Billing Contact</span>
                 <div className="font-semibold">{sponsorship.billing_contact_name}</div>
               </div>
               <div>
-                <span className="text-cs-400 uppercase tracking-widest text-[6.5px]">Billing Email</span>
+                <span className="text-cs-400 uppercase tracking-widest text-[14px]">Billing Email</span>
                 <div>{sponsorship.billing_contact_email}</div>
               </div>
               {sponsorship.billing_contact_phone && (
                 <div>
-                  <span className="text-cs-400 uppercase tracking-widest text-[6.5px]">Phone</span>
+                  <span className="text-cs-400 uppercase tracking-widest text-[14px]">Phone</span>
                   <div>{sponsorship.billing_contact_phone}</div>
                 </div>
               )}
               {sponsorship.billing_contact_address && (
                 <div className="col-span-2">
-                  <span className="text-cs-400 uppercase tracking-widest text-[6.5px]">Address</span>
+                  <span className="text-cs-400 uppercase tracking-widest text-[14px]">Address</span>
                   <div>{sponsorship.billing_contact_address}</div>
                 </div>
               )}
@@ -217,7 +217,7 @@ export default async function AssignmentDetailPage({
       {/* Startup snapshot */}
       <div className="border border-cs-200 bg-white mb-6">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-          <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
             Startup Profile
           </span>
         </div>
@@ -231,10 +231,10 @@ export default async function AssignmentDetailPage({
             { label: "Submitted",   value: fmt(req.created_at) },
           ].map((f) => (
             <div key={f.label}>
-              <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                 {f.label}
               </div>
-              <div className="text-[8px] font-semibold">
+              <div className="text-[13px] font-semibold">
                 {f.value ? String(f.value) : "—"}
               </div>
             </div>
@@ -242,46 +242,46 @@ export default async function AssignmentDetailPage({
 
           {req.description && (
             <div className="col-span-2">
-              <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                 Description
               </div>
-              <p className="text-[8px] text-cs-700 leading-relaxed">{req.description}</p>
+              <p className="text-[13px] text-cs-700 leading-relaxed">{req.description}</p>
             </div>
           )}
           {req.problem && (
             <div className="col-span-2">
-              <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                 Problem
               </div>
-              <p className="text-[8px] text-cs-700 leading-relaxed">{req.problem}</p>
+              <p className="text-[13px] text-cs-700 leading-relaxed">{req.problem}</p>
             </div>
           )}
           {req.traction && (
             <div className="col-span-2">
-              <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                 Traction
               </div>
-              <p className="text-[8px] text-cs-700 leading-relaxed">{req.traction}</p>
+              <p className="text-[13px] text-cs-700 leading-relaxed">{req.traction}</p>
             </div>
           )}
           {req.demo_url && (
             <div>
-              <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                 Demo
               </div>
               <a href={req.demo_url} target="_blank" rel="noopener noreferrer"
-                 className="text-[8px] text-black underline underline-offset-2 break-all">
+                 className="text-[13px] text-black underline underline-offset-2 break-all">
                 {req.demo_url}
               </a>
             </div>
           )}
           {req.pitch_deck_url && (
             <div>
-              <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                 Pitch Deck
               </div>
               <a href={req.pitch_deck_url} target="_blank" rel="noopener noreferrer"
-                 className="text-[8px] text-black underline underline-offset-2 break-all">
+                 className="text-[13px] text-black underline underline-offset-2 break-all">
                 {req.pitch_deck_url}
               </a>
             </div>
@@ -293,7 +293,7 @@ export default async function AssignmentDetailPage({
       {!isTerminal && nextStatus && (
         <div className="border border-cs-200 bg-white">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-            <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
               Evaluator Actions
             </span>
           </div>
@@ -312,7 +312,7 @@ export default async function AssignmentDetailPage({
                 </button>
               </form>
               {nextStatus === "accredited" && (
-                <span className="text-[7px] font-mono text-cs-400">
+                <span className="text-[14px] font-mono text-cs-400">
                   Save verification progress first, then accredit.
                 </span>
               )}
@@ -321,7 +321,7 @@ export default async function AssignmentDetailPage({
             {/* Reject with reason */}
             <form action={rejectAction} className="border-t border-cs-100 pt-4 flex flex-col gap-2">
               <input type="hidden" name="request_id" value={req.id} />
-              <label className="text-[7px] font-mono text-cs-400 uppercase tracking-widest">
+              <label className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
                 Rejection Reason (optional)
               </label>
               <div className="flex items-start gap-3">
@@ -329,7 +329,7 @@ export default async function AssignmentDetailPage({
                   name="rejection_reason"
                   rows={2}
                   placeholder="Explain why the application is being rejected…"
-                  className="cs-input resize-none flex-1 text-[7.5px]"
+                  className="cs-input resize-none flex-1 text-[12px]"
                 />
                 <button type="submit" className="btn-danger btn-sm shrink-0 mt-0.5">
                   Reject

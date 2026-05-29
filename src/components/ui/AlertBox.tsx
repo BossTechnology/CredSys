@@ -24,7 +24,7 @@ export function AlertBox({
   return (
     <div
       className={cn(
-        "px-4 py-2 text-[8px] font-mono",
+        "px-4 py-2 text-[13px] font-mono",
         variantStyles[variant],
         className
       )}

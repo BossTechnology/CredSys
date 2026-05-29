@@ -22,7 +22,7 @@ function NavLink({ href, label, dark = false }: NavLinkProps) {
     <Link
       href={href}
       className={cn(
-        "text-[8px] font-mono uppercase tracking-widest pb-0.5 transition-colors",
+        "text-[13px] font-mono uppercase tracking-widest pb-0.5 transition-colors",
         dark
           ? active
             ? "text-white border-b border-white font-bold"
@@ -61,7 +61,7 @@ export function AdminNav({ onSignOut }: AdminNavProps) {
       >
         StartupBoss.org
       </Link>
-      <span className="text-[7px] font-mono text-cs-600 uppercase tracking-widest border-l border-cs-700 pl-4 shrink-0">
+      <span className="text-[14px] font-mono text-cs-600 uppercase tracking-widest border-l border-cs-700 pl-4 shrink-0">
         Admin
       </span>
       <div className="flex-1 flex items-center gap-5 ml-2">
@@ -72,7 +72,7 @@ export function AdminNav({ onSignOut }: AdminNavProps) {
       {onSignOut && (
         <button
           onClick={onSignOut}
-          className="text-[7.5px] font-mono text-cs-500 uppercase tracking-widest hover:text-white transition-colors"
+          className="text-[12px] font-mono text-cs-500 uppercase tracking-widest hover:text-white transition-colors"
         >
           Sign Out
         </button>
@@ -103,7 +103,7 @@ export function EvaluatorNav({ onSignOut }: EvaluatorNavProps) {
       >
         StartupBoss.org
       </Link>
-      <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
+      <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
         Evaluator
       </span>
       <div className="flex-1 flex items-center gap-5 ml-2">
@@ -114,7 +114,7 @@ export function EvaluatorNav({ onSignOut }: EvaluatorNavProps) {
       {onSignOut && (
         <button
           onClick={onSignOut}
-          className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
+          className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
         >
           Sign Out
         </button>
@@ -145,7 +145,7 @@ export function StartupNav({ onSignOut }: StartupNavProps) {
       >
         StartupBoss.org
       </Link>
-      <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
+      <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
         Startup
       </span>
       <div className="flex-1 flex items-center gap-5 ml-2">
@@ -156,7 +156,7 @@ export function StartupNav({ onSignOut }: StartupNavProps) {
       {onSignOut && (
         <button
           onClick={onSignOut}
-          className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
+          className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
         >
           Sign Out
         </button>
@@ -187,7 +187,7 @@ export function AcceleratorNav({ onSignOut }: AcceleratorNavProps) {
       >
         StartupBoss.org
       </Link>
-      <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
+      <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
         Accelerator
       </span>
       <div className="flex-1 flex items-center gap-5 ml-2">
@@ -198,7 +198,7 @@ export function AcceleratorNav({ onSignOut }: AcceleratorNavProps) {
       {onSignOut && (
         <button
           onClick={onSignOut}
-          className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
+          className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
         >
           Sign Out
         </button>
@@ -226,7 +226,7 @@ export function InvestorNav({ onSignOut }: InvestorNavProps) {
       <Link href="/app/investor/dashboard" className="text-sm font-bold tracking-tight text-black shrink-0">
         StartupBoss.org
       </Link>
-      <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
+      <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
         Investor
       </span>
       <div className="flex-1 flex items-center gap-5 ml-2">
@@ -235,7 +235,7 @@ export function InvestorNav({ onSignOut }: InvestorNavProps) {
         ))}
       </div>
       {onSignOut && (
-        <button onClick={onSignOut} className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors">
+        <button onClick={onSignOut} className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors">
           Sign Out
         </button>
       )}
@@ -258,12 +258,12 @@ export function PendingBanner({
 }: PendingBannerProps) {
   return (
     <div className="bg-sb-light border-b border-sb-default px-7 py-2 flex items-center gap-3">
-      <span className="text-[7px] font-mono text-sb-text uppercase tracking-widest font-semibold">
+      <span className="text-[14px] font-mono text-sb-text uppercase tracking-widest font-semibold">
         Pending Activation
       </span>
-      <span className="text-[8px] text-sb-text">{message}</span>
+      <span className="text-[13px] text-sb-text">{message}</span>
       {role && (
-        <span className="text-[7px] font-mono text-sb-dark uppercase tracking-widest ml-auto">
+        <span className="text-[14px] font-mono text-sb-dark uppercase tracking-widest ml-auto">
           {role}
         </span>
       )}
@@ -289,7 +289,7 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
   return (
     <nav
       aria-label="Breadcrumb"
-      className={cn("flex items-center gap-2 text-[7.5px] font-mono text-cs-500 uppercase tracking-widest", className)}
+      className={cn("flex items-center gap-2 text-[12px] font-mono text-cs-500 uppercase tracking-widest", className)}
     >
       {items.map((item, i) => (
         <span key={i} className="flex items-center gap-2">

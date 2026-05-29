@@ -139,12 +139,12 @@ export default async function AcceleratorSponsorPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
-          <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
             Accelerator Portal
           </span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight">Sponsor an Accreditation</h1>
-        <p className="text-[8px] font-mono text-cs-400 mt-1">
+        <p className="text-[13px] font-mono text-cs-400 mt-1">
           Fund a startup&apos;s accreditation process on their behalf.
         </p>
       </div>
@@ -155,7 +155,7 @@ export default async function AcceleratorSponsorPage() {
         {/* Section 1: Billing Contact */}
         <div className="bg-white border border-cs-200">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-            <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
               Billing Contact
             </span>
           </div>
@@ -205,7 +205,7 @@ export default async function AcceleratorSponsorPage() {
         {/* Section 2: Startup Info */}
         <div className="bg-white border border-cs-200">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-            <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
               Startup to Sponsor
             </span>
           </div>
@@ -229,7 +229,7 @@ export default async function AcceleratorSponsorPage() {
                 placeholder="startup@example.com"
                 className="cs-input"
               />
-              <p className="text-[7px] font-mono text-cs-400 mt-1">
+              <p className="text-[14px] font-mono text-cs-400 mt-1">
                 We will send the sponsorship offer to this email address.
               </p>
             </div>
@@ -239,7 +239,7 @@ export default async function AcceleratorSponsorPage() {
         {/* Section 3: Message */}
         <div className="bg-white border border-cs-200">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-            <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
               Message to Startup (Optional)
             </span>
           </div>
@@ -262,7 +262,7 @@ export default async function AcceleratorSponsorPage() {
       {(existingSponsorships ?? []).length > 0 && (
         <div className="mt-10 bg-white border border-cs-200">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-            <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
               Your Sponsorships · {existingSponsorships!.length}
             </span>
           </div>
@@ -270,12 +270,12 @@ export default async function AcceleratorSponsorPage() {
             {existingSponsorships!.map((s) => (
               <div key={s.id} className="px-5 py-3 flex items-center justify-between gap-4">
                 <div>
-                  <div className="text-[8px] font-semibold">{s.startup_name_input}</div>
-                  <div className="text-[7px] font-mono text-cs-400 mt-0.5">{s.startup_email_input}</div>
+                  <div className="text-[13px] font-semibold">{s.startup_name_input}</div>
+                  <div className="text-[14px] font-mono text-cs-400 mt-0.5">{s.startup_email_input}</div>
                 </div>
                 <div className="flex items-center gap-4 shrink-0">
-                  <span className="text-[7px] font-mono text-cs-400">{fmt(s.created_at)}</span>
-                  <span className={`text-[7px] font-mono font-bold uppercase tracking-widest ${STATUS_COLORS[s.status] ?? "text-cs-400"}`}>
+                  <span className="text-[14px] font-mono text-cs-400">{fmt(s.created_at)}</span>
+                  <span className={`text-[14px] font-mono font-bold uppercase tracking-widest ${STATUS_COLORS[s.status] ?? "text-cs-400"}`}>
                     {s.status.replace(/_/g, " ")}
                   </span>
                 </div>

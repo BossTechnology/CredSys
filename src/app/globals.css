@@ -81,9 +81,9 @@
   --color-cs-cream-dark: #F2EBE4;
   --color-cs-cream-border: #E8DFD0;
 
-  /* Fonts */
-  --font-mono: "JetBrains Mono", "Courier New", monospace;
-  --font-body: "Inter", system-ui, sans-serif;
+  /* Fonts — Avenir LT (loaded via @font-face above) */
+  --font-mono: 'avenir-lt-w01_85-heavy1475544', sans-serif;
+  --font-body: 'avenir-lt-w01_35-light1475496', sans-serif;
 
   /* Container widths */
   --container-sm: 600px;
@@ -128,69 +128,69 @@
      ============================================= */
   .btn-primary {
     @apply inline-flex items-center justify-center bg-black text-white
-           text-[8px] font-mono font-semibold uppercase tracking-widest
+           text-[13px] font-mono tracking-[.03em]
            px-4 py-2 transition-opacity hover:opacity-80 disabled:opacity-40
            disabled:cursor-not-allowed;
   }
 
   .btn-outline {
     @apply inline-flex items-center justify-center bg-white text-black
-           border border-black text-[8px] font-mono font-semibold uppercase
-           tracking-widest px-4 py-2 transition-colors
+           border border-black text-[13px] font-mono tracking-[.03em]
+           px-4 py-2 transition-colors
            hover:bg-black hover:text-white disabled:opacity-40
            disabled:cursor-not-allowed;
   }
 
   .btn-ghost {
     @apply inline-flex items-center justify-center bg-transparent text-cs-500
-           text-[8px] font-mono uppercase tracking-widest px-4 py-2
+           text-[13px] font-mono tracking-[.02em] px-4 py-2
            transition-colors hover:text-black disabled:opacity-40
            disabled:cursor-not-allowed;
   }
 
   .btn-danger {
     @apply inline-flex items-center justify-center bg-cs-red text-white
-           text-[8px] font-mono font-semibold uppercase tracking-widest
+           text-[13px] font-mono tracking-[.03em]
            px-4 py-2 transition-opacity hover:opacity-80 disabled:opacity-40
            disabled:cursor-not-allowed;
   }
 
   .btn-accent {
     @apply inline-flex items-center justify-center bg-sb-default text-sb-text
-           text-[8px] font-mono font-semibold uppercase tracking-widest
+           text-[13px] font-mono tracking-[.03em]
            px-4 py-2 transition-opacity hover:opacity-80 disabled:opacity-40
            disabled:cursor-not-allowed;
   }
 
   /* Size modifiers */
-  .btn-sm  { @apply px-3 py-1 text-[7px]; }
-  .btn-lg  { @apply px-6 py-3 text-[9px]; }
+  .btn-sm  { @apply px-3 py-1 text-[12px]; }
+  .btn-lg  { @apply px-6 py-3 text-[14px]; }
 
   /* =============================================
      INPUTS
      ============================================= */
   .cs-input {
-    @apply w-full border border-cs-200 bg-white text-[11px] font-mono
+    @apply w-full border border-cs-200 bg-white text-[14px]
            text-black px-3 py-2 outline-none placeholder:text-cs-400
            focus:border-black transition-colors;
   }
 
   .cs-input-cream {
-    @apply w-full border border-cs-cream-border bg-cs-cream text-[11px]
-           font-mono text-black px-3 py-2 outline-none
+    @apply w-full border border-cs-cream-border bg-cs-cream text-[14px]
+           text-black px-3 py-2 outline-none
            placeholder:text-cs-400 focus:border-cs-700 transition-colors;
   }
 
   .cs-label {
-    @apply block text-[7.5px] font-mono text-cs-600 uppercase tracking-widest mb-1;
+    @apply block text-[12px] font-mono text-cs-600 tracking-[.04em] mb-1;
   }
 
   /* =============================================
      STATUS BADGES
      ============================================= */
   .status-badge {
-    @apply inline-block text-[6.5px] font-mono uppercase tracking-widest
-           px-2 py-0.5 font-semibold;
+    @apply inline-block text-[11px] font-mono tracking-[.04em]
+           px-2 py-0.5;
   }
 
   .status-accredited     { @apply bg-sb-light text-sb-text; }
@@ -246,17 +246,17 @@
 
   /* Section divider — black bar */
   .section-bar {
-    @apply bg-black text-white text-xs font-mono uppercase tracking-widest px-4 py-1 flex items-center gap-3;
+    @apply bg-black text-white text-[13px] font-mono tracking-[.04em] px-4 py-1 flex items-center gap-3;
   }
 
   /* Section bar — accent variant */
   .section-bar-accent {
-    @apply bg-sb-default text-sb-text text-xs font-mono uppercase tracking-widest px-4 py-1 flex items-center;
+    @apply bg-sb-default text-sb-text text-[13px] font-mono tracking-[.04em] px-4 py-1 flex items-center;
   }
 
   /* Section bar — red alert */
   .section-bar-alert {
-    @apply bg-cs-red-100 text-cs-red text-xs font-mono uppercase tracking-widest px-4 py-1 flex items-center;
+    @apply bg-cs-red-100 text-cs-red text-[13px] font-mono tracking-[.04em] px-4 py-1 flex items-center;
   }
 
   /* Dense data table */
@@ -265,7 +265,7 @@
   }
 
   .cs-table thead th {
-    @apply bg-cs-100 text-cs-400 text-[6.5px] font-mono uppercase tracking-widest px-3 py-1 text-left border-b-2 border-cs-200;
+    @apply bg-cs-100 text-cs-400 text-[11px] font-mono tracking-[.05em] uppercase px-3 py-1 text-left border-b-2 border-cs-200;
   }
 
   .cs-table tbody tr:nth-child(even) {
@@ -285,7 +285,7 @@
   }
 
   .cs-table tbody td {
-    @apply px-3 py-2 text-[8px] border-r border-cs-50 last:border-r-0;
+    @apply px-3 py-2 text-[13px] border-r border-cs-50 last:border-r-0;
   }
 
   /* Pending activation banner */
@@ -295,6 +295,6 @@
 
   /* Metric strip */
   .metric-strip {
-    @apply bg-white border border-cs-200 px-4 py-2 flex items-center gap-6 text-xs font-mono;
+    @apply bg-white border border-cs-200 px-4 py-2 flex items-center gap-6 text-[13px] font-mono;
   }
 }

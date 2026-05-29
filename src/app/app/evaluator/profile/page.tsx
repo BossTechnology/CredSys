@@ -93,12 +93,12 @@ export default async function EvaluatorProfilePage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
-          <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
             Evaluator Portal
           </span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight">Profile</h1>
-        <p className="text-[8px] font-mono text-cs-400 mt-1">{user.email}</p>
+        <p className="text-[13px] font-mono text-cs-400 mt-1">{user.email}</p>
       </div>
 
       {/* Stats strip */}
@@ -112,10 +112,10 @@ export default async function EvaluatorProfilePage() {
               : "—" },
         ].map((s) => (
           <div key={s.label} className="flex-1 px-5 py-3">
-            <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+            <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
               {s.label}
             </div>
-            <div className={`text-[8px] font-semibold ${s.accent ? "text-sb-text" : ""}`}>
+            <div className={`text-[13px] font-semibold ${s.accent ? "text-sb-text" : ""}`}>
               {s.value}
             </div>
           </div>
@@ -126,7 +126,7 @@ export default async function EvaluatorProfilePage() {
       <form action={updateEvaluatorProfile} className="flex flex-col gap-6">
         <div className="border border-cs-200 bg-white">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-            <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
               Organization Info
             </span>
           </div>

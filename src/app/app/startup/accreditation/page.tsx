@@ -82,13 +82,13 @@ export default async function StartupAccreditationPage() {
         <div className="mb-8">
           <Link
             href="/app/startup/dashboard"
-            className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors block mb-6"
+            className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors block mb-6"
           >
             ← Dashboard
           </Link>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-2 h-2 bg-sb-default" />
-            <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
               Apply for Accreditation
             </span>
           </div>
@@ -102,7 +102,7 @@ export default async function StartupAccreditationPage() {
 
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-              <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+              <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 01 — Startup Information
               </span>
             </div>
@@ -156,7 +156,7 @@ export default async function StartupAccreditationPage() {
 
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-              <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+              <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 02 — About Your Startup
               </span>
             </div>
@@ -178,7 +178,7 @@ export default async function StartupAccreditationPage() {
 
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-              <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+              <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 03 — Supporting Evidence
               </span>
             </div>
@@ -230,7 +230,7 @@ export default async function StartupAccreditationPage() {
 
       <Link
         href="/app/startup/dashboard"
-        className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors block mb-6"
+        className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors block mb-6"
       >
         ← Dashboard
       </Link>
@@ -238,11 +238,11 @@ export default async function StartupAccreditationPage() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4 mb-6">
         <div>
-          <div className="text-[8px] font-mono text-cs-400 uppercase tracking-widest mb-1">
+          <div className="text-[13px] font-mono text-cs-400 uppercase tracking-widest mb-1">
             Accreditation Request
           </div>
           <h1 className="text-2xl font-bold tracking-tight">{request.startup_name}</h1>
-          <p className="text-[8px] font-mono text-cs-400 mt-1">
+          <p className="text-[13px] font-mono text-cs-400 mt-1">
             Submitted {fmt(request.created_at)}
           </p>
         </div>
@@ -260,13 +260,13 @@ export default async function StartupAccreditationPage() {
       {status === "accredited" && credCode && (
         <div className="bg-sb-light border border-sb-default px-5 py-4 mb-6 flex items-center justify-between">
           <div>
-            <div className="text-[7px] font-mono text-sb-text uppercase tracking-widest mb-0.5">
+            <div className="text-[14px] font-mono text-sb-text uppercase tracking-widest mb-0.5">
               Credential ID
             </div>
             <div className="text-lg font-bold font-mono tracking-widest">
               {credCode.toUpperCase()}
             </div>
-            <div className="text-[7px] font-mono text-cs-400 mt-0.5">
+            <div className="text-[14px] font-mono text-cs-400 mt-0.5">
               Accredited {fmt(request.accredited_at)}
               {request.expires_at && ` · Expires ${fmt(request.expires_at)}`}
             </div>
@@ -280,17 +280,17 @@ export default async function StartupAccreditationPage() {
       {/* Evaluator notes */}
       {request.evaluator_notes && (
         <div className="border border-cs-200 bg-cs-50 px-5 py-3 mb-6">
-          <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-1">
+          <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-1">
             Evaluator Notes
           </div>
-          <p className="text-[8px] text-cs-700 leading-relaxed">{request.evaluator_notes}</p>
+          <p className="text-[13px] text-cs-700 leading-relaxed">{request.evaluator_notes}</p>
         </div>
       )}
 
       {/* BLIPS / ADDIS — read-only view */}
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-3">
-          <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest border-b border-cs-200 pb-1 flex-1">
+          <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest border-b border-cs-200 pb-1 flex-1">
             Verification Progress
           </span>
         </div>
@@ -306,7 +306,7 @@ export default async function StartupAccreditationPage() {
       {/* Snapshot */}
       <div className="border border-cs-200 bg-white">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-          <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
             Submission Snapshot
           </span>
         </div>
@@ -318,16 +318,16 @@ export default async function StartupAccreditationPage() {
             { label: "Team Size", value: request.team_size },
           ].map((f) => (
             <div key={f.label}>
-              <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                 {f.label}
               </div>
-              <div className="text-[8px] font-semibold">{f.value ? String(f.value) : "—"}</div>
+              <div className="text-[13px] font-semibold">{f.value ? String(f.value) : "—"}</div>
             </div>
           ))}
           {request.description && (
             <div className="col-span-2">
-              <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">Description</div>
-              <p className="text-[8px] text-cs-600 leading-relaxed">{request.description}</p>
+              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">Description</div>
+              <p className="text-[13px] text-cs-600 leading-relaxed">{request.description}</p>
             </div>
           )}
         </div>

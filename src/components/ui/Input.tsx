@@ -32,7 +32,7 @@ export function Input({
       {label && (
         <label
           htmlFor={inputId}
-          className="text-[6.5px] font-mono uppercase tracking-widest text-cs-500"
+          className="text-[14px] font-mono uppercase tracking-widest text-cs-500"
         >
           {label}
         </label>
@@ -41,7 +41,7 @@ export function Input({
         id={inputId}
         {...props}
         className={cn(
-          "h-[18px] px-2 text-[8px] font-body border rounded-none outline-none transition-colors",
+          "h-[18px] px-2 text-[13px] font-body border rounded-none outline-none transition-colors",
           "placeholder:text-cs-400",
           "disabled:bg-cs-100 disabled:text-cs-400 disabled:border-cs-200",
           variantStyles[activeVariant],
@@ -49,7 +49,7 @@ export function Input({
         )}
       />
       {error && (
-        <span className="text-[7px] font-mono text-cs-red">{error}</span>
+        <span className="text-[14px] font-mono text-cs-red">{error}</span>
       )}
     </div>
   );
@@ -77,7 +77,7 @@ export function Textarea({
       {label && (
         <label
           htmlFor={inputId}
-          className="text-[6.5px] font-mono uppercase tracking-widest text-cs-500"
+          className="text-[14px] font-mono uppercase tracking-widest text-cs-500"
         >
           {label}
         </label>
@@ -86,14 +86,14 @@ export function Textarea({
         id={inputId}
         {...props}
         className={cn(
-          "px-2 py-1 text-[8px] font-body border rounded-none outline-none transition-colors resize-y min-h-[60px]",
+          "px-2 py-1 text-[13px] font-body border rounded-none outline-none transition-colors resize-y min-h-[60px]",
           "placeholder:text-cs-400",
           variantStyles[activeVariant],
           className
         )}
       />
       {error && (
-        <span className="text-[7px] font-mono text-cs-red">{error}</span>
+        <span className="text-[14px] font-mono text-cs-red">{error}</span>
       )}
     </div>
   );
@@ -125,7 +125,7 @@ export function Select({
       {label && (
         <label
           htmlFor={inputId}
-          className="text-[6.5px] font-mono uppercase tracking-widest text-cs-500"
+          className="text-[14px] font-mono uppercase tracking-widest text-cs-500"
         >
           {label}
         </label>
@@ -134,7 +134,7 @@ export function Select({
         id={inputId}
         {...props}
         className={cn(
-          "h-[18px] px-2 text-[8px] font-body border rounded-none outline-none transition-colors appearance-none cursor-pointer",
+          "h-[18px] px-2 text-[13px] font-body border rounded-none outline-none transition-colors appearance-none cursor-pointer",
           variantStyles[activeVariant],
           className
         )}
@@ -151,7 +151,7 @@ export function Select({
         ))}
       </select>
       {error && (
-        <span className="text-[7px] font-mono text-cs-red">{error}</span>
+        <span className="text-[14px] font-mono text-cs-red">{error}</span>
       )}
     </div>
   );

@@ -46,7 +46,7 @@ export default async function CredListPage({ params }: CredListPageProps) {
 
       {/* Black accent strip */}
       <div className="bg-black px-7 py-1">
-        <span className="text-[7px] font-mono text-sb-default uppercase tracking-widest">
+        <span className="text-[14px] font-mono text-sb-default uppercase tracking-widest">
           GetCRED · Build Trust · Become Unstoppable
         </span>
       </div>
@@ -56,7 +56,7 @@ export default async function CredListPage({ params }: CredListPageProps) {
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-3 h-3 bg-sb-default" />
-            <span className="text-[8px] font-mono text-sb-text uppercase tracking-widest font-semibold">
+            <span className="text-[13px] font-mono text-sb-text uppercase tracking-widest font-semibold">
               {dict.credList.subtitle}
             </span>
           </div>
@@ -70,7 +70,7 @@ export default async function CredListPage({ params }: CredListPageProps) {
 
         {creds.length === 0 ? (
           <div className="border border-cs-200 bg-white p-10 text-center">
-            <p className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+            <p className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
               {dict.credList.noResults}
             </p>
           </div>
@@ -78,12 +78,12 @@ export default async function CredListPage({ params }: CredListPageProps) {
           <div className="border border-cs-200 bg-white">
             {/* Table header */}
             <div className="grid grid-cols-[1fr_120px_140px_100px] gap-0 border-b border-cs-200 bg-cs-50 px-5 py-2">
-              <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest">Organization</span>
-              <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest">Industry</span>
-              <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest">
+              <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">Organization</span>
+              <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">Industry</span>
+              <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
                 {dict.credList.credentialId}
               </span>
-              <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest">
+              <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
                 {dict.credList.accreditedOn}
               </span>
             </div>
@@ -99,24 +99,24 @@ export default async function CredListPage({ params }: CredListPageProps) {
                     {row.startups?.org_name ?? "—"}
                   </span>
                   {row.startups?.country && (
-                    <span className="ml-2 text-[7px] font-mono text-cs-400 uppercase tracking-widest">
+                    <span className="ml-2 text-[14px] font-mono text-cs-400 uppercase tracking-widest">
                       {row.startups.country}
                     </span>
                   )}
                 </div>
 
-                <span className="text-[8px] font-mono text-cs-500 uppercase tracking-widest">
+                <span className="text-[13px] font-mono text-cs-500 uppercase tracking-widest">
                   {row.startups?.industry ?? "—"}
                 </span>
 
                 <Link
                   href={`/startup/${row.unique_code}`}
-                  className="text-[8px] font-mono text-black underline underline-offset-2 hover:text-sb-text transition-colors tracking-widest"
+                  className="text-[13px] font-mono text-black underline underline-offset-2 hover:text-sb-text transition-colors tracking-widest"
                 >
                   {row.unique_code.toUpperCase()}
                 </Link>
 
-                <span className="text-[8px] font-mono text-cs-400">
+                <span className="text-[13px] font-mono text-cs-400">
                   {new Date(row.accredited_at).toLocaleDateString(locale, {
                     year: "numeric", month: "short", day: "numeric",
                   })}

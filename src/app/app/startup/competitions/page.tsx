@@ -95,12 +95,12 @@ export default async function StartupCompetitionsPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
-          <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
             Startup Portal
           </span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight">Competitions</h1>
-        <p className="text-[8px] font-mono text-cs-400 mt-1">
+        <p className="text-[13px] font-mono text-cs-400 mt-1">
           {total} competition{total !== 1 ? "s" : ""} available
         </p>
       </div>
@@ -110,10 +110,10 @@ export default async function StartupCompetitionsPage() {
         <div className="bg-[#1a1a1a] border border-[#333] px-5 py-3 mb-6 flex items-start gap-3">
           <div className="w-1 h-full bg-yellow-500 shrink-0 self-stretch" />
           <div>
-            <div className="text-[7.5px] font-mono font-bold text-yellow-400 uppercase tracking-widest mb-1">
+            <div className="text-[12px] font-mono font-bold text-yellow-400 uppercase tracking-widest mb-1">
               Accreditation Required
             </div>
-            <p className="text-[7.5px] font-mono text-cs-400">
+            <p className="text-[12px] font-mono text-cs-400">
               Only accredited startups can enter competitions.
               Complete your accreditation to unlock this feature.
             </p>
@@ -124,7 +124,7 @@ export default async function StartupCompetitionsPage() {
       {/* Competition list */}
       {total === 0 ? (
         <div className="bg-white border border-cs-200 px-5 py-12 text-center">
-          <p className="text-[8px] font-mono text-cs-400">No competitions available right now.</p>
+          <p className="text-[13px] font-mono text-cs-400">No competitions available right now.</p>
         </div>
       ) : (
         <div className="flex flex-col gap-3">
@@ -143,24 +143,24 @@ export default async function StartupCompetitionsPage() {
                   {/* Main info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                      <span className="text-[9px] font-bold">{comp.name}</span>
-                      <span className={`text-[6.5px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 ${statusColor}`}>
+                      <span className="text-[13px] font-bold">{comp.name}</span>
+                      <span className={`text-[14px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 ${statusColor}`}>
                         {statusLabel}
                       </span>
                       {entered && (
-                        <span className="text-[6.5px] font-mono font-bold text-sb-default uppercase tracking-widest">
+                        <span className="text-[14px] font-mono font-bold text-sb-default uppercase tracking-widest">
                           ✓ Entered
                         </span>
                       )}
                     </div>
 
                     {comp.description && (
-                      <p className="text-[7.5px] font-mono text-cs-500 mb-2 leading-relaxed max-w-xl">
+                      <p className="text-[12px] font-mono text-cs-500 mb-2 leading-relaxed max-w-xl">
                         {comp.description}
                       </p>
                     )}
 
-                    <div className="flex gap-5 text-[7px] font-mono text-cs-400">
+                    <div className="flex gap-5 text-[14px] font-mono text-cs-400">
                       {comp.industry && (
                         <span className="uppercase tracking-widest">{comp.industry}</span>
                       )}
@@ -175,28 +175,28 @@ export default async function StartupCompetitionsPage() {
                     {scoreRow && (
                       <div className="mt-3 flex items-center gap-5 bg-cs-50 border border-cs-200 px-3 py-2 w-fit">
                         <div>
-                          <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+                          <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                             Score
                           </div>
-                          <div className="text-[9px] font-bold text-sb-default">
+                          <div className="text-[13px] font-bold text-sb-default">
                             {scoreRow.score}/100
                           </div>
                         </div>
                         {scoreRow.notes && (
                           <div>
-                            <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+                            <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                               Evaluator notes
                             </div>
-                            <div className="text-[7.5px] font-mono text-cs-500 max-w-[240px] truncate">
+                            <div className="text-[12px] font-mono text-cs-500 max-w-[240px] truncate">
                               {scoreRow.notes}
                             </div>
                           </div>
                         )}
                         <div>
-                          <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+                          <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                             Scored on
                           </div>
-                          <div className="text-[7.5px] font-mono text-cs-500">
+                          <div className="text-[12px] font-mono text-cs-500">
                             {fmt(scoreRow.scored_at)}
                           </div>
                         </div>
@@ -214,19 +214,19 @@ export default async function StartupCompetitionsPage() {
                         </button>
                       </form>
                     ) : entered && !scoreRow ? (
-                      <span className="text-[7.5px] font-mono text-cs-400 border border-cs-200 bg-cs-50 px-3 py-1.5">
+                      <span className="text-[12px] font-mono text-cs-400 border border-cs-200 bg-cs-50 px-3 py-1.5">
                         Pending scoring
                       </span>
                     ) : entered && scoreRow ? (
-                      <span className="text-[7.5px] font-mono text-sb-default border border-sb-default px-3 py-1.5 font-bold">
+                      <span className="text-[12px] font-mono text-sb-default border border-sb-default px-3 py-1.5 font-bold">
                         Scored
                       </span>
                     ) : comp.status === "active" && !isAccredited ? (
-                      <span className="text-[7.5px] font-mono text-cs-400 border border-cs-200 px-3 py-1.5 opacity-50">
+                      <span className="text-[12px] font-mono text-cs-400 border border-cs-200 px-3 py-1.5 opacity-50">
                         Accreditation required
                       </span>
                     ) : (
-                      <span className="text-[7.5px] font-mono text-cs-400">
+                      <span className="text-[12px] font-mono text-cs-400">
                         {comp.status === "completed" || comp.status === "closed" ? "Closed" : "Not open"}
                       </span>
                     )}

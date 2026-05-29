@@ -13,9 +13,9 @@ const variantStyles: Record<ButtonVariant, string> = {
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: "px-[14px] py-[5px] text-[9px] h-[22px]",
-  md: "px-5 py-[7px] text-[9px] h-[22px]",
-  lg: "px-7 py-3 text-[9px] h-auto",
+  sm: "px-[14px] py-[5px] text-[13px] h-[22px]",
+  md: "px-5 py-[7px] text-[13px] h-[22px]",
+  lg: "px-7 py-3 text-[13px] h-auto",
 };
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

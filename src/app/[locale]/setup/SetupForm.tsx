@@ -50,7 +50,7 @@ export function SetupForm({ token }: SetupFormProps) {
       </div>
 
       {error && (
-        <div className="border border-red-300 bg-red-50 px-3 py-2 text-[8px] font-mono text-red-700">
+        <div className="border border-red-300 bg-red-50 px-3 py-2 text-[13px] font-mono text-red-700">
           {error}
         </div>
       )}

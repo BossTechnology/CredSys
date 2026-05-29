@@ -37,13 +37,13 @@ export default function LoginPage() {
 
           <div className="flex items-center gap-2 mb-4">
             <div className="w-2 h-2 bg-sb-default" />
-            <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
               CredSys
             </span>
           </div>
 
           <div className="bg-black text-white px-4 py-2 mb-1 inline-block">
-            <span className="text-[8px] font-mono uppercase tracking-widest">
+            <span className="text-[13px] font-mono uppercase tracking-widest">
               Sign In
             </span>
           </div>
@@ -77,7 +77,7 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div className="border border-red-300 bg-red-50 px-3 py-2 text-[8px] font-mono text-red-700">
+            <div className="border border-red-300 bg-red-50 px-3 py-2 text-[13px] font-mono text-red-700">
               {error}
             </div>
           )}
@@ -93,7 +93,7 @@ export default function LoginPage() {
 
         {/* Footer links */}
         <div className="mt-6 text-center">
-          <span className="text-[8px] font-mono text-cs-400">
+          <span className="text-[13px] font-mono text-cs-400">
             No account?{" "}
             <Link
               href={`/${locale}/getcred`}

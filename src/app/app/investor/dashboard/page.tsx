@@ -86,14 +86,14 @@ export default async function InvestorDashboardPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
-          <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
             Investor Portal
           </span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight">
           {investor?.org_name ?? "Dashboard"}
         </h1>
-        <p className="text-[8px] font-mono text-cs-400 mt-1">{user.email}</p>
+        <p className="text-[13px] font-mono text-cs-400 mt-1">{user.email}</p>
       </div>
 
       {/* Stats strip */}
@@ -106,7 +106,7 @@ export default async function InvestorDashboardPage() {
         ].map((s) => (
           <div key={s.label} className="bg-white border border-cs-200 px-5 py-4">
             <div className="text-2xl font-bold tracking-tight">{s.value}</div>
-            <div className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest mt-1">
+            <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mt-1">
               {s.label}
             </div>
           </div>
@@ -119,12 +119,12 @@ export default async function InvestorDashboardPage() {
           {/* Watchlist card */}
           <div className="bg-white border border-cs-200">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50 flex items-center justify-between">
-              <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+              <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 Watchlist
               </span>
               <Link
                 href="/app/investor/watchlist"
-                className="text-[7.5px] font-mono text-sb-default hover:underline uppercase tracking-widest"
+                className="text-[12px] font-mono text-sb-default hover:underline uppercase tracking-widest"
               >
                 Manage →
               </Link>
@@ -132,7 +132,7 @@ export default async function InvestorDashboardPage() {
 
             {totalWatching === 0 ? (
               <div className="px-5 py-8 text-center">
-                <p className="text-[8px] font-mono text-cs-400 mb-3">
+                <p className="text-[13px] font-mono text-cs-400 mb-3">
                   No startups on watchlist.
                 </p>
                 <Link href="/en/cred-list" className="btn-outline btn-sm">
@@ -143,7 +143,7 @@ export default async function InvestorDashboardPage() {
               <>
                 <div className="grid grid-cols-[1fr_100px_80px_100px_80px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
                   {["Startup", "Industry", "Country", "CRED Status", ""].map((h) => (
-                    <div key={h} className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
+                    <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
                   ))}
                 </div>
                 <div className="divide-y divide-cs-100">
@@ -157,7 +157,7 @@ export default async function InvestorDashboardPage() {
 
                     return (
                       <div key={entry.id} className="grid grid-cols-[1fr_100px_80px_100px_80px] gap-3 px-5 py-3 items-center">
-                        <div className="text-[8px] font-semibold">
+                        <div className="text-[13px] font-semibold">
                           {isAccredited ? (
                             <Link href={`/startup/${entry.startup_id}`} className="underline underline-offset-2 hover:opacity-70">
                               {startup?.org_name ?? "—"}
@@ -166,17 +166,17 @@ export default async function InvestorDashboardPage() {
                             startup?.org_name ?? "—"
                           )}
                         </div>
-                        <div className="text-[7.5px] font-mono text-cs-500 capitalize">{startup?.industry ?? "—"}</div>
-                        <div className="text-[7.5px] font-mono text-cs-500">{startup?.country ?? "—"}</div>
+                        <div className="text-[12px] font-mono text-cs-500 capitalize">{startup?.industry ?? "—"}</div>
+                        <div className="text-[12px] font-mono text-cs-500">{startup?.country ?? "—"}</div>
                         <div>
-                          <span className={`text-[7px] font-mono font-bold uppercase tracking-widest ${isAccredited ? "text-green-600" : "text-cs-400"}`}>
+                          <span className={`text-[14px] font-mono font-bold uppercase tracking-widest ${isAccredited ? "text-green-600" : "text-cs-400"}`}>
                             {latestStatus ? latestStatus.replace(/_/g, " ") : "No Request"}
                           </span>
                         </div>
                         <div>
                           <Link
                             href="/app/investor/watchlist"
-                            className="text-[7px] font-mono text-cs-400 hover:text-black uppercase tracking-widest"
+                            className="text-[14px] font-mono text-cs-400 hover:text-black uppercase tracking-widest"
                           >
                             Manage
                           </Link>
@@ -192,12 +192,12 @@ export default async function InvestorDashboardPage() {
           {/* Recent Sponsorships card */}
           <div className="bg-white border border-cs-200">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50 flex items-center justify-between">
-              <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+              <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 Recent Sponsorships
               </span>
               <Link
                 href="/app/investor/sponsor"
-                className="text-[7.5px] font-mono text-sb-default hover:underline uppercase tracking-widest"
+                className="text-[12px] font-mono text-sb-default hover:underline uppercase tracking-widest"
               >
                 + New →
               </Link>
@@ -205,7 +205,7 @@ export default async function InvestorDashboardPage() {
 
             {sponsorshipsCount === 0 ? (
               <div className="px-5 py-8 text-center">
-                <p className="text-[8px] font-mono text-cs-400 mb-3">
+                <p className="text-[13px] font-mono text-cs-400 mb-3">
                   No sponsorships yet.
                 </p>
                 <Link href="/app/investor/sponsor" className="btn-outline btn-sm">
@@ -216,22 +216,22 @@ export default async function InvestorDashboardPage() {
               <>
                 <div className="grid grid-cols-[1fr_80px_100px_60px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
                   {["Startup", "Date", "Status", ""].map((h) => (
-                    <div key={h} className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
+                    <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
                   ))}
                 </div>
                 <div className="divide-y divide-cs-100">
                   {(recentSponsorships ?? []).map((s) => (
                     <div key={s.id} className="grid grid-cols-[1fr_80px_100px_60px] gap-3 px-5 py-3 items-center">
-                      <div className="text-[8px] font-semibold">{s.startup_name_input}</div>
-                      <div className="text-[7.5px] font-mono text-cs-400">{fmt(s.created_at)}</div>
+                      <div className="text-[13px] font-semibold">{s.startup_name_input}</div>
+                      <div className="text-[12px] font-mono text-cs-400">{fmt(s.created_at)}</div>
                       <div>
-                        <span className={`text-[7px] font-mono font-bold uppercase tracking-widest ${STATUS_COLORS[s.status] ?? "text-cs-400"}`}>
+                        <span className={`text-[14px] font-mono font-bold uppercase tracking-widest ${STATUS_COLORS[s.status] ?? "text-cs-400"}`}>
                           {s.status.replace(/_/g, " ")}
                         </span>
                       </div>
                       <Link
                         href="/app/investor/sponsor"
-                        className="text-[7px] font-mono text-cs-400 hover:text-black uppercase tracking-widest"
+                        className="text-[14px] font-mono text-cs-400 hover:text-black uppercase tracking-widest"
                       >
                         View
                       </Link>
@@ -248,7 +248,7 @@ export default async function InvestorDashboardPage() {
         <div className="flex flex-col gap-4">
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50">
-              <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+              <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 Quick Links
               </span>
             </div>
@@ -267,7 +267,7 @@ export default async function InvestorDashboardPage() {
 
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50">
-              <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+              <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 Investor Info
               </span>
             </div>
@@ -278,10 +278,10 @@ export default async function InvestorDashboardPage() {
                 { label: "Since",   value: fmt(investor?.created_at)  },
               ].map((f) => (
                 <div key={f.label}>
-                  <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+                  <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                     {f.label}
                   </div>
-                  <div className="text-[8px] font-semibold">{f.value || "—"}</div>
+                  <div className="text-[13px] font-semibold">{f.value || "—"}</div>
                 </div>
               ))}
             </div>

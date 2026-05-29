@@ -33,12 +33,12 @@ export function CredBadge({
 
       <div className="pl-3">
         {/* Header */}
-        <div className="text-[8px] font-mono text-cs-400 uppercase tracking-widest mb-1">
+        <div className="text-[13px] font-mono text-cs-400 uppercase tracking-widest mb-1">
           StartupCred
         </div>
 
         {/* Accredited pill */}
-        <span className="inline-flex items-center px-2 py-0.5 bg-sb-default text-sb-text text-[6px] font-mono font-semibold uppercase tracking-wider mb-2">
+        <span className="inline-flex items-center px-2 py-0.5 bg-sb-default text-sb-text text-[10px] font-mono font-semibold uppercase tracking-wider mb-2">
           ACCREDITED
         </span>
 
@@ -46,12 +46,12 @@ export function CredBadge({
         <div className="text-lg font-bold leading-tight">{displayName}</div>
 
         {/* Date */}
-        <div className="text-[8px] font-mono text-cs-400 mt-1">{dateStr}</div>
+        <div className="text-[13px] font-mono text-cs-400 mt-1">{dateStr}</div>
       </div>
 
       {/* Footer: ID + domain */}
       <div className="pl-3 flex items-end justify-between">
-        <div className="text-[7px] font-mono text-cs-500">
+        <div className="text-[14px] font-mono text-cs-500">
           ID: {uniqueCode} · {domain}
         </div>
         {/* Check mark */}
