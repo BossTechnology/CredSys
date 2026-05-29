@@ -83,7 +83,7 @@ export default function GetCredPage() {
   if (step === "success") {
     return (
       <>
-        <MarketingNav locale={locale} />
+        <MarketingNav locale={locale} showSignIn={false} showLangDropdown={true} />
         <div className="min-h-[80vh] flex items-center justify-center px-4">
           <div className="max-w-[480px] w-full text-center">
             <div className="w-10 h-10 bg-sb-default mx-auto mb-6" />
@@ -128,7 +128,7 @@ export default function GetCredPage() {
 
   return (
     <>
-      <MarketingNav locale={locale} />
+      <MarketingNav locale={locale} showSignIn={false} showLangDropdown={true} />
 
       {/* Black accent strip */}
       <div className="bg-black px-7 py-1">
