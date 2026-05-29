@@ -450,10 +450,10 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
   });
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100vh", overflow: "hidden" }}>
+    <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
 
-      {/* ── FULL-WIDTH HEADER ── */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 48px", height: "64px", background: C_WHITE, borderBottom: `1px solid #e8e8e8`, flexShrink: 0 }}>
+      {/* ── FULL-WIDTH HEADER ── sticky so it stays visible when scrolling to footer */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 48px", height: "64px", background: C_WHITE, borderBottom: `1px solid #e8e8e8`, position: "sticky", top: 0, zIndex: 10 }}>
         {/* Logo */}
         <Link href={`/${locale}`}>
           <Image
@@ -508,8 +508,8 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
         </div>
       </div>
 
-      {/* ── SPLIT ROW ── fills remaining height above footer */}
-      <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+      {/* ── SPLIT ROW ── fills viewport below header; footer revealed on scroll */}
+      <div style={{ display: "flex", height: "calc(100vh - 64px)", overflow: "hidden", flexShrink: 0 }}>
 
         {/* LEFT PANEL — 50% viewport, white — scrolls internally */}
         <div style={{ width: "50%", flexShrink: 0, background: C_WHITE, padding: "20px 48px 32px", display: "flex", flexDirection: "column", overflowY: "auto", fontFamily: F_LIGHT }}>
