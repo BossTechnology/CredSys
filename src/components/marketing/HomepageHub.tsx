@@ -505,7 +505,7 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
           <img
             src="https://static.wixstatic.com/media/e97957_f5abe2dc670d41e480a991e1ac3e4931~mv2.jpg"
             alt="NEED CRED? — StartupBoss.org"
-            style={{ width: "100%", flex: 1, objectFit: "cover", objectPosition: "center top", display: "block" }}
+            style={{ width: "100%", flex: 1, minHeight: 0, objectFit: "cover", objectPosition: "50% 30%", display: "block" }}
           />
           {/* Black bar at bottom of right panel (visible in PDF) */}
           <div style={{ background: C_BLK, height: "52px", width: "100%", flexShrink: 0 }} />
