@@ -439,7 +439,7 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
     <div style={{ display: "flex", flexDirection: "column", width: "100%", minHeight: "100vh" }}>
 
       {/* ── SPLIT ROW ── */}
-      <div style={{ display: "flex", flex: 1, minHeight: "100vh", alignItems: "flex-start" }}>
+      <div style={{ display: "flex", minHeight: "100vh" }}>
 
         {/* LEFT PANEL — 50% viewport, white */}
         <div style={{ width: "50%", flexShrink: 0, background: C_WHITE, padding: "28px 48px 32px", display: "flex", flexDirection: "column" }}>
@@ -501,8 +501,8 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
           </div>
         </div>
 
-        {/* RIGHT PANEL — lavender + NEED CRED? image + black bottom bar — sticky so it stays in view while left panel scrolls */}
-        <div style={{ flex: 1, background: "#c4b5f0", position: "sticky", top: 0, height: "100vh", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+        {/* RIGHT PANEL — lavender + NEED CRED? image + black bottom bar */}
+        <div style={{ flex: 1, background: "#c4b5f0", display: "flex", flexDirection: "column", overflow: "hidden", minHeight: "100vh" }}>
           {/* Dev team: download the NEED CRED? image, save to /public/need-cred.jpg, use Next.js Image */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -516,9 +516,9 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
       </div>
 
       {/* ── FULL-WIDTH FOOTER ── */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 40px", borderTop: "1px solid #e8e8e8", background: C_WHITE }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 60px", borderTop: "1px solid #e8e8e8", background: C_WHITE }}>
         {/* Sponsored by Boss.Technology */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
           <span style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_TEXT }}>
             {isEs ? "Patrocinado por" : "Sponsored by"}
           </span>
@@ -528,14 +528,14 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
             <img
               src="https://static.wixstatic.com/media/e97957_e68f6e974b44435683e29d1f478057e1~mv2.png"
               alt="Boss.Technology"
-              height={38}
+              height={40}
               style={{ objectFit: "contain", display: "block" }}
             />
           </a>
         </div>
 
         {/* Powered by New Relic */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
           <span style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_TEXT }}>
             {isEs ? "Con el poder de" : "Powered by"}
           </span>
@@ -545,7 +545,7 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
             <img
               src="https://static.wixstatic.com/media/e97957_42d4d4509e0846d7bf96db5a50fd77dc~mv2.png"
               alt="New Relic"
-              height={26}
+              height={30}
               style={{ objectFit: "contain", display: "block" }}
             />
           </a>
@@ -553,8 +553,8 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
       </div>
 
       {/* Copyright */}
-      <div style={{ textAlign: "center", padding: "10px 40px 14px", background: "#2e2e2e" }}>
-        <p style={{ fontFamily: F_LIGHT, fontSize: "12px", color: "#e0e0e0" }}>
+      <div style={{ textAlign: "center", padding: "11px 40px 13px", background: "#555555" }}>
+        <p style={{ fontFamily: F_LIGHT, fontSize: "12px", color: "#d8d8d8" }}>
           © 2025 Boss.Technology SAC | Powered by ❤ 🇵🇪 🇨🇴
         </p>
       </div>
