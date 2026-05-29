@@ -411,9 +411,10 @@ function CredListPane({ credList, locale }: { credList: CredListRow[]; locale: L
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props) {
-  const [activeTab, setActiveTab] = useState<Tab>(initialTab);
-  const [langOpen, setLangOpen]   = useState(false);
-  const langRef                   = useRef<HTMLDivElement>(null);
+  const [activeTab,  setActiveTab]  = useState<Tab>(initialTab);
+  const [langOpen,   setLangOpen]   = useState(false);
+  const [pageScroll, setPageScroll] = useState(0);
+  const langRef                     = useRef<HTMLDivElement>(null);
   const isEs = locale === "es";
   const otherLocale = isEs ? "en" : "es";
 
@@ -426,6 +427,13 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
     }
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  // Parallax: track page scroll for right-panel image
+  useEffect(() => {
+    function onScroll() { setPageScroll(window.scrollY); }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const row1Tabs: Tab[] = ["getcred", "accelerators"];
@@ -557,7 +565,15 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
           <img
             src="https://static.wixstatic.com/media/e97957_f5abe2dc670d41e480a991e1ac3e4931~mv2.jpg"
             alt="NEED CRED? — StartupBoss.org"
-            style={{ width: "100%", flex: 1, minHeight: 0, objectFit: "cover", objectPosition: "50% 30%", display: "block" }}
+            style={{
+              width: "100%",
+              flex: 1,
+              minHeight: 0,
+              objectFit: "cover",
+              objectPosition: `50% calc(30% - ${pageScroll * 0.45}px)`,
+              display: "block",
+              willChange: "object-position",
+            }}
           />
           {/* Black bar at bottom of right panel (visible in PDF) */}
           <div style={{ background: C_BLK, height: "52px", width: "100%", flexShrink: 0 }} />
