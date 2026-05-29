@@ -300,4 +300,11 @@
   .metric-strip {
     @apply bg-white border border-cs-200 px-4 py-2 flex items-center gap-6 text-[13px] font-mono;
   }
+
+  /* =============================================
+     LINKS
+     ============================================= */
+  .cs-link {
+    @apply text-cs-btn underline hover:opacity-80 transition-opacity;
+  }
 }

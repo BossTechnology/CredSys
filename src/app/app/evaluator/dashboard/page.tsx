@@ -147,7 +147,7 @@ export default async function EvaluatorDashboardPage() {
                 </span>
                 <Link
                   href={`/app/evaluator/assignments/${a.id}`}
-                  className="text-[12px] font-mono text-black underline underline-offset-2 hover:text-sb-text transition-colors"
+                  className="text-[12px] font-mono cs-link underline-offset-2"
                 >
                   View →
                 </Link>

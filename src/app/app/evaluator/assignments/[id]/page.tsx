@@ -270,7 +270,7 @@ export default async function AssignmentDetailPage({
                 Demo
               </div>
               <a href={req.demo_url} target="_blank" rel="noopener noreferrer"
-                 className="text-[13px] text-black underline underline-offset-2 break-all">
+                 className="text-[13px] cs-link underline-offset-2 break-all">
                 {req.demo_url}
               </a>
             </div>
@@ -281,7 +281,7 @@ export default async function AssignmentDetailPage({
                 Pitch Deck
               </div>
               <a href={req.pitch_deck_url} target="_blank" rel="noopener noreferrer"
-                 className="text-[13px] text-black underline underline-offset-2 break-all">
+                 className="text-[13px] cs-link underline-offset-2 break-all">
                 {req.pitch_deck_url}
               </a>
             </div>

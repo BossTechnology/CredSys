@@ -157,7 +157,7 @@ export default async function EvaluatorAssignmentsPage({
                       {isActive ? (
                         <Link
                           href={`/app/evaluator/assignments/${a.id}`}
-                          className="text-[12px] font-mono font-bold text-black underline underline-offset-2 hover:text-sb-text transition-colors"
+                          className="text-[12px] font-mono font-bold cs-link underline-offset-2"
                         >
                           Review →
                         </Link>

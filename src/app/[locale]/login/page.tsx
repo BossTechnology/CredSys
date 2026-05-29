@@ -26,19 +26,9 @@ export default function LoginPage() {
 
   return (
     <>
-      <MarketingNav locale={locale} />
+      <MarketingNav locale={locale} showSignIn={false} showLangDropdown={true} />
       <div className="min-h-[calc(100vh-56px)] bg-cs-50 flex items-center justify-center px-4">
       <div className="w-full max-w-[400px]">
-
-        {/* Header */}
-        <div className="mb-8">
-          <div className="bg-black text-white px-4 py-2 mb-1 inline-block">
-            <span className="text-[13px] font-mono tracking-widest">
-              {locale === "es" ? "Iniciar Sesión" : "Sign In"}
-            </span>
-          </div>
-          <div className="h-0.5 bg-sb-default w-full" />
-        </div>
 
         {/* Form */}
         <form action={handleSubmit} className="flex flex-col gap-4">
@@ -87,7 +77,7 @@ export default function LoginPage() {
             No account?{" "}
             <Link
               href={`/${locale}/getcred`}
-              className="text-black underline"
+              className="cs-link"
             >
               Apply for Accreditation
             </Link>

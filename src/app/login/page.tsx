@@ -67,7 +67,7 @@ export default function LoginPage() {
         <div className="mt-6 text-center">
           <span className="text-[13px] font-mono text-cs-400">
             No account?{" "}
-            <Link href="/signup" className="text-black underline">
+            <Link href="/signup" className="cs-link">
               Apply for Accreditation
             </Link>
           </span>

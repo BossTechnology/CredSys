@@ -111,7 +111,7 @@ export default async function CredListPage({ params }: CredListPageProps) {
 
                 <Link
                   href={`/startup/${row.unique_code}`}
-                  className="text-[13px] font-mono text-black underline underline-offset-2 hover:text-sb-text transition-colors tracking-widest"
+                  className="text-[13px] font-mono cs-link underline-offset-2 tracking-widest"
                 >
                   {row.unique_code.toUpperCase()}
                 </Link>
