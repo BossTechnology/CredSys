@@ -1,13 +1,15 @@
 "use client";
 
-import { useState }       from "react";
-import Link               from "next/link";
-import { useParams }      from "next/navigation";
-import { signIn }         from "@/app/actions/auth";
+import { useState }          from "react";
+import Link                   from "next/link";
+import { useParams }          from "next/navigation";
+import { signIn }             from "@/app/actions/auth";
+import { MarketingNav }       from "@/components/marketing/MarketingNav";
+import type { Locale }        from "@/lib/i18n/types";
 
 export default function LoginPage() {
   const params  = useParams<{ locale: string }>();
-  const locale  = params.locale ?? "en";
+  const locale  = (params.locale ?? "en") as Locale;
 
   const [error,   setError]   = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -23,28 +25,16 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cs-50 flex items-center justify-center px-4">
+    <>
+      <MarketingNav locale={locale} />
+      <div className="min-h-[calc(100vh-56px)] bg-cs-50 flex items-center justify-center px-4">
       <div className="w-full max-w-[400px]">
 
         {/* Header */}
         <div className="mb-8">
-          <Link
-            href={`/${locale}`}
-            className="text-sm font-bold tracking-tight text-black block mb-6"
-          >
-            StartupBoss.org
-          </Link>
-
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-2 h-2 bg-sb-default" />
-            <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
-              CredSys
-            </span>
-          </div>
-
           <div className="bg-black text-white px-4 py-2 mb-1 inline-block">
-            <span className="text-[13px] font-mono uppercase tracking-widest">
-              Sign In
+            <span className="text-[13px] font-mono tracking-widest">
+              {locale === "es" ? "Iniciar Sesión" : "Sign In"}
             </span>
           </div>
           <div className="h-0.5 bg-sb-default w-full" />
@@ -105,6 +95,7 @@ export default function LoginPage() {
         </div>
 
       </div>
-    </div>
+      </div>
+    </>
   );
 }
