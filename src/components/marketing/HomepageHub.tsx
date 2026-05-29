@@ -1,6 +1,6 @@
 "use client";
 
-import { useState }   from "react";
+import { useState, useRef, useEffect } from "react";
 import Image           from "next/image";
 import Link            from "next/link";
 import type { Locale } from "@/lib/i18n/types";
@@ -412,7 +412,21 @@ function CredListPane({ credList, locale }: { credList: CredListRow[]; locale: L
 
 export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>(initialTab);
+  const [langOpen, setLangOpen]   = useState(false);
+  const langRef                   = useRef<HTMLDivElement>(null);
   const isEs = locale === "es";
+  const otherLocale = isEs ? "en" : "es";
+
+  // Close language dropdown on outside click
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setLangOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
 
   const row1Tabs: Tab[] = ["getcred", "accelerators"];
   const row2Tabs: Tab[] = ["evaluators", "investors", "cred-list"];
@@ -438,29 +452,67 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
   return (
     <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100vh", overflow: "hidden" }}>
 
+      {/* ── FULL-WIDTH HEADER ── */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 48px", height: "64px", background: C_WHITE, borderBottom: `1px solid #e8e8e8`, flexShrink: 0 }}>
+        {/* Logo */}
+        <Link href={`/${locale}`}>
+          <Image
+            src="/logo.png"
+            alt="StartupBoss.org"
+            width={220}
+            height={40}
+            style={{ objectFit: "contain", objectPosition: "left center", display: "block" }}
+            priority
+          />
+        </Link>
+
+        {/* Right side: language dropdown + Sign In */}
+        <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+
+          {/* Language dropdown */}
+          <div ref={langRef} style={{ position: "relative" }}>
+            <button
+              onClick={() => setLangOpen(o => !o)}
+              style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_MUTED, background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "5px", padding: 0 }}
+            >
+              {isEs ? "ES" : "EN"}
+              <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style={{ transition: "transform .15s", transform: langOpen ? "rotate(180deg)" : "rotate(0deg)" }}>
+                <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+            {langOpen && (
+              <div style={{ position: "absolute", top: "calc(100% + 8px)", right: 0, background: C_WHITE, border: "1px solid #e8e8e8", minWidth: "72px", boxShadow: "0 4px 12px rgba(0,0,0,.08)", zIndex: 50 }}>
+                <Link
+                  href={`/${locale}`}
+                  onClick={() => setLangOpen(false)}
+                  style={{ display: "block", padding: "8px 14px", fontFamily: F_LIGHT, fontSize: "13px", color: !isEs ? C_TEXT : C_MUTED, background: !isEs ? "#f5f5f5" : "transparent", textDecoration: "none" }}
+                >
+                  EN
+                </Link>
+                <Link
+                  href={`/${otherLocale}`}
+                  onClick={() => setLangOpen(false)}
+                  style={{ display: "block", padding: "8px 14px", fontFamily: F_LIGHT, fontSize: "13px", color: isEs ? C_TEXT : C_MUTED, background: isEs ? "#f5f5f5" : "transparent", textDecoration: "none" }}
+                >
+                  ES
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Sign In */}
+          <Link href={`/${locale}/login`}
+            style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_MUTED, textDecoration: "underline", whiteSpace: "nowrap" }}>
+            {isEs ? "Iniciar Sesión" : "Sign In"}
+          </Link>
+        </div>
+      </div>
+
       {/* ── SPLIT ROW ── fills remaining height above footer */}
       <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
 
         {/* LEFT PANEL — 50% viewport, white — scrolls internally */}
-        <div style={{ width: "50%", flexShrink: 0, background: C_WHITE, padding: "28px 48px 32px", display: "flex", flexDirection: "column", overflowY: "auto", fontFamily: F_LIGHT }}>
-
-          {/* Logo + Sign In row */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px" }}>
-            <Link href={`/${locale}`}>
-              <Image
-                src="/logo.png"
-                alt="StartupBoss.org"
-                width={380}
-                height={69}
-                style={{ objectFit: "contain", objectPosition: "left center", display: "block" }}
-                priority
-              />
-            </Link>
-            <Link href={`/${locale}/login`}
-              style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_MUTED, textDecoration: "underline", whiteSpace: "nowrap" }}>
-              {isEs ? "Iniciar Sesión" : "Sign In"}
-            </Link>
-          </div>
+        <div style={{ width: "50%", flexShrink: 0, background: C_WHITE, padding: "20px 48px 32px", display: "flex", flexDirection: "column", overflowY: "auto", fontFamily: F_LIGHT }}>
 
           {/* Tab navigation — 2 rows */}
           <div style={{ display: "flex", alignItems: "baseline", gap: "22px", marginBottom: "2px" }}>
