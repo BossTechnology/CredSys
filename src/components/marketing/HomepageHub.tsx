@@ -570,13 +570,11 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
               flex: 1,
               minHeight: 0,
               objectFit: "cover",
-              objectPosition: `50% calc(30% - ${pageScroll * 0.45}px)`,
+              objectPosition: `50% calc(50% - ${pageScroll * 0.45}px)`,
               display: "block",
               willChange: "object-position",
             }}
           />
-          {/* Black bar at bottom of right panel (visible in PDF) */}
-          <div style={{ background: C_BLK, height: "52px", width: "100%", flexShrink: 0 }} />
         </div>
       </div>
 
