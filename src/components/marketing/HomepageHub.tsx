@@ -439,13 +439,13 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
     <div style={{ display: "flex", flexDirection: "column", width: "100%", minHeight: "100vh" }}>
 
       {/* ── SPLIT ROW ── */}
-      <div style={{ display: "flex", minHeight: "100vh" }}>
+      <div style={{ display: "flex", flex: 1, minHeight: "100vh" }}>
 
         {/* LEFT PANEL — 50% viewport, white */}
         <div style={{ width: "50%", flexShrink: 0, background: C_WHITE, padding: "28px 48px 32px", display: "flex", flexDirection: "column" }}>
 
-          {/* Logo */}
-          <div style={{ marginBottom: "18px" }}>
+          {/* Logo + Sign In row */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px" }}>
             <Link href={`/${locale}`}>
               <Image
                 src="/logo.png"
@@ -455,6 +455,10 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
                 style={{ objectFit: "contain", objectPosition: "left center", display: "block" }}
                 priority
               />
+            </Link>
+            <Link href={`/${locale}/login`}
+              style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_MUTED, textDecoration: "underline", whiteSpace: "nowrap" }}>
+              {isEs ? "Iniciar Sesión" : "Sign In"}
             </Link>
           </div>
 
@@ -492,13 +496,6 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
           {/* Resources below each form */}
           <Resources tab={activeTab} isEs={isEs} />
 
-          {/* Sign In link */}
-          <div style={{ marginTop: "auto", paddingTop: "28px" }}>
-            <Link href={`/${locale}/login`}
-              style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_MUTED, textDecoration: "underline" }}>
-              {isEs ? "Iniciar Sesión" : "Sign In"}
-            </Link>
-          </div>
         </div>
 
         {/* RIGHT PANEL — lavender + NEED CRED? image + black bottom bar */}
