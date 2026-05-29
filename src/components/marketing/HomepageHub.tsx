@@ -436,13 +436,13 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
   });
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", width: "100%", minHeight: "100vh" }}>
+    <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100vh", overflow: "hidden" }}>
 
-      {/* ── SPLIT ROW ── */}
-      <div style={{ display: "flex", flex: 1, minHeight: "100vh" }}>
+      {/* ── SPLIT ROW ── fills remaining height above footer */}
+      <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
 
-        {/* LEFT PANEL — 50% viewport, white */}
-        <div style={{ width: "50%", flexShrink: 0, background: C_WHITE, padding: "28px 48px 32px", display: "flex", flexDirection: "column" }}>
+        {/* LEFT PANEL — 50% viewport, white — scrolls internally */}
+        <div style={{ width: "50%", flexShrink: 0, background: C_WHITE, padding: "28px 48px 32px", display: "flex", flexDirection: "column", overflowY: "auto" }}>
 
           {/* Logo + Sign In row */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px" }}>
@@ -499,7 +499,7 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
         </div>
 
         {/* RIGHT PANEL — lavender + NEED CRED? image + black bottom bar */}
-        <div style={{ flex: 1, background: "#c4b5f0", display: "flex", flexDirection: "column", overflow: "hidden", minHeight: "100vh" }}>
+        <div style={{ flex: 1, background: "#c4b5f0", display: "flex", flexDirection: "column", overflow: "hidden" }}>
           {/* Dev team: download the NEED CRED? image, save to /public/need-cred.jpg, use Next.js Image */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
