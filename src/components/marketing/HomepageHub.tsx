@@ -513,44 +513,42 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
       </div>
 
       {/* ── FULL-WIDTH FOOTER ── */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 60px", borderTop: "1px solid #e8e8e8", background: C_WHITE }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 60px", borderTop: "1px solid #e8e8e8", background: C_WHITE, flexShrink: 0 }}>
         {/* Sponsored by Boss.Technology */}
         <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-          <span style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_TEXT }}>
+          <span style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_TEXT, whiteSpace: "nowrap" }}>
             {isEs ? "Patrocinado por" : "Sponsored by"}
           </span>
-          <div style={{ width: "40px", height: "1px", background: C_TEXT }} />
+          <div style={{ width: "40px", height: "1px", background: C_TEXT, flexShrink: 0 }} />
           <a href="https://boss.technology" target="_blank" rel="noopener noreferrer">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="https://static.wixstatic.com/media/e97957_e68f6e974b44435683e29d1f478057e1~mv2.png"
               alt="Boss.Technology"
-              height={40}
-              style={{ objectFit: "contain", display: "block" }}
+              style={{ height: "38px", width: "auto", maxWidth: "220px", display: "block", objectFit: "contain" }}
             />
           </a>
         </div>
 
         {/* Powered by New Relic */}
         <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-          <span style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_TEXT }}>
+          <span style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_TEXT, whiteSpace: "nowrap" }}>
             {isEs ? "Con el poder de" : "Powered by"}
           </span>
-          <div style={{ width: "40px", height: "1px", background: C_TEXT }} />
+          <div style={{ width: "40px", height: "1px", background: C_TEXT, flexShrink: 0 }} />
           <a href="https://newrelic.com/solutions/industry/startups" target="_blank" rel="noopener noreferrer">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="https://static.wixstatic.com/media/e97957_42d4d4509e0846d7bf96db5a50fd77dc~mv2.png"
               alt="New Relic"
-              height={30}
-              style={{ objectFit: "contain", display: "block" }}
+              style={{ height: "26px", width: "auto", maxWidth: "160px", display: "block", objectFit: "contain" }}
             />
           </a>
         </div>
       </div>
 
       {/* Copyright */}
-      <div style={{ textAlign: "center", padding: "11px 40px 13px", background: "#555555" }}>
+      <div style={{ textAlign: "center", padding: "9px 40px 10px", background: "#555555", flexShrink: 0 }}>
         <p style={{ fontFamily: F_LIGHT, fontSize: "12px", color: "#d8d8d8" }}>
           © 2025 Boss.Technology SAC | Powered by ❤ 🇵🇪 🇨🇴
         </p>
