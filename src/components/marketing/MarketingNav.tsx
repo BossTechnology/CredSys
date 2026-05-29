@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import Image from "next/image";
-import Link  from "next/link";
+import Image       from "next/image";
+import Link        from "next/link";
+import { usePathname } from "next/navigation";
 import type { Locale } from "@/lib/i18n/types";
 
 interface MarketingNavProps {
@@ -16,9 +17,17 @@ export function MarketingNav({
   showSignIn       = true,
   showLangDropdown = false,
 }: MarketingNavProps) {
-  const isEs = locale === "es";
+  const isEs    = locale === "es";
+  const pathname = usePathname();
   const [langOpen, setLangOpen] = useState(false);
   const dropRef = useRef<HTMLDivElement>(null);
+
+  /* Swap locale prefix while keeping the rest of the path intact */
+  function localePath(targetLocale: string) {
+    // pathname is like /es/login or /en/getcred
+    const withoutLocale = pathname.replace(/^\/(en|es)(\/|$)/, "/");
+    return `/${targetLocale}${withoutLocale === "/" ? "" : withoutLocale}`;
+  }
 
   /* Close dropdown when clicking outside */
   useEffect(() => {
@@ -85,7 +94,7 @@ export function MarketingNav({
               }}
             >
               <Link
-                href="/en"
+                href={localePath("en")}
                 onClick={() => setLangOpen(false)}
                 style={{
                   display:        "block",
@@ -101,7 +110,7 @@ export function MarketingNav({
                 EN
               </Link>
               <Link
-                href="/es"
+                href={localePath("es")}
                 onClick={() => setLangOpen(false)}
                 style={{
                   display:        "block",
