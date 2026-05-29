@@ -175,7 +175,7 @@ function CbRow({ id, label }: { id: string; label: string }) {
       <input type="checkbox" id={id}
         style={{ marginTop: "3px", width: "13px", height: "13px", flexShrink: 0, accentColor: C_PURPLE, cursor: "pointer" }} />
       <label htmlFor={id}
-        style={{ fontFamily: F_LIGHT, fontSize: "12px", color: C_TEXT, lineHeight: "1.5", cursor: "pointer" }}>
+        style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_TEXT, lineHeight: "1.5", cursor: "pointer" }}>
         {label}
       </label>
     </div>
@@ -224,7 +224,7 @@ function Resources({ tab, isEs }: { tab: Tab; isEs: boolean }) {
             style={{ fontFamily: F_LIGHT, fontSize: "14px", color: C_PURPLE, textDecoration: "none" }}>
             | download ▼
           </a>
-          <p style={{ fontFamily: F_LIGHT, fontSize: "12px", color: C_TEXT, lineHeight: "1.5", marginTop: "3px" }}>
+          <p style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_TEXT, lineHeight: "1.5", marginTop: "3px" }}>
             {isEs ? r.descEs : r.descEn}
           </p>
         </div>
@@ -391,7 +391,7 @@ function CredListPane({ credList, locale }: { credList: CredListRow[]; locale: L
               <span style={{ fontFamily: F_HEAVY, fontSize: "14px", color: C_TEXT }}>
                 {row.startups?.org_name ?? "—"}
                 {row.startups?.country && (
-                  <span style={{ fontFamily: F_LIGHT, fontSize: "11px", color: C_MUTED, marginLeft: "6px" }}>
+                  <span style={{ fontFamily: F_LIGHT, fontSize: "12px", color: C_MUTED, marginLeft: "6px" }}>
                     {row.startups.country}
                   </span>
                 )}
@@ -442,7 +442,7 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
       <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
 
         {/* LEFT PANEL — 50% viewport, white — scrolls internally */}
-        <div style={{ width: "50%", flexShrink: 0, background: C_WHITE, padding: "28px 48px 32px", display: "flex", flexDirection: "column", overflowY: "auto" }}>
+        <div style={{ width: "50%", flexShrink: 0, background: C_WHITE, padding: "28px 48px 32px", display: "flex", flexDirection: "column", overflowY: "auto", fontFamily: F_LIGHT }}>
 
           {/* Logo + Sign In row */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px" }}>
