@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -22,8 +23,15 @@ export function PortalNav({ portalLabel, orgName, items, onSignOut }: PortalNavP
   return (
     <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-8">
       {/* Logo */}
-      <Link href="/" className="text-sm font-bold tracking-tight text-black shrink-0">
-        StartupBoss.org
+      <Link href="/" className="shrink-0">
+        <Image
+          src="/logo.png"
+          alt="StartupBoss.org"
+          width={200}
+          height={36}
+          className="object-contain"
+          priority
+        />
       </Link>
 
       {/* Portal label */}

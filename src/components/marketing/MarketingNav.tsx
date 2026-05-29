@@ -16,8 +16,8 @@ export function MarketingNav({ locale }: MarketingNavProps) {
         <Image
           src="/logo.png"
           alt="StartupBoss.org"
-          width={180}
-          height={33}
+          width={220}
+          height={40}
           className="object-contain"
           priority
         />
@@ -28,7 +28,7 @@ export function MarketingNav({ locale }: MarketingNavProps) {
       {/* Sign In */}
       <Link
         href={`/${locale}/login`}
-        className="text-[8px] font-mono text-cs-500 uppercase tracking-widest hover:text-black transition-colors"
+        className="text-[13px] font-mono text-cs-500 tracking-[.03em] hover:text-black transition-colors"
       >
         {isEs ? "Iniciar Sesión" : "Sign In"}
       </Link>

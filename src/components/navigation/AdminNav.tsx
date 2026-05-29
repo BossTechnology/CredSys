@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -23,8 +24,16 @@ export function AdminNav({ onSignOut }: AdminNavProps) {
 
   return (
     <nav className="h-12 bg-black flex items-center px-7 gap-6">
-      <Link href="/admin/overview" className="text-sm font-bold tracking-tight text-white shrink-0">
-        StartupBoss.org
+      <Link href="/admin/overview" className="shrink-0">
+        <Image
+          src="/logo.png"
+          alt="StartupBoss.org"
+          width={200}
+          height={36}
+          className="object-contain"
+          style={{ filter: "brightness(0) invert(1)" }}
+          priority
+        />
       </Link>
 
       <span className="text-[14px] font-mono text-cs-600 uppercase tracking-widest border-l border-cs-700 pl-4 shrink-0">
