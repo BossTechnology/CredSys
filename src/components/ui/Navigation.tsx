@@ -1,7 +1,8 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { cn }    from "@/lib/utils";
+import Image      from "next/image";
+import Link       from "next/link";
 import { usePathname } from "next/navigation";
 
 // =============================================
@@ -55,11 +56,11 @@ interface AdminNavProps { onSignOut?: () => void }
 export function AdminNav({ onSignOut }: AdminNavProps) {
   return (
     <nav className="h-12 bg-black flex items-center px-7 gap-6 shrink-0">
-      <Link
-        href="/admin/overview"
-        className="text-sm font-bold tracking-tight text-white shrink-0"
-      >
-        StartupBoss.org
+      <Link href="/admin/overview" className="shrink-0">
+        <Image src="/logo.png" alt="StartupBoss.org" width={160} height={28}
+               className="object-contain"
+               style={{ filter: "invert(1)", mixBlendMode: "screen" }}
+               priority />
       </Link>
       <span className="text-[14px] font-mono text-cs-600 uppercase tracking-widest border-l border-cs-700 pl-4 shrink-0">
         Admin
@@ -97,11 +98,9 @@ interface EvaluatorNavProps { onSignOut?: () => void }
 export function EvaluatorNav({ onSignOut }: EvaluatorNavProps) {
   return (
     <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0">
-      <Link
-        href="/app/evaluator/dashboard"
-        className="text-sm font-bold tracking-tight text-black shrink-0"
-      >
-        StartupBoss.org
+      <Link href="/app/evaluator/dashboard" className="shrink-0">
+        <Image src="/logo.png" alt="StartupBoss.org" width={160} height={28}
+               className="object-contain" priority />
       </Link>
       <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
         Evaluator
@@ -139,11 +138,9 @@ interface StartupNavProps { onSignOut?: () => void }
 export function StartupNav({ onSignOut }: StartupNavProps) {
   return (
     <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0">
-      <Link
-        href="/app/startup/dashboard"
-        className="text-sm font-bold tracking-tight text-black shrink-0"
-      >
-        StartupBoss.org
+      <Link href="/app/startup/dashboard" className="shrink-0">
+        <Image src="/logo.png" alt="StartupBoss.org" width={160} height={28}
+               className="object-contain" priority />
       </Link>
       <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
         Startup
@@ -181,11 +178,9 @@ interface AcceleratorNavProps { onSignOut?: () => void }
 export function AcceleratorNav({ onSignOut }: AcceleratorNavProps) {
   return (
     <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0">
-      <Link
-        href="/app/accelerator/dashboard"
-        className="text-sm font-bold tracking-tight text-black shrink-0"
-      >
-        StartupBoss.org
+      <Link href="/app/accelerator/dashboard" className="shrink-0">
+        <Image src="/logo.png" alt="StartupBoss.org" width={160} height={28}
+               className="object-contain" priority />
       </Link>
       <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
         Accelerator
@@ -223,8 +218,9 @@ interface InvestorNavProps { onSignOut?: () => void }
 export function InvestorNav({ onSignOut }: InvestorNavProps) {
   return (
     <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0">
-      <Link href="/app/investor/dashboard" className="text-sm font-bold tracking-tight text-black shrink-0">
-        StartupBoss.org
+      <Link href="/app/investor/dashboard" className="shrink-0">
+        <Image src="/logo.png" alt="StartupBoss.org" width={160} height={28}
+               className="object-contain" priority />
       </Link>
       <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
         Investor
