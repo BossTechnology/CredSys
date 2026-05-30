@@ -1,7 +1,8 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { cn }    from "@/lib/utils";
+import Image      from "next/image";
+import Link       from "next/link";
 import { usePathname } from "next/navigation";
 
 interface AdminNavProps {
@@ -23,8 +24,16 @@ export function AdminNav({ onSignOut }: AdminNavProps) {
 
   return (
     <nav className="h-12 bg-black flex items-center px-7 gap-6">
-      <Link href="/admin/overview" className="shrink-0 text-white text-[15px] font-mono tracking-tight">
-        StartupBoss.org
+      <Link href="/admin/overview" className="shrink-0">
+        <Image
+          src="/logo.png"
+          alt="StartupBoss.org"
+          width={180}
+          height={32}
+          className="object-contain"
+          style={{ filter: "invert(1)", mixBlendMode: "screen" }}
+          priority
+        />
       </Link>
 
       <span className="text-[14px] font-mono text-cs-600 uppercase tracking-widest border-l border-cs-700 pl-4 shrink-0">
