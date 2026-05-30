@@ -414,9 +414,17 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
   const [activeTab,  setActiveTab]  = useState<Tab>(initialTab);
   const [langOpen,   setLangOpen]   = useState(false);
   const [pageScroll, setPageScroll] = useState(0);
+  const [isMobile,   setIsMobile]   = useState(false);
   const langRef                     = useRef<HTMLDivElement>(null);
   const isEs = locale === "es";
-  const otherLocale = isEs ? "en" : "es";
+
+  // Detect mobile breakpoint (< 768px)
+  useEffect(() => {
+    function check() { setIsMobile(window.innerWidth < 768); }
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   // Close language dropdown on outside click
   useEffect(() => {
@@ -429,7 +437,7 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  // Parallax: track page scroll for right-panel image
+  // Parallax: track page scroll for right-panel image (desktop only)
   useEffect(() => {
     function onScroll() { setPageScroll(window.scrollY); }
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -457,25 +465,36 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
     transition: "color .12s",
   });
 
+  /* ── Responsive values ── */
+  const hPad    = isMobile ? "0 20px"  : "0 48px";
+  const panelPad = isMobile ? "20px 20px 32px" : "20px 48px 32px";
+  const tabSize  = isMobile ? "20px"   : "28px";
+  const tabGap   = isMobile ? "16px"   : "22px";
+
   return (
     <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
 
-      {/* ── FULL-WIDTH HEADER ── sticky so it stays visible when scrolling to footer */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 48px", height: "64px", background: C_WHITE, borderBottom: `1px solid #e8e8e8`, position: "sticky", top: 0, zIndex: 10 }}>
+      {/* ── FULL-WIDTH HEADER ── */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: hPad, height: "64px",
+        background: C_WHITE, borderBottom: `1px solid #e8e8e8`,
+        position: "sticky", top: 0, zIndex: 10,
+      }}>
         {/* Logo */}
         <Link href={`/${locale}`}>
           <Image
             src="/logo.png"
             alt="StartupBoss.org"
-            width={220}
-            height={40}
+            width={isMobile ? 160 : 220}
+            height={isMobile ? 30  : 40}
             style={{ objectFit: "contain", objectPosition: "left center", display: "block" }}
             priority
           />
         </Link>
 
         {/* Right side: language dropdown + Sign In */}
-        <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "16px" : "24px" }}>
 
           {/* Language dropdown */}
           <div ref={langRef} style={{ position: "relative" }}>
@@ -490,18 +509,12 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
             </button>
             {langOpen && (
               <div style={{ position: "absolute", top: "calc(100% + 8px)", right: 0, background: C_WHITE, border: "1px solid #e8e8e8", minWidth: "72px", boxShadow: "0 4px 12px rgba(0,0,0,.08)", zIndex: 50 }}>
-                <Link
-                  href="/en"
-                  onClick={() => setLangOpen(false)}
-                  style={{ display: "block", padding: "8px 14px", fontFamily: F_LIGHT, fontSize: "13px", color: !isEs ? C_TEXT : C_MUTED, background: !isEs ? "#f5f5f5" : "transparent", textDecoration: "none" }}
-                >
+                <Link href="/en" onClick={() => setLangOpen(false)}
+                  style={{ display: "block", padding: "8px 14px", fontFamily: F_LIGHT, fontSize: "13px", color: !isEs ? C_TEXT : C_MUTED, background: !isEs ? "#f5f5f5" : "transparent", textDecoration: "none" }}>
                   EN
                 </Link>
-                <Link
-                  href="/es"
-                  onClick={() => setLangOpen(false)}
-                  style={{ display: "block", padding: "8px 14px", fontFamily: F_LIGHT, fontSize: "13px", color: isEs ? C_TEXT : C_MUTED, background: isEs ? "#f5f5f5" : "transparent", textDecoration: "none" }}
-                >
+                <Link href="/es" onClick={() => setLangOpen(false)}
+                  style={{ display: "block", padding: "8px 14px", fontFamily: F_LIGHT, fontSize: "13px", color: isEs ? C_TEXT : C_MUTED, background: isEs ? "#f5f5f5" : "transparent", textDecoration: "none" }}>
                   ES
                 </Link>
               </div>
@@ -516,23 +529,57 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
         </div>
       </div>
 
-      {/* ── SPLIT ROW ── fills viewport below header; footer revealed on scroll */}
-      <div style={{ display: "flex", height: "calc(100vh - 64px)", overflow: "hidden", flexShrink: 0 }}>
+      {/* ── MAIN AREA ──
+            Desktop: side-by-side, fills viewport height (footer revealed on scroll)
+            Mobile:  stacked — hero image on top, then form below, natural scroll  */}
+      <div style={isMobile ? {
+        display: "flex", flexDirection: "column", flexShrink: 0,
+      } : {
+        display: "flex", flexDirection: "row",
+        height: "calc(100vh - 64px)", overflow: "hidden", flexShrink: 0,
+      }}>
 
-        {/* LEFT PANEL — 50% viewport, white — scrolls internally */}
-        <div style={{ width: "50%", flexShrink: 0, background: C_WHITE, padding: "20px 48px 32px", display: "flex", flexDirection: "column", overflowY: "auto", fontFamily: F_LIGHT }}>
+        {/* HERO IMAGE — top on mobile, right on desktop */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://static.wixstatic.com/media/e97957_f5abe2dc670d41e480a991e1ac3e4931~mv2.jpg"
+          alt="NEED CRED? — StartupBoss.org"
+          style={isMobile ? {
+            width: "100%", height: "220px",
+            objectFit: "cover", objectPosition: "50% 40%",
+            display: "block", order: -1,
+          } : {
+            flex: 1, minHeight: 0,
+            objectFit: "cover",
+            objectPosition: `50% calc(50% - ${pageScroll * 0.45}px)`,
+            display: "block",
+            willChange: "object-position",
+          }}
+        />
+
+        {/* LEFT / MAIN PANEL — form + tabs */}
+        <div style={{
+          width: isMobile ? "100%" : "50%",
+          flexShrink: 0,
+          background: C_WHITE,
+          padding: panelPad,
+          display: "flex", flexDirection: "column",
+          overflowY: isMobile ? "visible" : "auto",
+          fontFamily: F_LIGHT,
+          order: isMobile ? 1 : 0,
+        }}>
 
           {/* Tab navigation — 2 rows */}
-          <div style={{ display: "flex", alignItems: "baseline", gap: "22px", marginBottom: "2px" }}>
+          <div style={{ display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: tabGap, marginBottom: "2px" }}>
             {row1Tabs.map(id => (
-              <button key={id} onClick={() => setActiveTab(id)} style={tabBtnStyle(id)}>
+              <button key={id} onClick={() => setActiveTab(id)} style={{ ...tabBtnStyle(id), fontSize: tabSize }}>
                 {tabLabel(id)}
               </button>
             ))}
           </div>
-          <div style={{ display: "flex", alignItems: "baseline", gap: "22px" }}>
+          <div style={{ display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: tabGap }}>
             {row2Tabs.map(id => (
-              <button key={id} onClick={() => setActiveTab(id)} style={tabBtnStyle(id)}>
+              <button key={id} onClick={() => setActiveTab(id)} style={{ ...tabBtnStyle(id), fontSize: tabSize }}>
                 {tabLabel(id)}
               </button>
             ))}
@@ -547,39 +594,29 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
           </p>
 
           {/* Active form */}
-          {activeTab === "getcred"      && <GetCredForm    isEs={isEs} />}
+          {activeTab === "getcred"      && <GetCredForm     isEs={isEs} />}
           {activeTab === "accelerators" && <AcceleratorForm isEs={isEs} />}
           {activeTab === "evaluators"   && <EvaluatorForm   isEs={isEs} />}
           {activeTab === "investors"    && <InvestorForm    isEs={isEs} />}
-          {activeTab === "cred-list"   && <CredListPane    credList={credList} locale={locale} />}
+          {activeTab === "cred-list"    && <CredListPane    credList={credList} locale={locale} />}
 
           {/* Resources below each form */}
           <Resources tab={activeTab} isEs={isEs} />
 
         </div>
-
-        {/* RIGHT PANEL — lavender + NEED CRED? image + black bottom bar */}
-        <div style={{ flex: 1, background: "#c4b5f0", display: "flex", flexDirection: "column", overflow: "hidden" }}>
-          {/* Dev team: download the NEED CRED? image, save to /public/need-cred.jpg, use Next.js Image */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://static.wixstatic.com/media/e97957_f5abe2dc670d41e480a991e1ac3e4931~mv2.jpg"
-            alt="NEED CRED? — StartupBoss.org"
-            style={{
-              width: "100%",
-              flex: 1,
-              minHeight: 0,
-              objectFit: "cover",
-              objectPosition: `50% calc(50% - ${pageScroll * 0.45}px)`,
-              display: "block",
-              willChange: "object-position",
-            }}
-          />
-        </div>
       </div>
 
       {/* ── FULL-WIDTH FOOTER ── */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 60px", borderTop: "1px solid #e8e8e8", background: C_WHITE, flexShrink: 0 }}>
+      <div style={{
+        display: "flex",
+        flexDirection: isMobile ? "column" : "row",
+        alignItems: isMobile ? "flex-start" : "center",
+        justifyContent: "space-between",
+        gap: isMobile ? "16px" : "0",
+        padding: isMobile ? "20px 20px" : "14px 60px",
+        borderTop: "1px solid #e8e8e8",
+        background: C_WHITE, flexShrink: 0,
+      }}>
         {/* Sponsored by Boss.Technology */}
         <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
           <span style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_TEXT, whiteSpace: "nowrap" }}>
@@ -591,7 +628,7 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
             <img
               src="https://static.wixstatic.com/media/e97957_e68f6e974b44435683e29d1f478057e1~mv2.png"
               alt="Boss.Technology"
-              style={{ height: "38px", width: "auto", maxWidth: "220px", display: "block", objectFit: "contain" }}
+              style={{ height: "38px", width: "auto", maxWidth: "180px", display: "block", objectFit: "contain" }}
             />
           </a>
         </div>
@@ -607,14 +644,14 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
             <img
               src="https://static.wixstatic.com/media/e97957_42d4d4509e0846d7bf96db5a50fd77dc~mv2.png"
               alt="New Relic"
-              style={{ height: "26px", width: "auto", maxWidth: "160px", display: "block", objectFit: "contain" }}
+              style={{ height: "26px", width: "auto", maxWidth: "140px", display: "block", objectFit: "contain" }}
             />
           </a>
         </div>
       </div>
 
       {/* Copyright */}
-      <div style={{ textAlign: "center", padding: "9px 40px 10px", background: "#555555", flexShrink: 0 }}>
+      <div style={{ textAlign: "center", padding: "9px 20px 10px", background: "#555555", flexShrink: 0 }}>
         <p style={{ fontFamily: F_LIGHT, fontSize: "12px", color: "#d8d8d8" }}>
           © 2025 Boss.Technology SAC | Powered by ❤ 🇵🇪 🇨🇴
         </p>
