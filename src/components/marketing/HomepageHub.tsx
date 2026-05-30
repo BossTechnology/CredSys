@@ -539,23 +539,21 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
         height: "calc(100vh - 64px)", overflow: "hidden", flexShrink: 0,
       }}>
 
-        {/* HERO IMAGE — top on mobile, right on desktop */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://static.wixstatic.com/media/e97957_f5abe2dc670d41e480a991e1ac3e4931~mv2.jpg"
-          alt="NEED CRED? — StartupBoss.org"
-          style={isMobile ? {
-            width: "100%", height: "220px",
-            objectFit: "cover", objectPosition: "50% 40%",
-            display: "block", order: -1,
-          } : {
-            flex: 1, minHeight: 0,
-            objectFit: "cover",
-            objectPosition: `50% calc(50% - ${pageScroll * 0.45}px)`,
-            display: "block",
-            willChange: "object-position",
-          }}
-        />
+        {/* HERO IMAGE — right panel on desktop, hidden on mobile */}
+        {!isMobile && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src="https://static.wixstatic.com/media/e97957_f5abe2dc670d41e480a991e1ac3e4931~mv2.jpg"
+            alt="NEED CRED? — StartupBoss.org"
+            style={{
+              flex: 1, minHeight: 0,
+              objectFit: "cover",
+              objectPosition: `50% calc(50% - ${pageScroll * 0.45}px)`,
+              display: "block",
+              willChange: "object-position",
+            }}
+          />
+        )}
 
         {/* LEFT / MAIN PANEL — form + tabs */}
         <div style={{
@@ -566,7 +564,6 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
           display: "flex", flexDirection: "column",
           overflowY: isMobile ? "visible" : "auto",
           fontFamily: F_LIGHT,
-          order: isMobile ? 1 : 0,
         }}>
 
           {/* Tab navigation — 2 rows */}
