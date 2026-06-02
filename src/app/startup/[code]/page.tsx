@@ -160,9 +160,14 @@ export default async function CredentialPage({
           </div>
 
           {isExpired ? (
-            <h1 className="text-3xl font-bold mb-1 text-red-600">⚠ Credential Expired</h1>
+            <h1 className="text-3xl font-bold mb-1 text-red-600 flex items-center gap-3">
+              <span>⚠</span> Credential Expired
+            </h1>
           ) : (
-            <h1 className="text-3xl font-bold mb-1 text-black">✓ Verified Credential</h1>
+            <h1 className="text-3xl font-bold mb-1 text-black flex items-center gap-3">
+              <Image src="/icon.png" alt="Boss.Technology" width={36} height={36} className="object-contain" />
+              Verified Credential
+            </h1>
           )}
         </div>
 
