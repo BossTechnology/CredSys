@@ -2,23 +2,24 @@ import { cn } from "@/lib/utils";
 import { truncate, formatDateShort } from "@/lib/utils";
 
 interface CredBadgeProps {
-  startupName: string;
-  uniqueCode: string;
+  startupName:  string;
+  uniqueCode:   string;
   accreditedAt: string;
-  domain?: string;
-  width?: number;
-  className?: string;
+  domain?:      string;
+  statusText?:  string;
+  className?:   string;
 }
 
 export function CredBadge({
   startupName,
   uniqueCode,
   accreditedAt,
-  domain = "startupboss.org",
+  domain      = "startupboss.org",
+  statusText,
   className,
 }: CredBadgeProps) {
   const displayName = truncate(startupName, 28);
-  const dateStr = formatDateShort(accreditedAt);
+  const dateStr     = formatDateShort(accreditedAt);
 
   return (
     <div
@@ -32,11 +33,6 @@ export function CredBadge({
       <div className="absolute left-0 top-0 bottom-0 w-1 bg-sb-default" />
 
       <div className="pl-3">
-        {/* Header */}
-        <div className="text-[13px] font-mono text-cs-400 uppercase tracking-widest mb-1">
-          StartupCred
-        </div>
-
         {/* Accredited pill */}
         <span className="inline-flex items-center px-2 py-0.5 bg-sb-default text-sb-text text-[10px] font-mono font-semibold uppercase tracking-wider mb-2">
           ACCREDITED
@@ -49,12 +45,18 @@ export function CredBadge({
         <div className="text-[13px] font-mono text-cs-400 mt-1">{dateStr}</div>
       </div>
 
-      {/* Footer: ID + domain */}
+      {/* Footer row */}
       <div className="pl-3 flex items-end justify-between">
-        <div className="text-[14px] font-mono text-cs-500">
-          ID: {uniqueCode} · {domain}
+        <div>
+          <div className="text-[11px] font-mono text-cs-500">
+            ID: {uniqueCode} · {domain}
+          </div>
+          {statusText && (
+            <div className="text-[10px] font-mono text-cs-500 mt-0.5 italic">
+              {statusText}
+            </div>
+          )}
         </div>
-        {/* Check mark */}
         <div className="text-[#1A1A1A] text-2xl font-bold">✓</div>
       </div>
     </div>

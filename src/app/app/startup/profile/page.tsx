@@ -33,6 +33,7 @@ async function updateStartupProfile(formData: FormData) {
       country:     (formData.get("country")     as string) || null,
       website:     (formData.get("website")     as string) || null,
       description: (formData.get("description") as string) || null,
+      logo_url:    (formData.get("logo_url")    as string) || null,
       team_size:   formData.get("team_size") ? Number(formData.get("team_size")) : null,
     })
     .eq("id", profile.entity_id);
@@ -162,6 +163,27 @@ export default async function StartupProfilePage() {
                 placeholder="What does your startup do?"
                 className="cs-input resize-none"
               />
+            </div>
+            <div>
+              <label className="cs-label">Logo URL</label>
+              <input
+                name="logo_url"
+                type="url"
+                defaultValue={(startup as unknown as { logo_url?: string })?.logo_url ?? ""}
+                placeholder="https://yoursite.com/logo.png"
+                className="cs-input"
+              />
+              <p className="text-[11px] text-cs-400 mt-1">
+                Public URL of your logo image — shown on your Verified Credential page.
+              </p>
+              {(startup as unknown as { logo_url?: string })?.logo_url && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={(startup as unknown as { logo_url?: string }).logo_url!}
+                  alt="Logo preview"
+                  className="mt-2 h-14 w-auto object-contain border border-cs-200 p-1"
+                />
+              )}
             </div>
           </div>
         </div>

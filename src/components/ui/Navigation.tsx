@@ -27,10 +27,10 @@ function NavLink({ href, label, dark = false }: NavLinkProps) {
         dark
           ? active
             ? "text-white border-b border-white font-bold"
-            : "text-cs-500 hover:text-white"
+            : "text-cs-500 hover:text-cs-btn"
           : active
-          ? "text-black border-b border-black font-bold"
-          : "text-cs-500 hover:text-black"
+          ? "text-black border-b-2 border-black font-bold"
+          : "text-cs-500 hover:text-cs-btn"
       )}
     >
       {label}

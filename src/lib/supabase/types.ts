@@ -55,6 +55,7 @@ export interface Startup {
   country?:       string;
   website?:       string;
   description?:   string;
+  logo_url?:      string;
   stage?:         string;
   team_size?:     number;
   created_at:     string;
