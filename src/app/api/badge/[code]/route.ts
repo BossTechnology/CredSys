@@ -36,12 +36,12 @@ export async function GET(
     const statusText  = isExpired ? "EXPIRED"     : "ACCREDITED";
     const statusColor = isExpired ? "#CC0000"     : "#D9D3FA";
 
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="320" height="100" viewBox="0 0 320 100" role="img" aria-label="CredSys badge for ${orgName}">
-  <title>CredSys — ${orgName}</title>
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="320" height="100" viewBox="0 0 320 100" role="img" aria-label="StartupBoss.org badge for ${orgName}">
+  <title>StartupBoss.org — ${orgName}</title>
   <rect width="320" height="100" fill="#0A0A0A" rx="2"/>
   <rect width="4" height="100" fill="${accentColor}" rx="0"/>
   <text x="16" y="22" font-family="monospace" font-size="9" fill="#666" letter-spacing="2" text-anchor="start">STARTUPBOSS.ORG</text>
-  <text x="16" y="42" font-family="monospace" font-size="16" font-weight="bold" fill="#FFFFFF" letter-spacing="1" text-anchor="start">CRED SYS</text>
+  <text x="16" y="42" font-family="monospace" font-size="16" font-weight="bold" fill="#FFFFFF" letter-spacing="1" text-anchor="start">STARTUPBOSS</text>
   <line x1="16" y1="52" x2="304" y2="52" stroke="#222" stroke-width="1"/>
   <text x="16" y="68" font-family="monospace" font-size="10" font-weight="bold" fill="#FFFFFF" text-anchor="start">${displayName}</text>
   <text x="16" y="82" font-family="monospace" font-size="7.5" fill="#666" letter-spacing="1" text-anchor="start">ID: ${upperCode} · ${year}</text>

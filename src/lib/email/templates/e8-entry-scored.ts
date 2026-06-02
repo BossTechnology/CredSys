@@ -29,7 +29,7 @@ export async function sendEntryScored(
 
   await sendEmail({
     to,
-    subject: `CredSys — Your entry has been scored: ${competitionName}`,
+    subject: `StartupBoss.org — Your entry has been scored: ${competitionName}`,
     html,
   });
 }
@@ -61,7 +61,7 @@ export async function sendAcceleratorEntryScored(
 
   await sendEmail({
     to,
-    subject: `CredSys — Score update: ${startupName} in ${competitionName}`,
+    subject: `StartupBoss.org — Score update: ${startupName} in ${competitionName}`,
     html,
   });
 }

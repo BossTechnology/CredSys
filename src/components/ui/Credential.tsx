@@ -39,7 +39,7 @@ export function CredBadge({
 
       <div className="pl-3">
         <div className="text-[13px] font-mono text-cs-400 uppercase tracking-widest mb-1">
-          CredSys · StartupBoss.org
+          StartupBoss.org
         </div>
         <span className="inline-flex items-center px-2 py-0.5 bg-sb-default text-sb-text text-[10px] font-mono font-semibold uppercase tracking-wider mb-2">
           ACCREDITED

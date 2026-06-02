@@ -23,7 +23,7 @@ export async function sendCompetitionEntered(
 
   await sendEmail({
     to,
-    subject: `CredSys — Entry confirmed: ${competitionName}`,
+    subject: `StartupBoss.org — Entry confirmed: ${competitionName}`,
     html,
   });
 }

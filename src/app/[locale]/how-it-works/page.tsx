@@ -81,7 +81,7 @@ export default async function HowItWorksPage({ params }: HowItWorksPageProps) {
                 How CRED Works
               </h1>
               <p className="text-sm text-cs-600 leading-relaxed max-w-[480px]">
-                CredSys uses a structured evaluation framework to assess startups against
+                StartupBoss.org uses a structured evaluation framework to assess startups against
                 seven criteria. Accredited startups receive a verifiable credential ID
                 they can share with investors, partners, and accelerators.
               </p>

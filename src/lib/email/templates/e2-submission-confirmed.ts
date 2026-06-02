@@ -21,7 +21,7 @@ export async function sendSubmissionConfirmed(
 
   await sendEmail({
     to,
-    subject: "CredSys — Your accreditation request was received",
+    subject: "StartupBoss.org — Your accreditation request was received",
     html,
   });
 }

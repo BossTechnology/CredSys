@@ -63,7 +63,7 @@ export default async function AdminOverviewPage() {
           <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">Admin</span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight">Overview</h1>
-        <p className="text-[13px] font-mono text-cs-400 mt-1">System dashboard — CredSys</p>
+        <p className="text-[13px] font-mono text-cs-400 mt-1">System dashboard — StartupBoss.org</p>
       </div>
 
       {/* Alert banners */}

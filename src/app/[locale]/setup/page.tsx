@@ -62,7 +62,7 @@ export default async function SetupPage({ params, searchParams }: SetupPageProps
           </Link>
           <div className="flex items-center gap-2 mb-4">
             <div className="w-2 h-2 bg-sb-default" />
-            <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">CredSys</span>
+            <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">StartupBoss.org</span>
           </div>
           <div className="bg-black text-white px-4 py-2 mb-1 inline-block">
             <span className="text-[13px] font-mono uppercase tracking-widest">Activate Account</span>

@@ -27,7 +27,7 @@ export function HeroSection({ locale, dict }: HeroSectionProps) {
           <div className="flex items-center gap-3 mb-4">
             <div className="w-3 h-3 bg-sb-default" />
             <span className="text-[13px] font-mono text-sb-text uppercase tracking-widest font-semibold">
-              CredSys — Accreditation Platform
+              StartupBoss.org — Accreditation Platform
             </span>
           </div>
 

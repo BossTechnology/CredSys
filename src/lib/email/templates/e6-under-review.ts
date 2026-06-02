@@ -22,7 +22,7 @@ export async function sendUnderReview(
 
   await sendEmail({
     to,
-    subject: "CredSys — Your application is under review",
+    subject: "StartupBoss.org — Your application is under review",
     html,
   });
 }

@@ -24,13 +24,13 @@ export async function generateMetadata({
   const orgName = (data?.startups as unknown as { org_name: string } | null)?.org_name;
 
   return {
-    title:       orgName ? `${orgName} · CredSys Verified` : `Credential ${code} · CredSys`,
+    title:       orgName ? `${orgName} · CRED Verified` : `Credential ${code} · StartupBoss.org`,
     description: orgName
       ? `${orgName} is an accredited startup on StartupBoss.org. Verify their CRED credential.`
-      : `Verify this CredSys credential issued by StartupBoss.org.`,
+      : `Verify this CRED credential issued by StartupBoss.org.`,
     openGraph: {
-      title:       orgName ? `${orgName} is CRED Accredited` : "CredSys Credential",
-      description: "Verified by StartupBoss.org — CredSys Accreditation Platform",
+      title:       orgName ? `${orgName} is CRED Accredited` : "CRED Credential",
+      description: "Verified by StartupBoss.org — Accreditation Platform",
     },
   };
 }
@@ -118,7 +118,7 @@ export default async function CredentialPage({
           StartupBoss.org
         </Link>
         <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 ml-4">
-          CredSys · Public Verification
+          StartupBoss.org · Public Verification
         </span>
         <div className="flex-1" />
         <Link
@@ -136,7 +136,7 @@ export default async function CredentialPage({
           <div className="flex items-center gap-3 mb-3">
             <div className="w-1 h-6 bg-sb-default" />
             <span className="text-[13px] font-mono text-sb-text uppercase tracking-widest">
-              CredSys Accreditation
+              CRED Accreditation
             </span>
           </div>
 
@@ -294,7 +294,7 @@ export default async function CredentialPage({
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <pre className="bg-cs-50 border border-cs-200 px-4 py-3 text-[12px] font-mono text-cs-600 overflow-x-auto whitespace-pre-wrap break-all select-all">
 {`<a href="${pageUrl}" target="_blank" rel="noopener">
-  <img src="${badgeUrl}" alt="${startup?.org_name ?? ""} — CredSys Accredited" width="320" height="100" />
+  <img src="${badgeUrl}" alt="${startup?.org_name ?? ""} — CRED Accredited" width="320" height="100" />
 </a>`}
             </pre>
           </div>
@@ -305,7 +305,7 @@ export default async function CredentialPage({
           <span>Verified by</span>
           <Link href="/en" className="text-sb-text hover:underline">StartupBoss.org</Link>
           <span>·</span>
-          <span>Powered by CredSys</span>
+          <span>Powered by StartupBoss.org</span>
         </div>
 
       </main>

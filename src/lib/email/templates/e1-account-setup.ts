@@ -12,7 +12,7 @@ export async function sendAccountSetup(
       Hi <strong style="color:#ffffff">${orgName}</strong>,
     </p>
     <p style="font-size:12px;color:#cccccc;margin:0 0 16px">
-      Your application to CredSys has been received. Click below to set up
+      Your application to StartupBoss.org has been received. Click below to set up
       your account and complete your profile.
     </p>
     ${emailBlock("Account Setup Link", "Valid for 7 days")}
@@ -29,7 +29,7 @@ export async function sendAccountSetup(
 
   await sendEmail({
     to,
-    subject: "CredSys — Activate your account",
+    subject: "StartupBoss.org — Activate your account",
     html,
   });
 }
