@@ -2,6 +2,7 @@ import { createClient }        from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { redirect }            from "next/navigation";
 import { revalidatePath }      from "next/cache";
+import { LogoUploadField }     from "@/components/ui/LogoUploadField";
 
 // ─── Server Action ────────────────────────────────────────────────────────────
 
@@ -24,18 +25,42 @@ async function updateStartupProfile(formData: FormData) {
 
   if (!profile?.entity_id) return;
 
+  // ── Logo upload ──────────────────────────────────────────────
+  let logoUrl: string | null | undefined = undefined; // undefined = don't touch existing value
+
+  const logoFile = formData.get("logo") as File | null;
+  if (logoFile && logoFile.size > 0) {
+    const ext  = logoFile.name.split(".").pop() ?? "png";
+    const path = `${profile.entity_id}/logo.${ext}`;
+    const buf  = Buffer.from(await logoFile.arrayBuffer());
+
+    const { error: uploadError } = await service.storage
+      .from("startup-logos")
+      .upload(path, buf, { contentType: logoFile.type, upsert: true });
+
+    if (!uploadError) {
+      const { data: { publicUrl } } = service.storage
+        .from("startup-logos")
+        .getPublicUrl(path);
+      logoUrl = publicUrl;
+    }
+  }
+
+  // ── Profile update ───────────────────────────────────────────
+  const update: Record<string, unknown> = {
+    org_name:    (formData.get("org_name")    as string) || undefined,
+    industry:    (formData.get("industry")    as string) || null,
+    stage:       (formData.get("stage")       as string) || null,
+    country:     (formData.get("country")     as string) || null,
+    website:     (formData.get("website")     as string) || null,
+    description: (formData.get("description") as string) || null,
+    team_size:   formData.get("team_size") ? Number(formData.get("team_size")) : null,
+  };
+  if (logoUrl !== undefined) update.logo_url = logoUrl;
+
   await service
     .from("startups")
-    .update({
-      org_name:    (formData.get("org_name")    as string) || undefined,
-      industry:    (formData.get("industry")    as string) || null,
-      stage:       (formData.get("stage")       as string) || null,
-      country:     (formData.get("country")     as string) || null,
-      website:     (formData.get("website")     as string) || null,
-      description: (formData.get("description") as string) || null,
-      logo_url:    (formData.get("logo_url")    as string) || null,
-      team_size:   formData.get("team_size") ? Number(formData.get("team_size")) : null,
-    })
+    .update(update)
     .eq("id", profile.entity_id);
 
   revalidatePath("/app/startup/profile");
@@ -164,27 +189,9 @@ export default async function StartupProfilePage() {
                 className="cs-input resize-none"
               />
             </div>
-            <div>
-              <label className="cs-label">Logo URL</label>
-              <input
-                name="logo_url"
-                type="url"
-                defaultValue={(startup as unknown as { logo_url?: string })?.logo_url ?? ""}
-                placeholder="https://yoursite.com/logo.png"
-                className="cs-input"
-              />
-              <p className="text-[11px] text-cs-400 mt-1">
-                Public URL of your logo image — shown on your Verified Credential page.
-              </p>
-              {(startup as unknown as { logo_url?: string })?.logo_url && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={(startup as unknown as { logo_url?: string }).logo_url!}
-                  alt="Logo preview"
-                  className="mt-2 h-14 w-auto object-contain border border-cs-200 p-1"
-                />
-              )}
-            </div>
+            <LogoUploadField
+              currentLogoUrl={(startup as unknown as { logo_url?: string })?.logo_url}
+            />
           </div>
         </div>
 
