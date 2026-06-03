@@ -170,6 +170,8 @@ export interface CompetitionScore {
 // Accreditation Types
 // ============================================================
 
+// ── Legacy simple-flag types (kept for backward compat) ──────────────────────
+
 export interface BLIPSVerification {
   b?: boolean;  // Business model validated
   l?: boolean;  // Legal compliance confirmed
@@ -185,6 +187,32 @@ export interface ADDISVerification {
   i?: boolean;  // Investment readiness
   s?: boolean;  // Stage-appropriate
 }
+
+// ── Rich chassis-compatible verification types ────────────────────────────────
+
+/** A single BLIPS or ADDIS item (from chassis import or manual entry) */
+export interface VerificationItem {
+  item:         string;    // item / component name
+  type?:        string;    // category type (e.g. "CRM", "Cloud Database")
+  env?:         string;    // "Controlled" | "Uncontrolled" | "Uncontrolled, Real World"
+  inEx?:        string;    // "Internal" | "External"
+  data?:        string;    // description of the data this item handles
+  source?:      string;    // data sources (BLIPS only)
+  description?: string;    // full item description
+  verified:     boolean;   // set by evaluator
+}
+
+/** A named group of VerificationItems (e.g. "Sales", "Dev") */
+export interface VerificationCategory {
+  name:  string;
+  items: VerificationItem[];
+}
+
+/** Full BLIPS data — list of categories */
+export type BLIPSData = VerificationCategory[];
+
+/** Full ADDIS data — list of categories */
+export type ADDISData = VerificationCategory[];
 
 export interface AccreditationRequest {
   id:              string;
@@ -208,9 +236,13 @@ export interface AccreditationRequest {
   team_size?:        number;
   additional_notes?: string;
 
-  // Verification
+  // Verification — legacy boolean flags
   blips_verification: BLIPSVerification;
   addis_verification: ADDISVerification;
+
+  // Verification — rich chassis-compatible data
+  blips_data?: BLIPSData | null;
+  addis_data?: ADDISData | null;
 
   // Credential
   unique_code?:   string;

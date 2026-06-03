@@ -7,7 +7,7 @@ import { WorkflowStatusBar }   from "@/components/ui/WorkflowStatusBar";
 import { VerificationPanel }   from "@/components/accreditation/VerificationPanel";
 import { advanceAccreditationStatus } from "@/app/actions/accreditation";
 import { rejectWithReason }           from "@/app/actions/verification";
-import type { AccreditationStatus, BLIPSVerification, ADDISVerification } from "@/lib/supabase/types";
+import type { AccreditationStatus, BLIPSData, ADDISData } from "@/lib/supabase/types";
 
 // ─── Workflow map ─────────────────────────────────────────────────────────────
 
@@ -166,8 +166,8 @@ export default async function AssignmentDetailPage({
           </div>
           <VerificationPanel
             requestId={req.id}
-            initialBLIPS={(req.blips_verification as BLIPSVerification) ?? {}}
-            initialADDIS={(req.addis_verification as ADDISVerification) ?? {}}
+            initialBLIPS={(req as unknown as { blips_data?: BLIPSData | null }).blips_data ?? null}
+            initialADDIS={(req as unknown as { addis_data?: ADDISData | null }).addis_data ?? null}
             initialNotes={req.evaluator_notes}
             readOnly={status !== "verification_in_progress"}
           />

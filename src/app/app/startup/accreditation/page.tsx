@@ -6,7 +6,7 @@ import { Badge }                 from "@/components/ui/Badge";
 import { WorkflowStatusBar }     from "@/components/ui/WorkflowStatusBar";
 import { VerificationPanel }     from "@/components/accreditation/VerificationPanel";
 import { submitAccreditationRequest } from "@/app/actions/apply";
-import type { AccreditationStatus, BLIPSVerification, ADDISVerification } from "@/lib/supabase/types";
+import type { AccreditationStatus, BLIPSData, ADDISData } from "@/lib/supabase/types";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -296,8 +296,8 @@ export default async function StartupAccreditationPage() {
         </div>
         <VerificationPanel
           requestId={request.id}
-          initialBLIPS={(request.blips_verification as BLIPSVerification) ?? {}}
-          initialADDIS={(request.addis_verification as ADDISVerification) ?? {}}
+          initialBLIPS={(request as unknown as { blips_data?: BLIPSData | null }).blips_data ?? null}
+          initialADDIS={(request as unknown as { addis_data?: ADDISData | null }).addis_data ?? null}
           initialNotes={request.evaluator_notes}
           readOnly
         />
