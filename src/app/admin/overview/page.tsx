@@ -37,7 +37,7 @@ export default async function AdminOverviewPage() {
     { value: pendingAssignment ?? 0, label: "Unassigned Requests", href: "/admin/accreditations", alert: (pendingAssignment ?? 0) > 0 },
     { value: inProgress        ?? 0, label: "In Progress",         href: "/admin/accreditations"                                },
     { value: activeComps       ?? 0, label: "Active Competitions", href: "/admin/competitions",   accent: true                  },
-    { value: totalStartups     ?? 0, label: "Total Startups",      href: "/admin/accreditations"                                },
+    { value: totalStartups     ?? 0, label: "Total Startups",      href: "/admin/startups"                                      },
   ];
 
   const STATUS_COLOR: Record<string, string> = {

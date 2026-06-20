@@ -11,6 +11,7 @@ interface AdminNavProps {
 
 const NAV_ITEMS = [
   { label: "Overview",       href: "/admin/overview"       },
+  { label: "Startups",       href: "/admin/startups"       },
   { label: "Evaluators",     href: "/admin/evaluators"     },
   { label: "Accelerators",   href: "/admin/accelerators"   },
   { label: "Sponsorships",   href: "/admin/sponsorships"   },
