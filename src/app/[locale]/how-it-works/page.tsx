@@ -64,7 +64,7 @@ export default async function HowItWorksPage({ params }: HowItWorksPageProps) {
         {/* Hero */}
         <section className="border-b border-cs-200 bg-white">
           <div className="bg-black px-7 py-1">
-            <span className="text-[7px] font-mono text-sb-default uppercase tracking-widest">
+            <span className="text-[14px] font-mono text-sb-default uppercase tracking-widest">
               GetCRED · Build Trust · Become Unstoppable
             </span>
           </div>
@@ -73,7 +73,7 @@ export default async function HowItWorksPage({ params }: HowItWorksPageProps) {
             <div className="max-w-[620px]">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-3 h-3 bg-sb-default" />
-                <span className="text-[8px] font-mono text-sb-text uppercase tracking-widest font-semibold">
+                <span className="text-[13px] font-mono text-sb-text uppercase tracking-widest font-semibold">
                   The Process
                 </span>
               </div>
@@ -81,7 +81,7 @@ export default async function HowItWorksPage({ params }: HowItWorksPageProps) {
                 How CRED Works
               </h1>
               <p className="text-sm text-cs-600 leading-relaxed max-w-[480px]">
-                CredSys uses a structured evaluation framework to assess startups against
+                StartupBoss.org uses a structured evaluation framework to assess startups against
                 seven criteria. Accredited startups receive a verifiable credential ID
                 they can share with investors, partners, and accelerators.
               </p>
@@ -107,7 +107,7 @@ export default async function HowItWorksPage({ params }: HowItWorksPageProps) {
           <div className="max-w-[1280px] mx-auto px-7 py-16">
             <div className="flex items-center gap-3 mb-10">
               <div className="h-px flex-1 bg-cs-200 max-w-[40px]" />
-              <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+              <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
                 The CHASS1S Framework
               </span>
             </div>
@@ -134,7 +134,7 @@ export default async function HowItWorksPage({ params }: HowItWorksPageProps) {
                       <h3 className="text-sm font-bold tracking-tight mb-1">
                         {item.label}
                       </h3>
-                      <p className="text-[11px] text-cs-500 leading-relaxed">
+                      <p className="text-[14px] text-cs-500 leading-relaxed">
                         {item.desc}
                       </p>
                     </div>
@@ -158,7 +158,7 @@ export default async function HowItWorksPage({ params }: HowItWorksPageProps) {
             </div>
             <Link
               href={`/${locale}/getcred`}
-              className="bg-white text-black text-[8px] font-mono font-semibold uppercase tracking-widest px-8 py-4 hover:opacity-80 transition-opacity shrink-0"
+              className="bg-white text-black text-[13px] font-mono font-semibold uppercase tracking-widest px-8 py-4 hover:opacity-80 transition-opacity shrink-0"
             >
               Apply Now
             </Link>

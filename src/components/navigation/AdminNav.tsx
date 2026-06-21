@@ -1,7 +1,8 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { cn }    from "@/lib/utils";
+import Image      from "next/image";
+import Link       from "next/link";
 import { usePathname } from "next/navigation";
 
 interface AdminNavProps {
@@ -10,6 +11,7 @@ interface AdminNavProps {
 
 const NAV_ITEMS = [
   { label: "Overview",       href: "/admin/overview"       },
+  { label: "Startups",       href: "/admin/startups"       },
   { label: "Evaluators",     href: "/admin/evaluators"     },
   { label: "Accelerators",   href: "/admin/accelerators"   },
   { label: "Sponsorships",   href: "/admin/sponsorships"   },
@@ -23,11 +25,19 @@ export function AdminNav({ onSignOut }: AdminNavProps) {
 
   return (
     <nav className="h-12 bg-black flex items-center px-7 gap-6">
-      <Link href="/admin/overview" className="text-sm font-bold tracking-tight text-white shrink-0">
-        StartupBoss.org
+      <Link href="/admin/overview" className="shrink-0">
+        <Image
+          src="/logo.png"
+          alt="StartupBoss.org"
+          width={180}
+          height={32}
+          className="object-contain"
+          style={{ filter: "invert(1)", mixBlendMode: "screen" }}
+          priority
+        />
       </Link>
 
-      <span className="text-[7px] font-mono text-cs-600 uppercase tracking-widest border-l border-cs-700 pl-4 shrink-0">
+      <span className="text-[14px] font-mono text-cs-600 uppercase tracking-widest border-l border-cs-700 pl-4 shrink-0">
         Admin
       </span>
 
@@ -37,7 +47,7 @@ export function AdminNav({ onSignOut }: AdminNavProps) {
             key={item.href}
             href={item.href}
             className={cn(
-              "text-[8px] font-mono uppercase tracking-widest pb-0.5 transition-colors",
+              "text-[13px] font-mono uppercase tracking-widest pb-0.5 transition-colors",
               pathname === item.href || pathname.startsWith(item.href + "/")
                 ? "text-white border-b border-white font-bold"
                 : "text-cs-500 hover:text-white"
@@ -51,7 +61,7 @@ export function AdminNav({ onSignOut }: AdminNavProps) {
       {onSignOut && (
         <button
           onClick={onSignOut}
-          className="text-[7.5px] font-mono text-cs-500 uppercase tracking-widest hover:text-white transition-colors"
+          className="text-[12px] font-mono text-cs-500 uppercase tracking-widest hover:text-white transition-colors"
         >
           Sign Out
         </button>

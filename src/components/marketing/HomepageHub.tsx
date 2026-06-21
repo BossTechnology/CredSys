@@ -1,6 +1,7 @@
 "use client";
 
-import { useState }   from "react";
+import { useState, useRef, useEffect } from "react";
+import Image           from "next/image";
 import Link            from "next/link";
 import type { Locale } from "@/lib/i18n/types";
 
@@ -174,7 +175,7 @@ function CbRow({ id, label }: { id: string; label: string }) {
       <input type="checkbox" id={id}
         style={{ marginTop: "3px", width: "13px", height: "13px", flexShrink: 0, accentColor: C_PURPLE, cursor: "pointer" }} />
       <label htmlFor={id}
-        style={{ fontFamily: F_LIGHT, fontSize: "12px", color: C_TEXT, lineHeight: "1.5", cursor: "pointer" }}>
+        style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_TEXT, lineHeight: "1.5", cursor: "pointer" }}>
         {label}
       </label>
     </div>
@@ -223,7 +224,7 @@ function Resources({ tab, isEs }: { tab: Tab; isEs: boolean }) {
             style={{ fontFamily: F_LIGHT, fontSize: "14px", color: C_PURPLE, textDecoration: "none" }}>
             | download ▼
           </a>
-          <p style={{ fontFamily: F_LIGHT, fontSize: "12px", color: C_TEXT, lineHeight: "1.5", marginTop: "3px" }}>
+          <p style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_TEXT, lineHeight: "1.5", marginTop: "3px" }}>
             {isEs ? r.descEs : r.descEn}
           </p>
         </div>
@@ -390,7 +391,7 @@ function CredListPane({ credList, locale }: { credList: CredListRow[]; locale: L
               <span style={{ fontFamily: F_HEAVY, fontSize: "14px", color: C_TEXT }}>
                 {row.startups?.org_name ?? "—"}
                 {row.startups?.country && (
-                  <span style={{ fontFamily: F_LIGHT, fontSize: "11px", color: C_MUTED, marginLeft: "6px" }}>
+                  <span style={{ fontFamily: F_LIGHT, fontSize: "12px", color: C_MUTED, marginLeft: "6px" }}>
                     {row.startups.country}
                   </span>
                 )}
@@ -410,8 +411,38 @@ function CredListPane({ credList, locale }: { credList: CredListRow[]; locale: L
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props) {
-  const [activeTab, setActiveTab] = useState<Tab>(initialTab);
+  const [activeTab,  setActiveTab]  = useState<Tab>(initialTab);
+  const [langOpen,   setLangOpen]   = useState(false);
+  const [pageScroll, setPageScroll] = useState(0);
+  const [isMobile,   setIsMobile]   = useState(false);
+  const langRef                     = useRef<HTMLDivElement>(null);
   const isEs = locale === "es";
+
+  // Detect mobile breakpoint (< 768px)
+  useEffect(() => {
+    function check() { setIsMobile(window.innerWidth < 768); }
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // Close language dropdown on outside click
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setLangOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  // Parallax: track page scroll for right-panel image (desktop only)
+  useEffect(() => {
+    function onScroll() { setPageScroll(window.scrollY); }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const row1Tabs: Tab[] = ["getcred", "accelerators"];
   const row2Tabs: Tab[] = ["evaluators", "investors", "cred-list"];
@@ -434,35 +465,118 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
     transition: "color .12s",
   });
 
+  /* ── Responsive values ── */
+  const hPad    = isMobile ? "0 20px"  : "0 48px";
+  const panelPad = isMobile ? "20px 20px 32px" : "20px 48px 32px";
+  const tabSize  = isMobile ? "20px"   : "28px";
+  const tabGap   = isMobile ? "16px"   : "22px";
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", width: "100%", minHeight: "100vh" }}>
+    <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
 
-      {/* ── SPLIT ROW ── */}
-      <div style={{ display: "flex", flex: 1, minHeight: "100vh" }}>
+      {/* ── FULL-WIDTH HEADER ── */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: hPad, height: "64px",
+        background: C_WHITE, borderBottom: `1px solid #e8e8e8`,
+        position: "sticky", top: 0, zIndex: 10,
+      }}>
+        {/* Logo */}
+        <Link href={`/${locale}`}>
+          <Image
+            src="/logo.png"
+            alt="StartupBoss.org"
+            width={isMobile ? 160 : 220}
+            height={isMobile ? 30  : 40}
+            style={{ objectFit: "contain", objectPosition: "left center", display: "block" }}
+            priority
+          />
+        </Link>
 
-        {/* LEFT PANEL — 490px, white */}
-        <div style={{ width: "490px", flexShrink: 0, background: C_WHITE, padding: "24px 38px 32px", display: "flex", flexDirection: "column" }}>
+        {/* Right side: language dropdown + Sign In */}
+        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? "16px" : "24px" }}>
 
-          {/* Logo — dev team: replace placeholder with <Image> from Next.js using /public/logo.png */}
-          <div style={{ marginBottom: "36px" }}>
-            <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", background: "#e8e8e8", width: "200px", height: "34px" }}>
-              <span style={{ fontFamily: F_LIGHT, fontSize: "10px", color: "#aaa", letterSpacing: ".04em" }}>
-                [ Logo placeholder ]
-              </span>
-            </div>
+          {/* Language dropdown */}
+          <div ref={langRef} style={{ position: "relative" }}>
+            <button
+              onClick={() => setLangOpen(o => !o)}
+              style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_MUTED, background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "5px", padding: 0 }}
+            >
+              {isEs ? "ES" : "EN"}
+              <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style={{ transition: "transform .15s", transform: langOpen ? "rotate(180deg)" : "rotate(0deg)" }}>
+                <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+            {langOpen && (
+              <div style={{ position: "absolute", top: "calc(100% + 8px)", right: 0, background: C_WHITE, border: "1px solid #e8e8e8", minWidth: "72px", boxShadow: "0 4px 12px rgba(0,0,0,.08)", zIndex: 50 }}>
+                <Link href="/en" onClick={() => setLangOpen(false)}
+                  style={{ display: "block", padding: "8px 14px", fontFamily: F_LIGHT, fontSize: "13px", color: !isEs ? C_TEXT : C_MUTED, background: !isEs ? "#f5f5f5" : "transparent", textDecoration: "none" }}>
+                  EN
+                </Link>
+                <Link href="/es" onClick={() => setLangOpen(false)}
+                  style={{ display: "block", padding: "8px 14px", fontFamily: F_LIGHT, fontSize: "13px", color: isEs ? C_TEXT : C_MUTED, background: isEs ? "#f5f5f5" : "transparent", textDecoration: "none" }}>
+                  ES
+                </Link>
+              </div>
+            )}
           </div>
 
+          {/* Sign In */}
+          <Link href={`/${locale}/login`}
+            style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_MUTED, textDecoration: "underline", whiteSpace: "nowrap" }}>
+            {isEs ? "Iniciar Sesión" : "Sign In"}
+          </Link>
+        </div>
+      </div>
+
+      {/* ── MAIN AREA ──
+            Desktop: side-by-side, fills viewport height (footer revealed on scroll)
+            Mobile:  stacked — hero image on top, then form below, natural scroll  */}
+      <div style={isMobile ? {
+        display: "flex", flexDirection: "column", flexShrink: 0,
+      } : {
+        display: "flex", flexDirection: "row",
+        height: "calc(100vh - 64px)", overflow: "hidden", flexShrink: 0,
+      }}>
+
+        {/* HERO IMAGE — right panel on desktop, hidden on mobile */}
+        {!isMobile && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src="https://static.wixstatic.com/media/e97957_f5abe2dc670d41e480a991e1ac3e4931~mv2.jpg"
+            alt="NEED CRED? — StartupBoss.org"
+            style={{
+              flex: 1, minHeight: 0,
+              objectFit: "cover",
+              objectPosition: `50% calc(50% - ${pageScroll * 0.45}px)`,
+              display: "block",
+              willChange: "object-position",
+            }}
+          />
+        )}
+
+        {/* LEFT / MAIN PANEL — form + tabs */}
+        <div style={{
+          width: isMobile ? "100%" : "50%",
+          flexShrink: 0,
+          background: C_WHITE,
+          padding: panelPad,
+          display: "flex", flexDirection: "column",
+          overflowY: isMobile ? "visible" : "auto",
+          fontFamily: F_LIGHT,
+        }}>
+
           {/* Tab navigation — 2 rows */}
-          <div style={{ display: "flex", alignItems: "baseline", gap: "22px", marginBottom: "2px" }}>
+          <div style={{ display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: tabGap, marginBottom: "2px" }}>
             {row1Tabs.map(id => (
-              <button key={id} onClick={() => setActiveTab(id)} style={tabBtnStyle(id)}>
+              <button key={id} onClick={() => setActiveTab(id)} style={{ ...tabBtnStyle(id), fontSize: tabSize }}>
                 {tabLabel(id)}
               </button>
             ))}
           </div>
-          <div style={{ display: "flex", alignItems: "baseline", gap: "22px" }}>
+          <div style={{ display: "flex", alignItems: "baseline", flexWrap: "wrap", gap: tabGap }}>
             {row2Tabs.map(id => (
-              <button key={id} onClick={() => setActiveTab(id)} style={tabBtnStyle(id)}>
+              <button key={id} onClick={() => setActiveTab(id)} style={{ ...tabBtnStyle(id), fontSize: tabSize }}>
                 {tabLabel(id)}
               </button>
             ))}
@@ -477,78 +591,65 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
           </p>
 
           {/* Active form */}
-          {activeTab === "getcred"      && <GetCredForm    isEs={isEs} />}
+          {activeTab === "getcred"      && <GetCredForm     isEs={isEs} />}
           {activeTab === "accelerators" && <AcceleratorForm isEs={isEs} />}
           {activeTab === "evaluators"   && <EvaluatorForm   isEs={isEs} />}
           {activeTab === "investors"    && <InvestorForm    isEs={isEs} />}
-          {activeTab === "cred-list"   && <CredListPane    credList={credList} locale={locale} />}
+          {activeTab === "cred-list"    && <CredListPane    credList={credList} locale={locale} />}
 
           {/* Resources below each form */}
           <Resources tab={activeTab} isEs={isEs} />
 
-          {/* Sign In link */}
-          <div style={{ marginTop: "auto", paddingTop: "28px" }}>
-            <Link href={`/${locale}/login`}
-              style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_MUTED, textDecoration: "underline" }}>
-              {isEs ? "Iniciar Sesión" : "Sign In"}
-            </Link>
-          </div>
-        </div>
-
-        {/* RIGHT PANEL — lavender + NEED CRED? image + black bottom bar */}
-        <div style={{ flex: 1, background: "#c4b5f0", position: "relative", display: "flex", flexDirection: "column", overflow: "hidden" }}>
-          {/* Dev team: download the NEED CRED? image, save to /public/need-cred.jpg, use Next.js Image */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://static.wixstatic.com/media/e97957_f5abe2dc670d41e480a991e1ac3e4931~mv2.jpg"
-            alt="NEED CRED? — StartupBoss.org"
-            style={{ width: "100%", flex: 1, objectFit: "cover", objectPosition: "center top", display: "block" }}
-          />
-          {/* Black bar at bottom of right panel (visible in PDF) */}
-          <div style={{ background: C_BLK, height: "52px", width: "100%", flexShrink: 0 }} />
         </div>
       </div>
 
       {/* ── FULL-WIDTH FOOTER ── */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 40px", borderTop: "1px solid #e8e8e8", background: C_WHITE }}>
+      <div style={{
+        display: "flex",
+        flexDirection: isMobile ? "column" : "row",
+        alignItems: isMobile ? "flex-start" : "center",
+        justifyContent: "space-between",
+        gap: isMobile ? "16px" : "0",
+        padding: isMobile ? "20px 20px" : "14px 60px",
+        borderTop: "1px solid #e8e8e8",
+        background: C_WHITE, flexShrink: 0,
+      }}>
         {/* Sponsored by Boss.Technology */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <span style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_TEXT }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+          <span style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_TEXT, whiteSpace: "nowrap" }}>
             {isEs ? "Patrocinado por" : "Sponsored by"}
           </span>
-          <div style={{ width: "40px", height: "1px", background: C_TEXT }} />
+          <div style={{ width: "40px", height: "1px", background: C_TEXT, flexShrink: 0 }} />
           <a href="https://boss.technology" target="_blank" rel="noopener noreferrer">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="https://static.wixstatic.com/media/e97957_e68f6e974b44435683e29d1f478057e1~mv2.png"
               alt="Boss.Technology"
-              height={38}
-              style={{ objectFit: "contain", display: "block" }}
+              style={{ height: "38px", width: "auto", maxWidth: "180px", display: "block", objectFit: "contain" }}
             />
           </a>
         </div>
 
         {/* Powered by New Relic */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <span style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_TEXT }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+          <span style={{ fontFamily: F_LIGHT, fontSize: "13px", color: C_TEXT, whiteSpace: "nowrap" }}>
             {isEs ? "Con el poder de" : "Powered by"}
           </span>
-          <div style={{ width: "40px", height: "1px", background: C_TEXT }} />
+          <div style={{ width: "40px", height: "1px", background: C_TEXT, flexShrink: 0 }} />
           <a href="https://newrelic.com/solutions/industry/startups" target="_blank" rel="noopener noreferrer">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="https://static.wixstatic.com/media/e97957_42d4d4509e0846d7bf96db5a50fd77dc~mv2.png"
               alt="New Relic"
-              height={26}
-              style={{ objectFit: "contain", display: "block" }}
+              style={{ height: "26px", width: "auto", maxWidth: "140px", display: "block", objectFit: "contain" }}
             />
           </a>
         </div>
       </div>
 
       {/* Copyright */}
-      <div style={{ textAlign: "center", padding: "10px 40px 14px", background: C_WHITE, borderTop: "1px solid #f0f0f0" }}>
-        <p style={{ fontFamily: F_LIGHT, fontSize: "12px", color: C_MUTED }}>
+      <div style={{ textAlign: "center", padding: "9px 20px 10px", background: "#555555", flexShrink: 0 }}>
+        <p style={{ fontFamily: F_LIGHT, fontSize: "12px", color: "#d8d8d8" }}>
           © 2025 Boss.Technology SAC | Powered by ❤ 🇵🇪 🇨🇴
         </p>
       </div>

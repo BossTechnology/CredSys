@@ -62,15 +62,15 @@ export default async function SetupPage({ params, searchParams }: SetupPageProps
           </Link>
           <div className="flex items-center gap-2 mb-4">
             <div className="w-2 h-2 bg-sb-default" />
-            <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest">CredSys</span>
+            <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">StartupBoss.org</span>
           </div>
           <div className="bg-black text-white px-4 py-2 mb-1 inline-block">
-            <span className="text-[8px] font-mono uppercase tracking-widest">Activate Account</span>
+            <span className="text-[13px] font-mono uppercase tracking-widest">Activate Account</span>
           </div>
           <div className="h-0.5 bg-sb-default w-full" />
         </div>
 
-        <p className="text-[11px] text-cs-500 mb-6">
+        <p className="text-[14px] text-cs-500 mb-6">
           Welcome, <strong>{tokenRow.email}</strong>. Set a password to activate your account.
         </p>
 
@@ -100,7 +100,7 @@ function SetupError({
         <div className="w-8 h-8 bg-black mx-auto mb-6" />
         <h1 className="text-lg font-bold tracking-tight mb-2">Setup Link Error</h1>
         <p className="text-sm text-cs-500 mb-2">{message}</p>
-        {hint && <p className="text-[11px] text-cs-400 mb-6">{hint}</p>}
+        {hint && <p className="text-[14px] text-cs-400 mb-6">{hint}</p>}
         {loginLocale && (
           <Link
             href={`/${loginLocale}/login`}
@@ -112,7 +112,7 @@ function SetupError({
         {!loginLocale && (
           <Link
             href={`/${locale}`}
-            className="text-[8px] font-mono text-cs-400 uppercase tracking-widest hover:text-black"
+            className="text-[13px] font-mono text-cs-400 uppercase tracking-widest hover:text-black"
           >
             ← Back to home
           </Link>

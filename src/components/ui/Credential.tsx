@@ -38,20 +38,20 @@ export function CredBadge({
       <div className="absolute left-0 top-0 bottom-0 w-1 bg-sb-default" />
 
       <div className="pl-3">
-        <div className="text-[8px] font-mono text-cs-400 uppercase tracking-widest mb-1">
-          CredSys · StartupBoss.org
+        <div className="text-[13px] font-mono text-cs-400 uppercase tracking-widest mb-1">
+          StartupBoss.org
         </div>
-        <span className="inline-flex items-center px-2 py-0.5 bg-sb-default text-sb-text text-[6px] font-mono font-semibold uppercase tracking-wider mb-2">
+        <span className="inline-flex items-center px-2 py-0.5 bg-sb-default text-sb-text text-[10px] font-mono font-semibold uppercase tracking-wider mb-2">
           ACCREDITED
         </span>
         <div className="text-lg font-bold leading-tight">{displayName}</div>
-        <div className="text-[8px] font-mono text-cs-400 mt-1">
+        <div className="text-[13px] font-mono text-cs-400 mt-1">
           {formatDateShort(accreditedAt)}
         </div>
       </div>
 
       <div className="pl-3 flex items-end justify-between">
-        <div className="text-[7px] font-mono text-cs-500">
+        <div className="text-[14px] font-mono text-cs-500">
           ID: {uniqueCode} · {domain}
         </div>
         <div className="text-sb-default text-xl font-bold">✓</div>
@@ -83,7 +83,7 @@ export function ScoreDisplay({
 
   return (
     <div className={cn("border border-cs-200 bg-white px-4 py-3", className)}>
-      <div className="text-[7px] font-mono text-cs-500 uppercase tracking-widest mb-1">
+      <div className="text-[14px] font-mono text-cs-500 uppercase tracking-widest mb-1">
         {label}
       </div>
       <div className="flex items-end gap-3">
@@ -92,7 +92,7 @@ export function ScoreDisplay({
         </span>
         <span className="text-cs-400 text-sm font-mono mb-0.5">/ {maxScore}</span>
         {rank != null && (
-          <span className="text-[8px] font-mono text-cs-600 uppercase tracking-widest mb-0.5 ml-2">
+          <span className="text-[13px] font-mono text-cs-600 uppercase tracking-widest mb-0.5 ml-2">
             #{rank}
           </span>
         )}
@@ -146,17 +146,17 @@ export function AccreditationDetailBlock({
 
   return (
     <div className={cn("border border-cs-200 bg-white", className)}>
-      <div className="bg-black text-white text-[8px] font-mono uppercase tracking-widest px-4 py-1">
+      <div className="bg-black text-white text-[13px] font-mono uppercase tracking-widest px-4 py-1">
         Accreditation Request
       </div>
       <div className="grid grid-cols-2 gap-px bg-cs-200">
         {fields.map(([label, value]) =>
           value != null ? (
             <div key={label} className="bg-white px-3 py-2">
-              <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest">
+              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
                 {label}
               </div>
-              <div className="text-[9px] font-semibold mt-0.5 break-all">{value}</div>
+              <div className="text-[13px] font-semibold mt-0.5 break-all">{value}</div>
             </div>
           ) : null
         )}
@@ -172,10 +172,10 @@ export function AccreditationDetailBlock({
         ({ label, value }) =>
           value ? (
             <div key={label} className="border-t border-cs-200 px-4 py-3">
-              <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-1">
+              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-1">
                 {label}
               </div>
-              <p className="text-[9px] text-cs-800 leading-relaxed">{value}</p>
+              <p className="text-[13px] text-cs-800 leading-relaxed">{value}</p>
             </div>
           ) : null
       )}
@@ -197,22 +197,22 @@ export function CredPageCard({ page, className }: CredPageCardProps) {
   return (
     <div className={cn("border border-cs-200 bg-white px-4 py-3 flex items-center gap-4", className)}>
       <div className="flex-1 min-w-0">
-        <div className="text-[9px] font-bold truncate">
+        <div className="text-[13px] font-bold truncate">
           {startup?.org_name ?? "—"}
         </div>
-        <div className="text-[7px] font-mono text-cs-500 mt-0.5">
+        <div className="text-[14px] font-mono text-cs-500 mt-0.5">
           {startup?.industry ?? ""}
           {startup?.country ? ` · ${startup.country}` : ""}
         </div>
       </div>
       <div className="flex flex-col items-end gap-0.5">
-        <span className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest">
+        <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
           Credential ID
         </span>
-        <span className="text-[8px] font-mono font-bold text-sb-text">
+        <span className="text-[13px] font-mono font-bold text-sb-text">
           {page.unique_code}
         </span>
-        <span className="text-[6.5px] font-mono text-cs-400">
+        <span className="text-[14px] font-mono text-cs-400">
           {formatDateShort(page.accredited_at)}
         </span>
       </div>

@@ -31,11 +31,11 @@ export function StatCard({ value, label, alert, alertText, accent }: StatCardPro
         {value}
       </span>
       <div>
-        <span className="text-[8px] font-mono text-cs-500 uppercase tracking-widest block">
+        <span className="text-[13px] font-mono text-cs-500 uppercase tracking-widest block">
           {label}
         </span>
         {alert && alertText && (
-          <span className="text-[7px] font-mono text-cs-red uppercase tracking-widest font-semibold">
+          <span className="text-[14px] font-mono text-cs-red uppercase tracking-widest font-semibold">
             {alertText}
           </span>
         )}
@@ -93,7 +93,7 @@ export function KBRCard({
     <div className={cn("border-l-4 px-4 py-3 bg-white min-h-[70px]", borderColor)}>
       <div
         className={cn(
-          "text-[8px] font-mono font-semibold uppercase tracking-widest mb-2",
+          "text-[13px] font-mono font-semibold uppercase tracking-widest mb-2",
           variant === "accent"
             ? "text-sb-text"
             : variant === "alert"
@@ -105,18 +105,18 @@ export function KBRCard({
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest">
+          <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
             {metricLabel}
           </div>
-          <div className="text-[8px] font-semibold">{metric}</div>
+          <div className="text-[13px] font-semibold">{metric}</div>
         </div>
         <div>
-          <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest">
+          <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
             {objectiveLabel}
           </div>
           <div
             className={cn(
-              "text-[8px] font-semibold",
+              "text-[13px] font-semibold",
               variant === "accent"
                 ? "text-sb-text"
                 : variant === "alert"
@@ -156,13 +156,13 @@ export function QuickAction({ title, desc, href, accent, alert }: QuickActionPro
     >
       <div
         className={cn(
-          "text-[8px] font-mono font-semibold uppercase tracking-widest",
+          "text-[13px] font-mono font-semibold uppercase tracking-widest",
           alert ? "text-cs-red" : accent ? "text-sb-text" : "text-black"
         )}
       >
         {title}
       </div>
-      <div className="text-[7.5px] text-cs-500 mt-1">{desc}</div>
+      <div className="text-[12px] text-cs-500 mt-1">{desc}</div>
     </a>
   );
 }

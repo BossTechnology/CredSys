@@ -173,12 +173,12 @@ export default async function InvestorWatchlistPage({
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
-          <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
             Investor Portal
           </span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight">Watchlist</h1>
-        <p className="text-[8px] font-mono text-cs-400 mt-1">
+        <p className="text-[13px] font-mono text-cs-400 mt-1">
           {watchlistEntries?.length ?? 0} startups being watched
         </p>
       </div>
@@ -186,7 +186,7 @@ export default async function InvestorWatchlistPage({
       {/* Add Startup Search */}
       <div className="bg-white border border-cs-200 mb-6">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-          <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
             Add Startup to Watchlist
           </span>
         </div>
@@ -205,7 +205,7 @@ export default async function InvestorWatchlistPage({
           </form>
 
           {q && searchResults.length === 0 && (
-            <p className="text-[8px] font-mono text-cs-400">
+            <p className="text-[13px] font-mono text-cs-400">
               No startups found for &quot;{q}&quot;.
             </p>
           )}
@@ -215,8 +215,8 @@ export default async function InvestorWatchlistPage({
               {searchResults.map((s) => (
                 <div key={s.id} className="flex items-center justify-between px-4 py-2.5">
                   <div>
-                    <div className="text-[8px] font-semibold">{s.org_name}</div>
-                    <div className="text-[7px] font-mono text-cs-400">
+                    <div className="text-[13px] font-semibold">{s.org_name}</div>
+                    <div className="text-[14px] font-mono text-cs-400">
                       {s.industry ?? "—"}{s.country ? ` · ${s.country}` : ""}
                     </div>
                   </div>
@@ -236,14 +236,14 @@ export default async function InvestorWatchlistPage({
       {/* Watchlist table */}
       <div className="bg-white border border-cs-200">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-          <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
             Watching · {watchlistEntries?.length ?? 0}
           </span>
         </div>
 
         {(watchlistEntries ?? []).length === 0 ? (
           <div className="px-5 py-10 text-center">
-            <p className="text-[8px] font-mono text-cs-400">
+            <p className="text-[13px] font-mono text-cs-400">
               No startups on watchlist. Use the search above to add some.
             </p>
           </div>
@@ -251,7 +251,7 @@ export default async function InvestorWatchlistPage({
           <>
             <div className="grid grid-cols-[1fr_90px_80px_110px_160px_90px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
               {["Startup", "Industry", "Country", "Status", "Notifications", "Actions"].map((h) => (
-                <div key={h} className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
+                <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
             <div className="divide-y divide-cs-100">
@@ -266,7 +266,7 @@ export default async function InvestorWatchlistPage({
                 return (
                   <div key={entry.id} className="grid grid-cols-[1fr_90px_80px_110px_160px_90px] gap-3 px-5 py-3 items-center">
                     <div>
-                      <div className="text-[8px] font-semibold">
+                      <div className="text-[13px] font-semibold">
                         {isAccredited ? (
                           <Link href={`/startup/${entry.startup_id}`} className="underline underline-offset-2 hover:opacity-70">
                             {startup?.org_name ?? "—"}
@@ -275,12 +275,12 @@ export default async function InvestorWatchlistPage({
                           startup?.org_name ?? "—"
                         )}
                       </div>
-                      <div className="text-[6.5px] font-mono text-cs-300 mt-0.5">Since {fmt(entry.added_at)}</div>
+                      <div className="text-[14px] font-mono text-cs-300 mt-0.5">Since {fmt(entry.added_at)}</div>
                     </div>
-                    <div className="text-[7.5px] font-mono text-cs-500 capitalize">{startup?.industry ?? "—"}</div>
-                    <div className="text-[7.5px] font-mono text-cs-500">{startup?.country ?? "—"}</div>
+                    <div className="text-[12px] font-mono text-cs-500 capitalize">{startup?.industry ?? "—"}</div>
+                    <div className="text-[12px] font-mono text-cs-500">{startup?.country ?? "—"}</div>
                     <div>
-                      <span className={`text-[7px] font-mono font-bold uppercase tracking-widest ${isAccredited ? "text-green-600" : "text-cs-400"}`}>
+                      <span className={`text-[14px] font-mono font-bold uppercase tracking-widest ${isAccredited ? "text-green-600" : "text-cs-400"}`}>
                         {latestStatus ? latestStatus.replace(/_/g, " ") : "No Request"}
                       </span>
                     </div>
@@ -292,7 +292,7 @@ export default async function InvestorWatchlistPage({
                           { key: "notify_on_evaluator_assigned", label: "Evaluator Assigned", checked: entry.notify_on_evaluator_assigned },
                           { key: "notify_on_status_change",      label: "Status Changes",   checked: entry.notify_on_status_change      },
                         ].map((n) => (
-                          <label key={n.key} className="flex items-center gap-1.5 text-[7px] font-mono text-cs-500">
+                          <label key={n.key} className="flex items-center gap-1.5 text-[14px] font-mono text-cs-500">
                             <input
                               type="hidden"
                               name={n.key}
@@ -310,7 +310,7 @@ export default async function InvestorWatchlistPage({
                             {n.label}
                           </label>
                         ))}
-                        <button type="submit" className="text-[6.5px] font-mono text-cs-400 hover:text-black uppercase tracking-widest mt-1">
+                        <button type="submit" className="text-[14px] font-mono text-cs-400 hover:text-black uppercase tracking-widest mt-1">
                           Save
                         </button>
                       </form>
@@ -320,7 +320,7 @@ export default async function InvestorWatchlistPage({
                         <input type="hidden" name="entry_id" value={entry.id} />
                         <button
                           type="submit"
-                          className="text-[7px] font-mono text-red-500 hover:text-red-700 uppercase tracking-widest"
+                          className="text-[14px] font-mono text-red-500 hover:text-red-700 uppercase tracking-widest"
                         >
                           Remove
                         </button>

@@ -69,14 +69,14 @@ export default async function AcceleratorDashboardPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
-          <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
             Accelerator Portal
           </span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight">
           {accelerator?.org_name ?? "Dashboard"}
         </h1>
-        <p className="text-[8px] font-mono text-cs-400 mt-1">
+        <p className="text-[13px] font-mono text-cs-400 mt-1">
           {accelerator?.industry ?? ""}{accelerator?.country ? ` · ${accelerator.country}` : ""}
         </p>
       </div>
@@ -90,7 +90,7 @@ export default async function AcceleratorDashboardPage() {
         ].map((s) => (
           <div key={s.label} className="bg-white border border-cs-200 px-5 py-4">
             <div className="text-2xl font-bold tracking-tight">{s.value}</div>
-            <div className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest mt-1">
+            <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mt-1">
               {s.label}
             </div>
           </div>
@@ -100,19 +100,19 @@ export default async function AcceleratorDashboardPage() {
       {/* Recent credentials */}
       <div className="bg-white border border-cs-200 mb-6">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50 flex items-center justify-between">
-          <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
             Recent Credentials
           </span>
           <Link
             href="/app/accelerator/portfolio"
-            className="text-[7.5px] font-mono text-sb-default hover:underline uppercase tracking-widest"
+            className="text-[12px] font-mono text-sb-default hover:underline uppercase tracking-widest"
           >
             View All →
           </Link>
         </div>
         {(recentCreds ?? []).length === 0 ? (
           <div className="px-5 py-8 text-center">
-            <p className="text-[8px] font-mono text-cs-400">No credentials issued yet.</p>
+            <p className="text-[13px] font-mono text-cs-400">No credentials issued yet.</p>
           </div>
         ) : (
           <div className="divide-y divide-cs-100">
@@ -123,18 +123,18 @@ export default async function AcceleratorDashboardPage() {
               return (
                 <div key={c.unique_code} className="px-5 py-3 flex items-center justify-between">
                   <div>
-                    <div className="text-[8.5px] font-semibold">{startup?.org_name ?? "—"}</div>
-                    <div className="text-[7px] font-mono text-cs-400 mt-0.5">
+                    <div className="text-[13px] font-semibold">{startup?.org_name ?? "—"}</div>
+                    <div className="text-[14px] font-mono text-cs-400 mt-0.5">
                       {startup?.industry ?? ""}{startup?.country ? ` · ${startup.country}` : ""}
                     </div>
                   </div>
                   <div className="flex items-center gap-5">
-                    <span className="text-[7.5px] font-mono text-cs-400">{fmt(c.accredited_at)}</span>
+                    <span className="text-[12px] font-mono text-cs-400">{fmt(c.accredited_at)}</span>
                     <a
                       href={`${portalUrl}/startup/${c.unique_code}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[7.5px] font-mono text-sb-default hover:underline font-bold"
+                      className="text-[12px] font-mono text-sb-default hover:underline font-bold"
                     >
                       {c.unique_code} ↗
                     </a>
@@ -152,10 +152,10 @@ export default async function AcceleratorDashboardPage() {
           href="/app/accelerator/portfolio"
           className="bg-white border border-cs-200 px-5 py-4 hover:border-cs-400 transition-colors"
         >
-          <div className="text-[8.5px] font-bold uppercase tracking-widest mb-1">
+          <div className="text-[13px] font-bold uppercase tracking-widest mb-1">
             Startup Portfolio
           </div>
-          <div className="text-[7.5px] font-mono text-cs-400">
+          <div className="text-[12px] font-mono text-cs-400">
             Browse all accredited startups in the ecosystem
           </div>
         </Link>
@@ -163,10 +163,10 @@ export default async function AcceleratorDashboardPage() {
           href="/app/accelerator/competitions"
           className="bg-white border border-cs-200 px-5 py-4 hover:border-cs-400 transition-colors"
         >
-          <div className="text-[8.5px] font-bold uppercase tracking-widest mb-1">
+          <div className="text-[13px] font-bold uppercase tracking-widest mb-1">
             Competitions
           </div>
-          <div className="text-[7.5px] font-mono text-cs-400">
+          <div className="text-[12px] font-mono text-cs-400">
             Manage your competitions and view entries
           </div>
         </Link>

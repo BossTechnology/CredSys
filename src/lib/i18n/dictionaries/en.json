@@ -9,7 +9,7 @@
   },
   "home": {
     "heroTitle": "Build Trust. Get Accredited.",
-    "heroSubtitle": "CredSys is the accreditation platform for startups on StartupBoss.org. Prove your legitimacy to investors, accelerators, and partners.",
+    "heroSubtitle": "StartupBoss.org is the accreditation platform for startups. Prove your legitimacy to investors, accelerators, and partners.",
     "ctaPrimary": "Apply for Accreditation",
     "ctaSecondary": "See Accredited Startups",
     "howItWorksTitle": "How CRED Works",
@@ -37,7 +37,7 @@
     "startupTitle": "Apply for Accreditation",
     "startupSubtitle": "Submit your startup for the CRED accreditation process.",
     "evaluatorTitle": "Become an Evaluator",
-    "evaluatorSubtitle": "Join the CredSys evaluator network.",
+    "evaluatorSubtitle": "Join the StartupBoss.org evaluator network.",
     "orgName": "Organization Name",
     "email": "Email Address",
     "industry": "Industry",
@@ -51,7 +51,7 @@
   },
   "credList": {
     "title": "Accredited Startups",
-    "subtitle": "Verified startups on the CredSys platform",
+    "subtitle": "Verified startups on the StartupBoss.org platform",
     "searchPlaceholder": "Search by name or credential ID...",
     "noResults": "No accredited startups found.",
     "credentialId": "Credential ID",

@@ -1,13 +1,15 @@
 "use client";
 
-import { useState }       from "react";
-import Link               from "next/link";
-import { useParams }      from "next/navigation";
-import { signIn }         from "@/app/actions/auth";
+import { useState }          from "react";
+import Link                   from "next/link";
+import { useParams }          from "next/navigation";
+import { signIn }             from "@/app/actions/auth";
+import { MarketingNav }       from "@/components/marketing/MarketingNav";
+import type { Locale }        from "@/lib/i18n/types";
 
 export default function LoginPage() {
   const params  = useParams<{ locale: string }>();
-  const locale  = params.locale ?? "en";
+  const locale  = (params.locale ?? "en") as Locale;
 
   const [error,   setError]   = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -23,32 +25,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cs-50 flex items-center justify-center px-4">
+    <>
+      <MarketingNav locale={locale} showSignIn={false} showLangDropdown={true} />
+      <div className="min-h-[calc(100vh-56px)] bg-cs-50 flex items-center justify-center px-4">
       <div className="w-full max-w-[400px]">
-
-        {/* Header */}
-        <div className="mb-8">
-          <Link
-            href={`/${locale}`}
-            className="text-sm font-bold tracking-tight text-black block mb-6"
-          >
-            StartupBoss.org
-          </Link>
-
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-2 h-2 bg-sb-default" />
-            <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest">
-              CredSys
-            </span>
-          </div>
-
-          <div className="bg-black text-white px-4 py-2 mb-1 inline-block">
-            <span className="text-[8px] font-mono uppercase tracking-widest">
-              Sign In
-            </span>
-          </div>
-          <div className="h-0.5 bg-sb-default w-full" />
-        </div>
 
         {/* Form */}
         <form action={handleSubmit} className="flex flex-col gap-4">
@@ -77,7 +57,7 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div className="border border-red-300 bg-red-50 px-3 py-2 text-[8px] font-mono text-red-700">
+            <div className="border border-red-300 bg-red-50 px-3 py-2 text-[13px] font-mono text-red-700">
               {error}
             </div>
           )}
@@ -93,11 +73,11 @@ export default function LoginPage() {
 
         {/* Footer links */}
         <div className="mt-6 text-center">
-          <span className="text-[8px] font-mono text-cs-400">
+          <span className="text-[13px] font-mono text-cs-400">
             No account?{" "}
             <Link
               href={`/${locale}/getcred`}
-              className="text-black underline"
+              className="cs-link"
             >
               Apply for Accreditation
             </Link>
@@ -105,6 +85,7 @@ export default function LoginPage() {
         </div>
 
       </div>
-    </div>
+      </div>
+    </>
   );
 }

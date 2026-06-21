@@ -23,7 +23,7 @@ export async function sendEvaluatorAssigned(
 
   await sendEmail({
     to,
-    subject: "CredSys — Evaluator assigned to your request",
+    subject: "StartupBoss.org — Evaluator assigned to your request",
     html,
   });
 }
@@ -52,7 +52,7 @@ export async function sendNewAssignment(
 
   await sendEmail({
     to,
-    subject: `CredSys — New assignment: ${startupName}`,
+    subject: `StartupBoss.org — New assignment: ${startupName}`,
     html,
   });
 }

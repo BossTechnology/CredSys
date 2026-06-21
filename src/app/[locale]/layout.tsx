@@ -18,7 +18,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   return {
-    title:       "CredSys — StartupBoss Accreditation",
+    title:       "StartupBoss.org — Accreditation",
     description: "GetCRED. Build Trust. Become Unstoppable.",
     alternates: {
       canonical: `https://startupboss.org/${locale}`,

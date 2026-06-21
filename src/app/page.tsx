@@ -10,7 +10,7 @@ export default function HomePage() {
         <span className="text-sm font-bold tracking-tight">StartupBoss.org</span>
         <div className="flex-1" />
         <div className="flex items-center gap-6">
-          <Link href="/login" className="text-[8px] font-mono text-cs-400 uppercase tracking-widest hover:text-white">
+          <Link href="/login" className="text-[13px] font-mono text-cs-400 uppercase tracking-widest hover:text-white">
             Sign In
           </Link>
           <Link href="/signup">
@@ -25,7 +25,7 @@ export default function HomePage() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 mb-8">
             <span className="w-1 h-6 bg-sb-default inline-block" />
-            <span className="text-[8px] font-mono text-sb-text uppercase tracking-widest">
+            <span className="text-[13px] font-mono text-sb-text uppercase tracking-widest">
               CHASS1S Accreditation System
             </span>
           </div>
@@ -39,7 +39,7 @@ export default function HomePage() {
             GetCRED. Build Trust. Become Unstoppable.
           </p>
 
-          <p className="text-[11px] font-mono text-cs-600 max-w-[480px] mx-auto mb-10">
+          <p className="text-[14px] font-mono text-cs-600 max-w-[480px] mx-auto mb-10">
             StartupCred is the verified accreditation standard for early-stage startups.
             Prove your legitimacy. Unlock opportunities. Access competitions.
           </p>
@@ -57,7 +57,7 @@ export default function HomePage() {
 
           {/* Verify credential search */}
           <div className="pt-8 border-t border-cs-800 max-w-md mx-auto">
-            <div className="text-[8px] font-mono text-cs-600 uppercase tracking-widest mb-3">
+            <div className="text-[13px] font-mono text-cs-600 uppercase tracking-widest mb-3">
               ◇ Verify a StartupCred Credential
             </div>
             <VerifyCredentialSearch />
@@ -75,14 +75,14 @@ export default function HomePage() {
         ].map((item) => (
           <div key={item.label} className="text-center">
             <div className="text-2xl font-bold text-sb-default">{item.value}</div>
-            <div className="text-[7px] font-mono text-cs-600 uppercase tracking-widest">
+            <div className="text-[14px] font-mono text-cs-600 uppercase tracking-widest">
               {item.label}
             </div>
           </div>
         ))}
       </div>
 
-      <div className="text-center py-3 text-[7px] font-mono text-cs-700">
+      <div className="text-center py-3 text-[14px] font-mono text-cs-700">
         boss.technology · chass1s.com · startupboss.org
       </div>
     </div>

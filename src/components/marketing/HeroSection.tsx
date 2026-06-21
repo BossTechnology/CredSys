@@ -16,7 +16,7 @@ export function HeroSection({ locale, dict }: HeroSectionProps) {
     <section className="border-b border-cs-200 bg-white">
       {/* Black accent strip */}
       <div className="bg-black px-7 py-1">
-        <span className="text-[7px] font-mono text-sb-default uppercase tracking-widest">
+        <span className="text-[14px] font-mono text-sb-default uppercase tracking-widest">
           GetCRED · Build Trust · Become Unstoppable
         </span>
       </div>
@@ -26,8 +26,8 @@ export function HeroSection({ locale, dict }: HeroSectionProps) {
           {/* Eyebrow */}
           <div className="flex items-center gap-3 mb-4">
             <div className="w-3 h-3 bg-sb-default" />
-            <span className="text-[8px] font-mono text-sb-text uppercase tracking-widest font-semibold">
-              CredSys — Accreditation Platform
+            <span className="text-[13px] font-mono text-sb-text uppercase tracking-widest font-semibold">
+              StartupBoss.org — Accreditation Platform
             </span>
           </div>
 
@@ -45,13 +45,13 @@ export function HeroSection({ locale, dict }: HeroSectionProps) {
           <div className="flex items-center gap-4">
             <Link
               href={`/${locale}/getcred`}
-              className="bg-black text-white text-[8px] font-mono font-semibold uppercase tracking-widest px-6 py-3 hover:opacity-80 transition-opacity"
+              className="bg-black text-white text-[13px] font-mono font-semibold uppercase tracking-widest px-6 py-3 hover:opacity-80 transition-opacity"
             >
               {dict.ctaPrimary}
             </Link>
             <Link
               href={`/${locale}/cred-list`}
-              className="border border-cs-300 text-black text-[8px] font-mono uppercase tracking-widest px-6 py-3 hover:border-black transition-colors"
+              className="border border-cs-300 text-black text-[13px] font-mono uppercase tracking-widest px-6 py-3 hover:border-black transition-colors"
             >
               {dict.ctaSecondary}
             </Link>

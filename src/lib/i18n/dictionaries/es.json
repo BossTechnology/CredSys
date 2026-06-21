@@ -9,7 +9,7 @@
   },
   "home": {
     "heroTitle": "Construye Credibilidad. Obtén Acreditación.",
-    "heroSubtitle": "CredSys es la plataforma de acreditación para startups en StartupBoss.org. Demuestra tu legitimidad a inversores, aceleradoras y socios.",
+    "heroSubtitle": "StartupBoss.org es la plataforma de acreditación para startups. Demuestra tu legitimidad a inversores, aceleradoras y socios.",
     "ctaPrimary": "Solicitar Acreditación",
     "ctaSecondary": "Ver Startups Acreditados",
     "howItWorksTitle": "Cómo Funciona CRED",
@@ -37,7 +37,7 @@
     "startupTitle": "Solicitar Acreditación",
     "startupSubtitle": "Envía tu startup al proceso de acreditación CRED.",
     "evaluatorTitle": "Convertirte en Evaluador",
-    "evaluatorSubtitle": "Únete a la red de evaluadores de CredSys.",
+    "evaluatorSubtitle": "Únete a la red de evaluadores de StartupBoss.org.",
     "orgName": "Nombre de la Organización",
     "email": "Correo Electrónico",
     "industry": "Industria",
@@ -51,7 +51,7 @@
   },
   "credList": {
     "title": "Startups Acreditados",
-    "subtitle": "Startups verificados en la plataforma CredSys",
+    "subtitle": "Startups verificados en la plataforma StartupBoss.org",
     "searchPlaceholder": "Buscar por nombre o ID de credencial...",
     "noResults": "No se encontraron startups acreditados.",
     "credentialId": "ID de Credencial",

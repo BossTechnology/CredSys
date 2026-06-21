@@ -23,7 +23,7 @@ export function FeatureGrid({ dict }: FeatureGridProps) {
         {/* Section header */}
         <div className="flex items-center gap-3 mb-10">
           <div className="h-px flex-1 bg-cs-200 max-w-[40px]" />
-          <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
             {dict.howItWorksTitle}
           </span>
         </div>
@@ -49,7 +49,7 @@ export function FeatureGrid({ dict }: FeatureGridProps) {
               </h3>
 
               {/* Description */}
-              <p className="text-[11px] text-cs-500 leading-relaxed">
+              <p className="text-[14px] text-cs-500 leading-relaxed">
                 {dict[step.descKey]}
               </p>
             </div>

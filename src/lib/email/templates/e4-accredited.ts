@@ -32,7 +32,7 @@ export async function sendAccredited(
 
   await sendEmail({
     to,
-    subject: "CredSys — You are now ACCREDITED",
+    subject: "StartupBoss.org — You are now ACCREDITED",
     html,
   });
 }

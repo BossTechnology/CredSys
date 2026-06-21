@@ -3,7 +3,7 @@
 import { createClient }        from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { revalidatePath }      from "next/cache";
-import type { BLIPSVerification, ADDISVerification } from "@/lib/supabase/types";
+import type { BLIPSVerification, ADDISVerification, BLIPSData, ADDISData } from "@/lib/supabase/types";
 
 // ─── Save BLIPS + ADDIS checkboxes + evaluator notes ─────────────────────────
 
@@ -55,13 +55,29 @@ export async function saveVerification(formData: FormData): Promise<{ error?: st
 
   const evaluatorNotes = (formData.get("evaluator_notes") as string) || null;
 
+  // Rich chassis-compatible data (new system)
+  let blipsData: BLIPSData | undefined;
+  let addisData: ADDISData | undefined;
+  const blipsDataRaw = formData.get("blips_data") as string | null;
+  const addisDataRaw = formData.get("addis_data") as string | null;
+  if (blipsDataRaw) {
+    try { blipsData = JSON.parse(blipsDataRaw) as BLIPSData; } catch { /* ignore parse errors */ }
+  }
+  if (addisDataRaw) {
+    try { addisData = JSON.parse(addisDataRaw) as ADDISData; } catch { /* ignore parse errors */ }
+  }
+
+  const update: Record<string, unknown> = {
+    blips_verification: blips,
+    addis_verification: addis,
+    evaluator_notes:    evaluatorNotes,
+  };
+  if (blipsData !== undefined) update.blips_data = blipsData;
+  if (addisData !== undefined) update.addis_data = addisData;
+
   await service
     .from("accreditation_requests")
-    .update({
-      blips_verification: blips,
-      addis_verification: addis,
-      evaluator_notes:    evaluatorNotes,
-    })
+    .update(update)
     .eq("id", requestId);
 
   revalidatePath(`/app/evaluator/assignments/${requestId}`);

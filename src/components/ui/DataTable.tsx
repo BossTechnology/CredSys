@@ -33,11 +33,11 @@ export function DataTable<T extends Record<string, unknown>>({
     <div className="border border-cs-200 overflow-hidden">
       {title && (
         <div className="bg-black text-white px-4 py-1 flex items-center justify-between">
-          <span className="text-[8px] font-mono uppercase tracking-widest font-semibold">
+          <span className="text-[13px] font-mono uppercase tracking-widest font-semibold">
             {title}
           </span>
           {subtitle && (
-            <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
               {subtitle}
             </span>
           )}
@@ -50,7 +50,7 @@ export function DataTable<T extends Record<string, unknown>>({
               <th
                 key={String(col.key) + "_" + i}
                 className={cn(
-                  "bg-cs-100 text-cs-400 text-[6.5px] font-mono uppercase tracking-widest px-3 py-1 text-left border-b-2 border-cs-200 font-semibold",
+                  "bg-cs-100 text-cs-400 text-[14px] font-mono uppercase tracking-widest px-3 py-1 text-left border-b-2 border-cs-200 font-semibold",
                   col.className
                 )}
               >
@@ -64,7 +64,7 @@ export function DataTable<T extends Record<string, unknown>>({
             <tr>
               <td
                 colSpan={columns.length}
-                className="px-3 py-6 text-center text-[8px] font-mono text-cs-400"
+                className="px-3 py-6 text-center text-[13px] font-mono text-cs-400"
               >
                 {emptyMessage}
               </td>
@@ -79,7 +79,7 @@ export function DataTable<T extends Record<string, unknown>>({
                   <td
                     key={String(col.key) + "_" + i}
                     className={cn(
-                      "px-3 py-2 text-[8px] border-r border-cs-50 last:border-r-0 align-middle",
+                      "px-3 py-2 text-[13px] border-r border-cs-50 last:border-r-0 align-middle",
                       col.className
                     )}
                   >

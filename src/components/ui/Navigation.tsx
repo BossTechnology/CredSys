@@ -1,7 +1,8 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { cn }    from "@/lib/utils";
+import Image      from "next/image";
+import Link       from "next/link";
 import { usePathname } from "next/navigation";
 
 // =============================================
@@ -22,14 +23,14 @@ function NavLink({ href, label, dark = false }: NavLinkProps) {
     <Link
       href={href}
       className={cn(
-        "text-[8px] font-mono uppercase tracking-widest pb-0.5 transition-colors",
+        "text-[13px] font-mono uppercase tracking-widest pb-0.5 transition-colors",
         dark
           ? active
             ? "text-white border-b border-white font-bold"
-            : "text-cs-500 hover:text-white"
+            : "text-cs-500 hover:text-cs-btn"
           : active
-          ? "text-black border-b border-black font-bold"
-          : "text-cs-500 hover:text-black"
+          ? "text-black border-b-2 border-black font-bold"
+          : "text-cs-500 hover:text-cs-btn"
       )}
     >
       {label}
@@ -55,13 +56,13 @@ interface AdminNavProps { onSignOut?: () => void }
 export function AdminNav({ onSignOut }: AdminNavProps) {
   return (
     <nav className="h-12 bg-black flex items-center px-7 gap-6 shrink-0">
-      <Link
-        href="/admin/overview"
-        className="text-sm font-bold tracking-tight text-white shrink-0"
-      >
-        StartupBoss.org
+      <Link href="/admin/overview" className="shrink-0">
+        <Image src="/logo.png" alt="StartupBoss.org" width={160} height={28}
+               className="object-contain"
+               style={{ filter: "invert(1)", mixBlendMode: "screen" }}
+               priority />
       </Link>
-      <span className="text-[7px] font-mono text-cs-600 uppercase tracking-widest border-l border-cs-700 pl-4 shrink-0">
+      <span className="text-[14px] font-mono text-cs-600 uppercase tracking-widest border-l border-cs-700 pl-4 shrink-0">
         Admin
       </span>
       <div className="flex-1 flex items-center gap-5 ml-2">
@@ -72,7 +73,7 @@ export function AdminNav({ onSignOut }: AdminNavProps) {
       {onSignOut && (
         <button
           onClick={onSignOut}
-          className="text-[7.5px] font-mono text-cs-500 uppercase tracking-widest hover:text-white transition-colors"
+          className="text-[12px] font-mono text-cs-500 uppercase tracking-widest hover:text-white transition-colors"
         >
           Sign Out
         </button>
@@ -97,13 +98,11 @@ interface EvaluatorNavProps { onSignOut?: () => void }
 export function EvaluatorNav({ onSignOut }: EvaluatorNavProps) {
   return (
     <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0">
-      <Link
-        href="/app/evaluator/dashboard"
-        className="text-sm font-bold tracking-tight text-black shrink-0"
-      >
-        StartupBoss.org
+      <Link href="/app/evaluator/dashboard" className="shrink-0">
+        <Image src="/logo.png" alt="StartupBoss.org" width={160} height={28}
+               className="object-contain" priority />
       </Link>
-      <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
+      <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
         Evaluator
       </span>
       <div className="flex-1 flex items-center gap-5 ml-2">
@@ -114,7 +113,7 @@ export function EvaluatorNav({ onSignOut }: EvaluatorNavProps) {
       {onSignOut && (
         <button
           onClick={onSignOut}
-          className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
+          className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
         >
           Sign Out
         </button>
@@ -139,13 +138,11 @@ interface StartupNavProps { onSignOut?: () => void }
 export function StartupNav({ onSignOut }: StartupNavProps) {
   return (
     <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0">
-      <Link
-        href="/app/startup/dashboard"
-        className="text-sm font-bold tracking-tight text-black shrink-0"
-      >
-        StartupBoss.org
+      <Link href="/app/startup/dashboard" className="shrink-0">
+        <Image src="/logo.png" alt="StartupBoss.org" width={160} height={28}
+               className="object-contain" priority />
       </Link>
-      <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
+      <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
         Startup
       </span>
       <div className="flex-1 flex items-center gap-5 ml-2">
@@ -156,7 +153,7 @@ export function StartupNav({ onSignOut }: StartupNavProps) {
       {onSignOut && (
         <button
           onClick={onSignOut}
-          className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
+          className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
         >
           Sign Out
         </button>
@@ -181,13 +178,11 @@ interface AcceleratorNavProps { onSignOut?: () => void }
 export function AcceleratorNav({ onSignOut }: AcceleratorNavProps) {
   return (
     <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0">
-      <Link
-        href="/app/accelerator/dashboard"
-        className="text-sm font-bold tracking-tight text-black shrink-0"
-      >
-        StartupBoss.org
+      <Link href="/app/accelerator/dashboard" className="shrink-0">
+        <Image src="/logo.png" alt="StartupBoss.org" width={160} height={28}
+               className="object-contain" priority />
       </Link>
-      <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
+      <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
         Accelerator
       </span>
       <div className="flex-1 flex items-center gap-5 ml-2">
@@ -198,7 +193,7 @@ export function AcceleratorNav({ onSignOut }: AcceleratorNavProps) {
       {onSignOut && (
         <button
           onClick={onSignOut}
-          className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
+          className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
         >
           Sign Out
         </button>
@@ -223,10 +218,11 @@ interface InvestorNavProps { onSignOut?: () => void }
 export function InvestorNav({ onSignOut }: InvestorNavProps) {
   return (
     <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0">
-      <Link href="/app/investor/dashboard" className="text-sm font-bold tracking-tight text-black shrink-0">
-        StartupBoss.org
+      <Link href="/app/investor/dashboard" className="shrink-0">
+        <Image src="/logo.png" alt="StartupBoss.org" width={160} height={28}
+               className="object-contain" priority />
       </Link>
-      <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
+      <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
         Investor
       </span>
       <div className="flex-1 flex items-center gap-5 ml-2">
@@ -235,7 +231,7 @@ export function InvestorNav({ onSignOut }: InvestorNavProps) {
         ))}
       </div>
       {onSignOut && (
-        <button onClick={onSignOut} className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors">
+        <button onClick={onSignOut} className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors">
           Sign Out
         </button>
       )}
@@ -258,12 +254,12 @@ export function PendingBanner({
 }: PendingBannerProps) {
   return (
     <div className="bg-sb-light border-b border-sb-default px-7 py-2 flex items-center gap-3">
-      <span className="text-[7px] font-mono text-sb-text uppercase tracking-widest font-semibold">
+      <span className="text-[14px] font-mono text-sb-text uppercase tracking-widest font-semibold">
         Pending Activation
       </span>
-      <span className="text-[8px] text-sb-text">{message}</span>
+      <span className="text-[13px] text-sb-text">{message}</span>
       {role && (
-        <span className="text-[7px] font-mono text-sb-dark uppercase tracking-widest ml-auto">
+        <span className="text-[14px] font-mono text-sb-dark uppercase tracking-widest ml-auto">
           {role}
         </span>
       )}
@@ -289,7 +285,7 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
   return (
     <nav
       aria-label="Breadcrumb"
-      className={cn("flex items-center gap-2 text-[7.5px] font-mono text-cs-500 uppercase tracking-widest", className)}
+      className={cn("flex items-center gap-2 text-[12px] font-mono text-cs-500 uppercase tracking-widest", className)}
     >
       {items.map((item, i) => (
         <span key={i} className="flex items-center gap-2">

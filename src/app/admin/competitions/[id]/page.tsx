@@ -115,23 +115,23 @@ export default async function AdminCompetitionDetailPage({
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <a href="/admin/competitions" className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest hover:text-black">
+          <a href="/admin/competitions" className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black">
             ← Competitions
           </a>
         </div>
         <div className="flex items-center gap-3 mb-1">
           <h1 className="text-2xl font-bold tracking-tight">{comp.name}</h1>
-          <span className={`text-[6.5px] font-mono font-bold uppercase tracking-widest px-2 py-1 ${STATUS_COLOR[comp.status] ?? "text-cs-400 bg-cs-100"}`}>
+          <span className={`text-[14px] font-mono font-bold uppercase tracking-widest px-2 py-1 ${STATUS_COLOR[comp.status] ?? "text-cs-400 bg-cs-100"}`}>
             {comp.status}
           </span>
         </div>
-        <div className="flex gap-5 text-[7px] font-mono text-cs-400">
+        <div className="flex gap-5 text-[14px] font-mono text-cs-400">
           {comp.industry && <span className="uppercase">{comp.industry}</span>}
           {comp.start_date && <span>Opens: {fmt(comp.start_date)}</span>}
           {comp.end_date   && <span>Closes: {fmt(comp.end_date)}</span>}
         </div>
         {comp.description && (
-          <p className="text-[7.5px] font-mono text-cs-500 mt-2 max-w-xl leading-relaxed">
+          <p className="text-[12px] font-mono text-cs-500 mt-2 max-w-xl leading-relaxed">
             {comp.description}
           </p>
         )}
@@ -145,20 +145,20 @@ export default async function AdminCompetitionDetailPage({
           {/* Roster */}
           <div className="bg-white border border-cs-200">
             <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-              <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+              <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 Startups Entered · {entries?.length ?? 0}
               </span>
             </div>
             {(entries ?? []).length === 0 ? (
               <div className="px-5 py-8 text-center">
-                <p className="text-[8px] font-mono text-cs-400">No entries yet.</p>
+                <p className="text-[13px] font-mono text-cs-400">No entries yet.</p>
               </div>
             ) : (
               <>
                 {/* Column headers */}
                 <div className="grid grid-cols-[1fr_80px_80px_100px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
                   {["Startup", "Scores", "Avg", "Entered"].map((h) => (
-                    <div key={h} className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
+                    <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
                   ))}
                 </div>
                 <div className="divide-y divide-cs-100">
@@ -171,19 +171,19 @@ export default async function AdminCompetitionDetailPage({
                         <div>
                           <div className="flex items-center gap-2">
                             {avg != null && (
-                              <span className="text-[6.5px] font-mono text-cs-400 w-4">#{idx + 1}</span>
+                              <span className="text-[14px] font-mono text-cs-400 w-4">#{idx + 1}</span>
                             )}
-                            <span className="text-[8px] font-semibold">{startup?.org_name ?? "—"}</span>
+                            <span className="text-[13px] font-semibold">{startup?.org_name ?? "—"}</span>
                           </div>
-                          <div className="text-[7px] font-mono text-cs-400">{startup?.email ?? ""}</div>
+                          <div className="text-[14px] font-mono text-cs-400">{startup?.email ?? ""}</div>
                         </div>
-                        <div className="text-[7.5px] font-mono text-cs-400">
+                        <div className="text-[12px] font-mono text-cs-400">
                           {count > 0 ? `${count} score${count !== 1 ? "s" : ""}` : "—"}
                         </div>
-                        <div className={`text-[8px] font-bold font-mono ${avg != null ? "text-sb-default" : "text-cs-300"}`}>
+                        <div className={`text-[13px] font-bold font-mono ${avg != null ? "text-sb-default" : "text-cs-300"}`}>
                           {avg != null ? `${avg}/100` : "—"}
                         </div>
-                        <div className="text-[7px] font-mono text-cs-400">
+                        <div className="text-[14px] font-mono text-cs-400">
                           {fmt(entry.entered_at)}
                         </div>
                       </div>
@@ -198,7 +198,7 @@ export default async function AdminCompetitionDetailPage({
           {(scores ?? []).length > 0 && (
             <div className="bg-white border border-cs-200">
               <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-                <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+                <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                   Individual Scores · {scores?.length}
                 </span>
               </div>
@@ -211,15 +211,15 @@ export default async function AdminCompetitionDetailPage({
                   return (
                     <div key={i} className="px-5 py-3 flex items-center justify-between gap-4">
                       <div>
-                        <div className="text-[8px] font-semibold">{sInfo?.org_name ?? s.startup_id.slice(0,8)}</div>
-                        <div className="text-[7px] font-mono text-cs-400">
+                        <div className="text-[13px] font-semibold">{sInfo?.org_name ?? s.startup_id.slice(0,8)}</div>
+                        <div className="text-[14px] font-mono text-cs-400">
                           by {eInfo?.org_name ?? "—"} · {fmt(s.scored_at)}
                         </div>
                         {s.notes && (
-                          <div className="text-[7px] font-mono text-cs-500 mt-0.5 italic">{s.notes}</div>
+                          <div className="text-[14px] font-mono text-cs-500 mt-0.5 italic">{s.notes}</div>
                         )}
                       </div>
-                      <div className="text-[9px] font-bold font-mono text-sb-default shrink-0">
+                      <div className="text-[13px] font-bold font-mono text-sb-default shrink-0">
                         {s.score}/100
                       </div>
                     </div>
@@ -237,7 +237,7 @@ export default async function AdminCompetitionDetailPage({
           {nextStatuses.length > 0 && (
             <div className="bg-white border border-cs-200">
               <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-                <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+                <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                   Update Status
                 </span>
               </div>
@@ -248,7 +248,7 @@ export default async function AdminCompetitionDetailPage({
                     <input type="hidden" name="status"         value={ns.value} />
                     <button
                       type="submit"
-                      className={`w-full btn-sm font-mono text-[7.5px] uppercase tracking-widest ${
+                      className={`w-full btn-sm font-mono text-[12px] uppercase tracking-widest ${
                         ns.danger ? "btn-danger" : "btn-primary"
                       }`}
                     >
@@ -264,12 +264,12 @@ export default async function AdminCompetitionDetailPage({
           {canPublish && (
             <div className="bg-white border border-cs-200">
               <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-                <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+                <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                   Publish Results
                 </span>
               </div>
               <div className="p-4">
-                <p className="text-[7.5px] font-mono text-cs-400 mb-3 leading-relaxed">
+                <p className="text-[12px] font-mono text-cs-400 mb-3 leading-relaxed">
                   Computes final rankings from all scores and sends E9 result emails to every participant.
                 </p>
                 <form action={publishResults}>
@@ -285,7 +285,7 @@ export default async function AdminCompetitionDetailPage({
           {/* Evaluators */}
           <div className="bg-white border border-cs-200">
             <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-              <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+              <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 Assigned Evaluators · {compEvaluators?.length ?? 0}
               </span>
             </div>
@@ -295,8 +295,8 @@ export default async function AdminCompetitionDetailPage({
                   const eInfo = ce.evaluators as unknown as { org_name: string } | null;
                   return (
                     <div key={ce.evaluator_id} className="px-4 py-2.5 flex items-center justify-between">
-                      <span className="text-[7.5px] font-mono">{eInfo?.org_name ?? ce.evaluator_id.slice(0,8)}</span>
-                      <span className="text-[6.5px] font-mono text-cs-400">{fmt(ce.assigned_at)}</span>
+                      <span className="text-[12px] font-mono">{eInfo?.org_name ?? ce.evaluator_id.slice(0,8)}</span>
+                      <span className="text-[14px] font-mono text-cs-400">{fmt(ce.assigned_at)}</span>
                     </div>
                   );
                 })}
@@ -306,7 +306,7 @@ export default async function AdminCompetitionDetailPage({
               <div className="p-4 border-t border-cs-100">
                 <form action={assignEvaluatorToCompetition} className="flex gap-2">
                   <input type="hidden" name="competition_id" value={comp.id} />
-                  <select name="evaluator_id" required className="cs-input flex-1 text-[7.5px]">
+                  <select name="evaluator_id" required className="cs-input flex-1 text-[12px]">
                     <option value="">Select evaluator…</option>
                     {unassignedEvals.map((e) => (
                       <option key={e.id} value={e.id}>{e.org_name}</option>

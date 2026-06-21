@@ -33,7 +33,7 @@ export async function sendDeadlineWarning(
 
   await sendEmail({
     to,
-    subject: "CredSys — Action required: accreditation deadline approaching",
+    subject: "StartupBoss.org — Action required: accreditation deadline approaching",
     html,
   });
 }

@@ -63,7 +63,7 @@ export default async function EvaluatorDashboardPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
-          <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
             Evaluator Portal
           </span>
         </div>
@@ -82,7 +82,7 @@ export default async function EvaluatorDashboardPage() {
             key={s.label}
             className={`px-6 py-5 ${i < 3 ? "border-r border-cs-200" : ""}`}
           >
-            <div className="text-[7px] font-mono text-cs-400 uppercase tracking-widest mb-1">
+            <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-1">
               {s.label}
             </div>
             <div
@@ -101,16 +101,16 @@ export default async function EvaluatorDashboardPage() {
       <div className="border border-cs-200 bg-white">
         <div className="px-5 py-3 border-b border-cs-200 bg-cs-50 flex items-center justify-between">
           <div>
-            <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
               My Assignments
             </span>
           </div>
-          <span className="text-[7px] font-mono text-cs-400">{total} total</span>
+          <span className="text-[14px] font-mono text-cs-400">{total} total</span>
         </div>
 
         {assignments.length === 0 ? (
           <div className="px-5 py-10 text-center">
-            <p className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+            <p className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
               No assignments yet. You will be notified when a startup is assigned to you.
             </p>
           </div>
@@ -119,7 +119,7 @@ export default async function EvaluatorDashboardPage() {
             {/* Column headers */}
             <div className="grid grid-cols-[1fr_120px_160px_120px_80px] px-5 py-2 border-b border-cs-100 bg-cs-50">
               {["Startup", "Industry", "Status", "Updated", ""].map((h) => (
-                <span key={h} className="text-[7px] font-mono text-cs-400 uppercase tracking-widest">
+                <span key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
                   {h}
                 </span>
               ))}
@@ -133,21 +133,21 @@ export default async function EvaluatorDashboardPage() {
                 }`}
               >
                 <div>
-                  <div className="text-[8px] font-semibold">{a.startup_name}</div>
-                  <div className="text-[7px] font-mono text-cs-400">{a.startup_email}</div>
+                  <div className="text-[13px] font-semibold">{a.startup_name}</div>
+                  <div className="text-[14px] font-mono text-cs-400">{a.startup_email}</div>
                 </div>
-                <span className="text-[8px] font-mono text-cs-500 capitalize">
+                <span className="text-[13px] font-mono text-cs-500 capitalize">
                   {a.industry || "—"}
                 </span>
                 <div>
                   <Badge variant={a.status} />
                 </div>
-                <span className="text-[7px] font-mono text-cs-400">
+                <span className="text-[14px] font-mono text-cs-400">
                   {formatShort(a.updated_at)}
                 </span>
                 <Link
                   href={`/app/evaluator/assignments/${a.id}`}
-                  className="text-[7.5px] font-mono text-black underline underline-offset-2 hover:text-sb-text transition-colors"
+                  className="text-[12px] font-mono cs-link underline-offset-2"
                 >
                   View →
                 </Link>

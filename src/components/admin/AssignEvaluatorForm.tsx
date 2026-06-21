@@ -38,7 +38,7 @@ export function AssignEvaluatorForm({ requestId, evaluators }: AssignEvaluatorFo
       <select
         name="evaluator_id"
         required
-        className="h-[22px] px-2 text-[8px] font-mono border border-cs-200 bg-white rounded-none outline-none"
+        className="h-[22px] px-2 text-[13px] font-mono border border-cs-200 bg-white rounded-none outline-none"
       >
         <option value="">Select evaluator...</option>
         {evaluators.map((ev) => (

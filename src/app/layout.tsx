@@ -14,7 +14,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CredSys — StartupBoss Accreditation",
+  title: "StartupBoss.org — Accreditation",
   description: "GetCRED. Build Trust. Become Unstoppable.",
 };
 

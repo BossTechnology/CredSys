@@ -74,12 +74,12 @@ export default async function EvaluatorAssignmentsPage({
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-2 h-2 bg-sb-default" />
-            <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
               Evaluator Portal
             </span>
           </div>
           <h1 className="text-2xl font-bold tracking-tight">Assignments</h1>
-          <p className="text-[8px] font-mono text-cs-400 mt-1">{total} requests</p>
+          <p className="text-[13px] font-mono text-cs-400 mt-1">{total} requests</p>
         </div>
 
         {/* Filter tabs */}
@@ -88,7 +88,7 @@ export default async function EvaluatorAssignmentsPage({
             <a
               key={tab.label}
               href={tab.value ? `/app/evaluator/assignments?filter=${tab.value}` : "/app/evaluator/assignments"}
-              className={`text-[7.5px] font-mono uppercase tracking-widest px-3 py-1.5 border transition-colors ${
+              className={`text-[12px] font-mono uppercase tracking-widest px-3 py-1.5 border transition-colors ${
                 (filter ?? "") === tab.value
                   ? "bg-black text-white border-black"
                   : "bg-white text-cs-500 border-cs-200 hover:border-black"
@@ -103,14 +103,14 @@ export default async function EvaluatorAssignmentsPage({
       {/* Table */}
       <div className="bg-white border border-cs-200">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-          <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
             Assigned Startups · {total}
           </span>
         </div>
 
         {total === 0 ? (
           <div className="px-5 py-12 text-center">
-            <p className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+            <p className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
               {filter === "active"
                 ? "No active assignments."
                 : filter === "done"
@@ -122,7 +122,7 @@ export default async function EvaluatorAssignmentsPage({
           <>
             <div className="grid grid-cols-[1fr_110px_160px_110px_70px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
               {["Startup", "Industry", "Status", "Updated", ""].map((h) => (
-                <div key={h} className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
+                <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
 
@@ -137,34 +137,34 @@ export default async function EvaluatorAssignmentsPage({
                     }`}
                   >
                     <div>
-                      <div className="text-[8px] font-semibold">{a.startup_name}</div>
-                      <div className="text-[7px] font-mono text-cs-400">{a.startup_email}</div>
+                      <div className="text-[13px] font-semibold">{a.startup_name}</div>
+                      <div className="text-[14px] font-mono text-cs-400">{a.startup_email}</div>
                     </div>
 
-                    <div className="text-[7.5px] font-mono text-cs-500 capitalize">
+                    <div className="text-[12px] font-mono text-cs-500 capitalize">
                       {a.industry ?? "—"}
                     </div>
 
                     <div>
-                      <span className={`text-[6.5px] font-mono font-bold uppercase tracking-widest px-1.5 py-0.5 ${STATUS_COLOR[a.status] ?? "text-cs-400 bg-cs-100"}`}>
+                      <span className={`text-[14px] font-mono font-bold uppercase tracking-widest px-1.5 py-0.5 ${STATUS_COLOR[a.status] ?? "text-cs-400 bg-cs-100"}`}>
                         {a.status.replace(/_/g, " ")}
                       </span>
                     </div>
 
-                    <div className="text-[7px] font-mono text-cs-400">{fmt(a.updated_at)}</div>
+                    <div className="text-[14px] font-mono text-cs-400">{fmt(a.updated_at)}</div>
 
                     <div>
                       {isActive ? (
                         <Link
                           href={`/app/evaluator/assignments/${a.id}`}
-                          className="text-[7.5px] font-mono font-bold text-black underline underline-offset-2 hover:text-sb-text transition-colors"
+                          className="text-[12px] font-mono font-bold cs-link underline-offset-2"
                         >
                           Review →
                         </Link>
                       ) : (
                         <Link
                           href={`/app/evaluator/assignments/${a.id}`}
-                          className="text-[7.5px] font-mono text-cs-400 hover:text-black transition-colors"
+                          className="text-[12px] font-mono text-cs-400 hover:text-black transition-colors"
                         >
                           View →
                         </Link>

@@ -52,12 +52,12 @@ export default async function AdminCompetitionsPage() {
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-2 h-2 bg-sb-default" />
-            <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
               Admin
             </span>
           </div>
           <h1 className="text-2xl font-bold tracking-tight">Competitions</h1>
-          <p className="text-[8px] font-mono text-cs-400 mt-1">
+          <p className="text-[13px] font-mono text-cs-400 mt-1">
             {total} total · {active} active
           </p>
         </div>
@@ -66,7 +66,7 @@ export default async function AdminCompetitionsPage() {
       {/* Create form */}
       <div className="bg-white border border-cs-200 mb-8">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-          <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
             Create Competition
           </span>
         </div>
@@ -116,13 +116,13 @@ export default async function AdminCompetitionsPage() {
       {/* List */}
       <div className="bg-white border border-cs-200">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-          <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
             All Competitions · {total}
           </span>
         </div>
         {total === 0 ? (
           <div className="px-5 py-10 text-center">
-            <p className="text-[8px] font-mono text-cs-400">No competitions yet.</p>
+            <p className="text-[13px] font-mono text-cs-400">No competitions yet.</p>
           </div>
         ) : (
           <div className="divide-y divide-cs-100">
@@ -130,12 +130,12 @@ export default async function AdminCompetitionsPage() {
               <div key={comp.id} className="px-5 py-4 flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[8.5px] font-bold">{comp.name}</span>
-                    <span className={`text-[6.5px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 ${STATUS_COLOR[comp.status] ?? "text-cs-400 bg-cs-100"}`}>
+                    <span className="text-[13px] font-bold">{comp.name}</span>
+                    <span className={`text-[14px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 ${STATUS_COLOR[comp.status] ?? "text-cs-400 bg-cs-100"}`}>
                       {comp.status}
                     </span>
                   </div>
-                  <div className="flex gap-5 text-[7px] font-mono text-cs-400">
+                  <div className="flex gap-5 text-[14px] font-mono text-cs-400">
                     {comp.industry && <span className="uppercase">{comp.industry}</span>}
                     {comp.accelerator_id && <span>{accelMap.get(comp.accelerator_id) ?? "—"}</span>}
                     {comp.start_date && <span>Opens: {fmt(comp.start_date)}</span>}
@@ -144,7 +144,7 @@ export default async function AdminCompetitionsPage() {
                 </div>
                 <Link
                   href={`/admin/competitions/${comp.id}`}
-                  className="text-[7.5px] font-mono text-sb-default hover:underline uppercase tracking-widest shrink-0"
+                  className="text-[12px] font-mono text-sb-default hover:underline uppercase tracking-widest shrink-0"
                 >
                   Manage →
                 </Link>

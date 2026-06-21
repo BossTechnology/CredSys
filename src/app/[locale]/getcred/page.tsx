@@ -1,46 +1,93 @@
 "use client";
 
-import { useState }    from "react";
-import Link            from "next/link";
-import { useParams }   from "next/navigation";
-import { MarketingNav } from "@/components/marketing/MarketingNav";
-import type { Locale }  from "@/lib/i18n/types";
+import { useState }          from "react";
+import Link                   from "next/link";
+import { useParams }          from "next/navigation";
+import { MarketingNav }       from "@/components/marketing/MarketingNav";
+import type { Locale }        from "@/lib/i18n/types";
 
+/* ─── Industry options ─────────────────────────────────────────── */
 const INDUSTRY_OPTIONS = [
-  { value: "fintech",    label: "Fintech"        },
-  { value: "edtech",     label: "Edtech"         },
-  { value: "healthtech", label: "Healthtech"     },
-  { value: "agritech",   label: "Agritech"       },
-  { value: "ecommerce",  label: "E-Commerce"     },
-  { value: "saas",       label: "SaaS / B2B"     },
-  { value: "cleantech",  label: "Cleantech"      },
-  { value: "logistics",  label: "Logistics"      },
-  { value: "other",      label: "Other"          },
+  { value: "fintech",    label: "Fintech"       },
+  { value: "edtech",     label: "Edtech"        },
+  { value: "healthtech", label: "Healthtech"    },
+  { value: "agritech",   label: "Agritech"      },
+  { value: "ecommerce",  label: "E-Commerce"    },
+  { value: "saas",       label: "SaaS / B2B"    },
+  { value: "cleantech",  label: "Cleantech"     },
+  { value: "logistics",  label: "Logistics"     },
+  { value: "other",      label: "Otra / Other"  },
 ];
 
-const STAGE_OPTIONS = [
-  { value: "idea",           label: "Idea / Pre-MVP"  },
-  { value: "mvp",            label: "MVP"             },
-  { value: "early_traction", label: "Early Traction"  },
-  { value: "growth",         label: "Growth"          },
-  { value: "scale",          label: "Scale"           },
-];
-
-// Dict nav labels are static here since this is a client component;
-// locale-specific text is minimal on this page.
-const NAV_DICT = {
-  nav: {
-    home:       "Home",
-    howItWorks: "How It Works",
-    credList:   "CRED List",
-    login:      "Sign In",
-    signup:     "Get Started",
+/* ─── i18n dict ────────────────────────────────────────────────── */
+const DICT = {
+  en: {
+    titlePre:  "Request a",
+    titlePost: "itation",
+    subtitle:  "Submit your startup to the CRED evaluation process.",
+    orgName:           "Startup Name",
+    orgNamePH:         "Acme Inc.",
+    website:           "Website / URL",
+    websitePH:         "https://yourstartup.com",
+    contactPerson:     "Contact Person",
+    contactPersonPH:   "John Doe",
+    contactRole:       "Role / Position",
+    contactRolePH:     "CEO",
+    email:             "Email Address",
+    emailPH:           "you@startup.com",
+    whatsapp:          "WhatsApp",
+    whatsappPH:        "+1 555 000 0000",
+    industry:          "Industry",
+    industryPH:        "Select industry…",
+    description:       "Brief Description",
+    descriptionPH:     "Describe your product, market and traction…",
+    subscribe:         "Add our Startup to your contact list and keep us informed about upcoming meetings and events.",
+    submit:            "Submit Application",
+    submitting:        "Submitting…",
+    cancel:            "Cancel",
+    successTitle:      "Application Received",
+    successMsg:        "Check your inbox for an activation link. Click it to set up your password and access your startup dashboard.",
+    successMsgNoEmail: "Your application was saved, but we had trouble sending the activation email. Use the link below to set up your account directly — valid for 7 days.",
+    activateBtn:       "Activate My Account →",
+    backHome:          "← Back to home",
+  },
+  es: {
+    titlePre:  "Solicitar a",
+    titlePost: "itación",
+    subtitle:  "Envía tu startup al proceso de evaluación CRED.",
+    orgName:           "Nombre de la Startup",
+    orgNamePH:         "Acme Inc.",
+    website:           "Website / URL / Link",
+    websitePH:         "https://tustartup.com",
+    contactPerson:     "Persona de contacto",
+    contactPersonPH:   "Juan García",
+    contactRole:       "Puesto / Cargo",
+    contactRolePH:     "CEO",
+    email:             "e-Mail",
+    emailPH:           "tu@startup.com",
+    whatsapp:          "WhatsApp",
+    whatsappPH:        "+51 999 999 999",
+    industry:          "Industria Principal",
+    industryPH:        "Seleccionar industria…",
+    description:       "Descripción Breve",
+    descriptionPH:     "Describe tu producto, mercado y tracción…",
+    subscribe:         "Agregue nuestra Startup a su lista de contactos y manténganos informados sobre próximas reuniones y eventos.",
+    submit:            "Enviar Solicitud",
+    submitting:        "Enviando…",
+    cancel:            "Cancelar",
+    successTitle:      "Solicitud Recibida",
+    successMsg:        "Revisa tu bandeja de entrada para el enlace de activación. Haz clic en él para configurar tu contraseña y acceder a tu dashboard.",
+    successMsgNoEmail: "Tu solicitud fue guardada, pero hubo un problema al enviar el correo de activación. Usa el enlace de abajo para configurar tu cuenta directamente — válido por 7 días.",
+    activateBtn:       "Activar Mi Cuenta →",
+    backHome:          "← Volver al inicio",
   },
 };
 
+/* ─── Page ─────────────────────────────────────────────────────── */
 export default function GetCredPage() {
-  const params  = useParams<{ locale: string }>();
-  const locale  = (params.locale ?? "en") as Locale;
+  const params = useParams<{ locale: string }>();
+  const locale = (params.locale ?? "en") as Locale;
+  const t      = DICT[locale as keyof typeof DICT] ?? DICT.en;
 
   const [step,      setStep]      = useState<"form" | "success">("form");
   const [loading,   setLoading]   = useState(false);
@@ -53,14 +100,15 @@ export default function GetCredPage() {
     setLoading(true);
     setError(null);
 
-    const formData = new FormData(e.currentTarget);
-    const body: Record<string, string> = {};
-    formData.forEach((val, key) => {
+    const fd = new FormData(e.currentTarget);
+    const body: Record<string, string | boolean> = {};
+    fd.forEach((val, key) => {
       if (typeof val === "string" && val.trim()) body[key] = val.trim();
     });
+    body.subscribe_events = fd.get("subscribe_events") === "on";
 
     try {
-      const res = await fetch("/api/intake/startup", {
+      const res  = await fetch("/api/intake/startup", {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
         body:    JSON.stringify(body),
@@ -80,45 +128,31 @@ export default function GetCredPage() {
     }
   }
 
+  /* ── Success screen ── */
   if (step === "success") {
     return (
       <>
-        <MarketingNav locale={locale} />
+        <MarketingNav locale={locale} showSignIn={false} showLangDropdown={true} />
         <div className="min-h-[80vh] flex items-center justify-center px-4">
           <div className="max-w-[480px] w-full text-center">
-            <div className="w-10 h-10 bg-sb-default mx-auto mb-6" />
-            <h1 className="text-2xl font-bold tracking-tight mb-3">
-              Application Received
-            </h1>
-
+            <div className="w-10 h-10 mx-auto mb-6" style={{ background: "rgb(156,139,188)" }} />
+            <h1 className="text-2xl font-bold tracking-tight mb-3">{t.successTitle}</h1>
             {emailSent ? (
-              <p className="text-sm text-cs-500 leading-relaxed mb-6">
-                Check your inbox for an activation link. Click it to set up
-                your password and access your startup dashboard.
-              </p>
+              <p className="text-[14px] text-cs-500 leading-relaxed mb-6">{t.successMsg}</p>
             ) : (
               <div className="mb-6">
-                <p className="text-sm text-cs-500 leading-relaxed mb-4">
-                  Your application was saved, but we had trouble sending the
-                  activation email. Use the link below to set up your account
-                  directly — it&apos;s valid for 7 days.
-                </p>
+                <p className="text-[14px] text-cs-500 leading-relaxed mb-4">{t.successMsgNoEmail}</p>
                 {setupUrl && (
-                  <a
-                    href={setupUrl}
-                    className="inline-block bg-black text-white text-[8px] font-mono uppercase tracking-widest px-5 py-2.5 hover:bg-cs-800 transition-colors"
-                  >
-                    Activate My Account →
+                  <a href={setupUrl}
+                     className="inline-block bg-black text-white text-[13px] font-mono uppercase tracking-widest px-5 py-2.5 hover:bg-cs-800 transition-colors">
+                    {t.activateBtn}
                   </a>
                 )}
               </div>
             )}
-
-            <Link
-              href={`/${locale}`}
-              className="text-[8px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
-            >
-              ← Back to home
+            <Link href={`/${locale}`}
+                  className="text-[13px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors">
+              {t.backHome}
             </Link>
           </div>
         </div>
@@ -126,128 +160,117 @@ export default function GetCredPage() {
     );
   }
 
+  /* ── Form screen ── */
   return (
     <>
-      <MarketingNav locale={locale} />
+      <MarketingNav locale={locale} showSignIn={false} showLangDropdown={true} />
 
-      {/* Black accent strip */}
-      <div className="bg-black px-7 py-1">
-        <span className="text-[7px] font-mono text-sb-default uppercase tracking-widest">
-          GetCRED · Build Trust · Become Unstoppable
-        </span>
-      </div>
+      <div className="max-w-[600px] mx-auto px-7 py-10">
 
-      <div className="max-w-[720px] mx-auto px-7 py-12">
-        {/* Header */}
+        {/* Title */}
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-3 h-3 bg-sb-default" />
-            <span className="text-[8px] font-mono text-sb-text uppercase tracking-widest font-semibold">
-              Accreditation Application
-            </span>
-          </div>
-          <h1 className="text-3xl font-bold tracking-tight mb-2">
-            Apply for Accreditation
+          <h1 className="text-[28px] font-bold tracking-tight mb-1">
+            {t.titlePre}
+            <span style={{ color: "rgb(156,139,188)" }}>CRED</span>
+            {t.titlePost}
           </h1>
-          <p className="text-sm text-cs-500 leading-relaxed max-w-[480px]">
-            Submit your startup for the CRED process. An expert evaluator
-            will assess your startup against the CHASS1S framework.
-          </p>
+          <p className="text-[13px] text-cs-400">{t.subtitle}</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
-          {/* Section 01 */}
+          {/* Startup Name */}
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest border-b border-cs-200 pb-1 w-full">
-                01 — Startup Information
-              </span>
+            <label className="cs-label">{t.orgName} *</label>
+            <input name="org_name" type="text" required
+                   placeholder={t.orgNamePH} className="cs-input" />
+          </div>
+
+          {/* Website */}
+          <div>
+            <label className="cs-label">{t.website}</label>
+            <input name="website" type="url"
+                   placeholder={t.websitePH} className="cs-input" />
+          </div>
+
+          {/* Contact person + Role */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="cs-label">{t.contactPerson}</label>
+              <input name="contact_person" type="text"
+                     placeholder={t.contactPersonPH} className="cs-input" />
             </div>
-            <div className="border border-cs-200 bg-white p-5 flex flex-col gap-4">
-              <div>
-                <label className="cs-label">Organization Name *</label>
-                <input name="org_name" type="text" required placeholder="Acme Inc." className="cs-input" />
-              </div>
-              <div>
-                <label className="cs-label">Email Address *</label>
-                <input name="email" type="email" required placeholder="you@startup.com" className="cs-input" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="cs-label">Industry</label>
-                  <select name="industry" className="cs-input">
-                    <option value="">Select industry…</option>
-                    {INDUSTRY_OPTIONS.map((o) => (
-                      <option key={o.value} value={o.value}>{o.label}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="cs-label">Stage</label>
-                  <select name="stage" className="cs-input">
-                    <option value="">Select stage…</option>
-                    {STAGE_OPTIONS.map((o) => (
-                      <option key={o.value} value={o.value}>{o.label}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="cs-label">Website</label>
-                  <input name="website" type="url" placeholder="https://yourstartup.com" className="cs-input" />
-                </div>
-                <div>
-                  <label className="cs-label">Country</label>
-                  <input name="country" type="text" placeholder="Peru" className="cs-input" />
-                </div>
-              </div>
-              <div>
-                <label className="cs-label">Team Size</label>
-                <input name="team_size" type="number" min={1} placeholder="5" className="cs-input w-32" />
-              </div>
+            <div>
+              <label className="cs-label">{t.contactRole}</label>
+              <input name="contact_role" type="text"
+                     placeholder={t.contactRolePH} className="cs-input" />
             </div>
           </div>
 
-          {/* Section 02 */}
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest border-b border-cs-200 pb-1 w-full">
-                02 — About Your Startup
-              </span>
+          {/* Email + WhatsApp */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="cs-label">{t.email} *</label>
+              <input name="email" type="email" required autoComplete="email"
+                     placeholder={t.emailPH} className="cs-input" />
             </div>
-            <div className="border border-cs-200 bg-white p-5 flex flex-col gap-4">
-              <div>
-                <label className="cs-label">What does your startup do? *</label>
-                <textarea
-                  name="description"
-                  required
-                  placeholder="Describe your product, market, and traction…"
-                  rows={3}
-                  className="cs-input resize-none"
-                />
-              </div>
+            <div>
+              <label className="cs-label">{t.whatsapp}</label>
+              <input name="phone_whatsapp" type="tel"
+                     placeholder={t.whatsappPH} className="cs-input" />
             </div>
           </div>
+
+          {/* Industry */}
+          <div>
+            <label className="cs-label">{t.industry}</label>
+            <select name="industry" className="cs-input">
+              <option value="">{t.industryPH}</option>
+              {INDUSTRY_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="cs-label">{t.description}</label>
+            <textarea name="description" rows={3}
+                      placeholder={t.descriptionPH}
+                      className="cs-input resize-none" />
+          </div>
+
+          {/* Subscribe / consent checkbox */}
+          <label style={{ display: "flex", alignItems: "flex-start", gap: "10px", cursor: "pointer" }}>
+            <input
+              type="checkbox"
+              name="subscribe_events"
+              style={{
+                marginTop:   "2px",
+                accentColor: "rgb(156,139,188)",
+                width:       "15px",
+                height:      "15px",
+                flexShrink:  0,
+              }}
+            />
+            <span className="text-[13px] text-cs-600 leading-snug">{t.subscribe}</span>
+          </label>
 
           {/* Error */}
           {error && (
-            <div className="border border-red-300 bg-red-50 px-4 py-3 text-[8px] font-mono text-red-700">
+            <div className="border border-cs-red-200 bg-cs-red-100 px-3 py-2 text-[13px] font-mono text-cs-red">
               {error}
             </div>
           )}
 
           {/* Actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5 pt-2">
             <button type="submit" disabled={loading} className="btn-primary btn-lg">
-              {loading ? "Submitting…" : "Submit Application"}
+              {loading ? t.submitting : t.submit}
             </button>
-            <Link
-              href={`/${locale}`}
-              className="text-[8px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
-            >
-              Cancel
+            <Link href={`/${locale}`}
+                  className="text-[13px] font-mono text-cs-400 tracking-widest hover:text-black transition-colors">
+              {t.cancel}
             </Link>
           </div>
 

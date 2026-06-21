@@ -24,7 +24,7 @@ export function SectionDivider({
   return (
     <div
       className={cn(
-        "flex items-center gap-3 px-4 py-1 text-[8px] font-mono uppercase tracking-widest",
+        "flex items-center gap-3 px-4 py-1 text-[13px] font-mono uppercase tracking-widest",
         variantStyles[variant],
         className
       )}
@@ -45,7 +45,7 @@ export function MetricStrip({ items }: MetricStripProps) {
   return (
     <div className="bg-white border border-cs-200 px-4 py-2 flex items-center gap-6">
       {items.map((item, i) => (
-        <span key={i} className="text-[8px] font-mono flex items-center gap-1">
+        <span key={i} className="text-[13px] font-mono flex items-center gap-1">
           <span className={cn("font-bold text-[10px]", item.alert ? "text-cs-red" : "text-black")}>
             {item.value}
           </span>
@@ -68,7 +68,7 @@ export function PageHeader({ title, subtitle, metrics }: PageHeaderProps) {
       <div className="px-7 py-4">
         <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
         {subtitle && (
-          <p className="text-[8px] font-mono text-cs-400 uppercase tracking-widest mt-1">
+          <p className="text-[13px] font-mono text-cs-400 uppercase tracking-widest mt-1">
             {subtitle}
           </p>
         )}
@@ -103,10 +103,10 @@ export function ProfileCard({ items, className }: ProfileCardProps) {
       {items.map((item) =>
         item.value != null ? (
           <div key={item.label}>
-            <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest">
+            <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
               {item.label}
             </div>
-            <div className="text-[8.5px] font-semibold mt-0.5">{item.value}</div>
+            <div className="text-[13px] font-semibold mt-0.5">{item.value}</div>
           </div>
         ) : null
       )}

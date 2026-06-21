@@ -30,7 +30,7 @@ export async function sendRejected(
 
   await sendEmail({
     to,
-    subject: "CredSys — Accreditation request update",
+    subject: "StartupBoss.org — Accreditation request update",
     html,
   });
 }

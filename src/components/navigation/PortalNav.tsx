@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -22,12 +23,19 @@ export function PortalNav({ portalLabel, orgName, items, onSignOut }: PortalNavP
   return (
     <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-8">
       {/* Logo */}
-      <Link href="/" className="text-sm font-bold tracking-tight text-black shrink-0">
-        StartupBoss.org
+      <Link href="/" className="shrink-0">
+        <Image
+          src="/logo.png"
+          alt="StartupBoss.org"
+          width={200}
+          height={36}
+          className="object-contain"
+          priority
+        />
       </Link>
 
       {/* Portal label */}
-      <span className="text-[7px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4">
+      <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4">
         {portalLabel}
       </span>
 
@@ -40,7 +48,7 @@ export function PortalNav({ portalLabel, orgName, items, onSignOut }: PortalNavP
           key={item.href}
           href={item.href}
           className={cn(
-            "text-[8px] font-mono uppercase tracking-widest pb-0.5 transition-colors",
+            "text-[13px] font-mono uppercase tracking-widest pb-0.5 transition-colors",
             pathname === item.href || pathname.startsWith(item.href + "/")
               ? "text-black border-b-2 border-black font-bold"
               : "text-cs-500 hover:text-black"
@@ -52,14 +60,14 @@ export function PortalNav({ portalLabel, orgName, items, onSignOut }: PortalNavP
 
       {/* Org name + sign out */}
       {orgName && (
-        <span className="text-[7.5px] font-mono text-cs-500 border-l border-cs-200 pl-4">
+        <span className="text-[12px] font-mono text-cs-500 border-l border-cs-200 pl-4">
           {orgName}
         </span>
       )}
       {onSignOut && (
         <button
           onClick={onSignOut}
-          className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
+          className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
         >
           Sign Out
         </button>

@@ -37,7 +37,7 @@ export default async function AdminOverviewPage() {
     { value: pendingAssignment ?? 0, label: "Unassigned Requests", href: "/admin/accreditations", alert: (pendingAssignment ?? 0) > 0 },
     { value: inProgress        ?? 0, label: "In Progress",         href: "/admin/accreditations"                                },
     { value: activeComps       ?? 0, label: "Active Competitions", href: "/admin/competitions",   accent: true                  },
-    { value: totalStartups     ?? 0, label: "Total Startups",      href: "/admin/accreditations"                                },
+    { value: totalStartups     ?? 0, label: "Total Startups",      href: "/admin/startups"                                      },
   ];
 
   const STATUS_COLOR: Record<string, string> = {
@@ -60,10 +60,10 @@ export default async function AdminOverviewPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-white" />
-          <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">Admin</span>
+          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">Admin</span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight">Overview</h1>
-        <p className="text-[8px] font-mono text-cs-400 mt-1">System dashboard — CredSys</p>
+        <p className="text-[13px] font-mono text-cs-400 mt-1">System dashboard — StartupBoss.org</p>
       </div>
 
       {/* Alert banners */}
@@ -74,10 +74,10 @@ export default async function AdminOverviewPage() {
               href="/admin/evaluators"
               className="bg-yellow-50 border border-yellow-200 px-4 py-2.5 flex items-center justify-between hover:bg-yellow-100 transition-colors"
             >
-              <span className="text-[7.5px] font-mono font-bold text-yellow-700 uppercase tracking-widest">
+              <span className="text-[12px] font-mono font-bold text-yellow-700 uppercase tracking-widest">
                 ⚠ {pendingEvaluators} evaluator{(pendingEvaluators ?? 0) !== 1 ? "s" : ""} pending activation
               </span>
-              <span className="text-[7px] font-mono text-yellow-600">Review →</span>
+              <span className="text-[14px] font-mono text-yellow-600">Review →</span>
             </Link>
           )}
           {(pendingAssignment ?? 0) > 0 && (
@@ -85,10 +85,10 @@ export default async function AdminOverviewPage() {
               href="/admin/accreditations"
               className="bg-yellow-50 border border-yellow-200 px-4 py-2.5 flex items-center justify-between hover:bg-yellow-100 transition-colors"
             >
-              <span className="text-[7.5px] font-mono font-bold text-yellow-700 uppercase tracking-widest">
+              <span className="text-[12px] font-mono font-bold text-yellow-700 uppercase tracking-widest">
                 ⚠ {pendingAssignment} request{(pendingAssignment ?? 0) !== 1 ? "s" : ""} awaiting evaluator assignment
               </span>
-              <span className="text-[7px] font-mono text-yellow-600">Assign →</span>
+              <span className="text-[14px] font-mono text-yellow-600">Assign →</span>
             </Link>
           )}
         </div>
@@ -113,7 +113,7 @@ export default async function AdminOverviewPage() {
             }`}>
               {s.value}
             </div>
-            <div className="text-[7px] font-mono text-cs-400 uppercase tracking-widest mt-1">
+            <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mt-1">
               {s.label}
             </div>
           </Link>
@@ -123,28 +123,28 @@ export default async function AdminOverviewPage() {
       {/* Recent requests */}
       <div className="bg-white border border-cs-200 mb-6">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50 flex items-center justify-between">
-          <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">Recent Requests</span>
-          <Link href="/admin/accreditations" className="text-[7.5px] font-mono text-sb-default hover:underline uppercase tracking-widest">
+          <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">Recent Requests</span>
+          <Link href="/admin/accreditations" className="text-[12px] font-mono text-sb-default hover:underline uppercase tracking-widest">
             View All →
           </Link>
         </div>
         {(recentRequests ?? []).length === 0 ? (
           <div className="px-5 py-8 text-center">
-            <p className="text-[8px] font-mono text-cs-400">No requests yet.</p>
+            <p className="text-[13px] font-mono text-cs-400">No requests yet.</p>
           </div>
         ) : (
           <div className="divide-y divide-cs-100">
             {(recentRequests ?? []).map((r) => (
               <div key={r.id} className="px-5 py-3 flex items-center justify-between gap-4">
                 <div>
-                  <div className="text-[8px] font-semibold">{r.startup_name}</div>
-                  <div className="text-[7px] font-mono text-cs-400">{r.startup_email}</div>
+                  <div className="text-[13px] font-semibold">{r.startup_name}</div>
+                  <div className="text-[14px] font-mono text-cs-400">{r.startup_email}</div>
                 </div>
                 <div className="flex items-center gap-5">
-                  <span className={`text-[7px] font-mono uppercase tracking-widest ${STATUS_COLOR[r.status] ?? "text-cs-400"}`}>
+                  <span className={`text-[14px] font-mono uppercase tracking-widest ${STATUS_COLOR[r.status] ?? "text-cs-400"}`}>
                     {r.status.replace(/_/g, " ")}
                   </span>
-                  <span className="text-[7px] font-mono text-cs-400">
+                  <span className="text-[14px] font-mono text-cs-400">
                     {new Date(r.updated_at).toLocaleDateString("en", { month: "short", day: "numeric" })}
                   </span>
                 </div>
@@ -166,8 +166,8 @@ export default async function AdminOverviewPage() {
             href={a.href}
             className="bg-white border border-cs-200 px-5 py-4 hover:border-black transition-colors"
           >
-            <div className="text-[8.5px] font-bold uppercase tracking-widest mb-1">{a.label}</div>
-            <div className="text-[7.5px] font-mono text-cs-400">{a.desc}</div>
+            <div className="text-[13px] font-bold uppercase tracking-widest mb-1">{a.label}</div>
+            <div className="text-[12px] font-mono text-cs-400">{a.desc}</div>
           </Link>
         ))}
       </div>

@@ -75,14 +75,14 @@ export default async function StartupDashboardPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
-          <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
             Startup Portal
           </span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight">
           {startup?.org_name ?? "Dashboard"}
         </h1>
-        <p className="text-[8px] font-mono text-cs-400 mt-1">{user.email}</p>
+        <p className="text-[13px] font-mono text-cs-400 mt-1">{user.email}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -93,7 +93,7 @@ export default async function StartupDashboardPage() {
           {/* Accreditation card */}
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50 flex items-center justify-between">
-              <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+              <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 Accreditation Status
               </span>
               {request && <Badge variant={status!} />}
@@ -102,7 +102,7 @@ export default async function StartupDashboardPage() {
             <div className="p-5">
               {!request ? (
                 <div className="text-center py-6">
-                  <p className="text-[8px] font-mono text-cs-400 mb-4">
+                  <p className="text-[13px] font-mono text-cs-400 mb-4">
                     You have not submitted an accreditation request yet.
                   </p>
                   <Link href="/app/startup/accreditation" className="btn-primary btn-sm">
@@ -122,13 +122,13 @@ export default async function StartupDashboardPage() {
                   {status === "accredited" && credCode && (
                     <div className="bg-sb-light border border-sb-default px-4 py-3 mb-4 flex items-center justify-between">
                       <div>
-                        <div className="text-[7px] font-mono text-sb-text uppercase tracking-widest mb-0.5">
+                        <div className="text-[14px] font-mono text-sb-text uppercase tracking-widest mb-0.5">
                           Credential ID
                         </div>
                         <div className="text-sm font-bold font-mono tracking-widest">
                           {credCode.toUpperCase()}
                         </div>
-                        <div className="text-[7px] font-mono text-cs-400 mt-0.5">
+                        <div className="text-[14px] font-mono text-cs-400 mt-0.5">
                           Accredited {fmt(request.accredited_at)}
                         </div>
                       </div>
@@ -145,10 +145,10 @@ export default async function StartupDashboardPage() {
                   {/* Rejected state */}
                   {status === "rejected" && (
                     <div className="border border-red-200 bg-red-50 px-4 py-3 mb-4">
-                      <div className="text-[7px] font-mono text-red-600 uppercase tracking-widest mb-0.5">
+                      <div className="text-[14px] font-mono text-red-600 uppercase tracking-widest mb-0.5">
                         Application Not Approved
                       </div>
-                      <p className="text-[8px] text-cs-600">
+                      <p className="text-[13px] text-cs-600">
                         Your application was not approved at this time.
                         Contact support or apply again after addressing the feedback.
                       </p>
@@ -158,17 +158,17 @@ export default async function StartupDashboardPage() {
                   {/* Evaluator notes */}
                   {request.evaluator_notes && (
                     <div className="border border-cs-200 bg-cs-50 px-4 py-3 mb-4">
-                      <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-1">
+                      <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-1">
                         Evaluator Notes
                       </div>
-                      <p className="text-[8px] text-cs-700 leading-relaxed">
+                      <p className="text-[13px] text-cs-700 leading-relaxed">
                         {request.evaluator_notes}
                       </p>
                     </div>
                   )}
 
                   {/* Request meta */}
-                  <div className="grid grid-cols-2 gap-4 text-[7.5px] font-mono">
+                  <div className="grid grid-cols-2 gap-4 text-[12px] font-mono">
                     <div>
                       <div className="text-cs-400 uppercase tracking-widest mb-0.5">Submitted</div>
                       <div className="font-semibold">{fmt(request.created_at)}</div>
@@ -183,7 +183,7 @@ export default async function StartupDashboardPage() {
                   <div className="mt-4">
                     <Link
                       href="/app/startup/accreditation"
-                      className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
+                      className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
                     >
                       View Full Details →
                     </Link>
@@ -198,7 +198,7 @@ export default async function StartupDashboardPage() {
         {(sponsorshipOffers ?? []).length > 0 && (
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50">
-              <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+              <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 Sponsorship Offers ({sponsorshipOffers!.length})
               </span>
             </div>
@@ -211,12 +211,12 @@ export default async function StartupDashboardPage() {
                   <div key={offer.id} className="p-5 flex flex-col gap-3">
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <div className="text-[8px] font-semibold">{sponsorName}</div>
-                        <div className="text-[7px] font-mono text-cs-400 mt-0.5 uppercase tracking-widest">
+                        <div className="text-[13px] font-semibold">{sponsorName}</div>
+                        <div className="text-[14px] font-mono text-cs-400 mt-0.5 uppercase tracking-widest">
                           {offer.sponsor_type} · wants to sponsor your accreditation
                         </div>
                         {offer.notes && (
-                          <p className="text-[7.5px] text-cs-600 mt-1 leading-relaxed">{offer.notes}</p>
+                          <p className="text-[12px] text-cs-600 mt-1 leading-relaxed">{offer.notes}</p>
                         )}
                       </div>
                     </div>
@@ -245,7 +245,7 @@ export default async function StartupDashboardPage() {
         <div className="flex flex-col gap-4">
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50">
-              <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+              <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 Startup Info
               </span>
             </div>
@@ -256,15 +256,15 @@ export default async function StartupDashboardPage() {
                 { label: "Website",  value: startup?.website  },
               ].map((f) => (
                 <div key={f.label}>
-                  <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+                  <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                     {f.label}
                   </div>
-                  <div className="text-[8px] font-semibold">{f.value || "—"}</div>
+                  <div className="text-[13px] font-semibold">{f.value || "—"}</div>
                 </div>
               ))}
               <Link
                 href="/app/startup/profile"
-                className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors mt-2"
+                className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors mt-2"
               >
                 Edit Profile →
               </Link>
@@ -274,7 +274,7 @@ export default async function StartupDashboardPage() {
           {/* Quick actions */}
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50">
-              <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+              <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 Quick Links
               </span>
             </div>

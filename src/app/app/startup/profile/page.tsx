@@ -2,6 +2,7 @@ import { createClient }        from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { redirect }            from "next/navigation";
 import { revalidatePath }      from "next/cache";
+import { LogoUploadField }     from "@/components/ui/LogoUploadField";
 
 // ─── Server Action ────────────────────────────────────────────────────────────
 
@@ -24,17 +25,42 @@ async function updateStartupProfile(formData: FormData) {
 
   if (!profile?.entity_id) return;
 
+  // ── Logo upload ──────────────────────────────────────────────
+  let logoUrl: string | null | undefined = undefined; // undefined = don't touch existing value
+
+  const logoFile = formData.get("logo") as File | null;
+  if (logoFile && logoFile.size > 0) {
+    const ext  = logoFile.name.split(".").pop() ?? "png";
+    const path = `${profile.entity_id}/logo.${ext}`;
+    const buf  = Buffer.from(await logoFile.arrayBuffer());
+
+    const { error: uploadError } = await service.storage
+      .from("startup-logos")
+      .upload(path, buf, { contentType: logoFile.type, upsert: true });
+
+    if (!uploadError) {
+      const { data: { publicUrl } } = service.storage
+        .from("startup-logos")
+        .getPublicUrl(path);
+      logoUrl = publicUrl;
+    }
+  }
+
+  // ── Profile update ───────────────────────────────────────────
+  const update: Record<string, unknown> = {
+    org_name:    (formData.get("org_name")    as string) || undefined,
+    industry:    (formData.get("industry")    as string) || null,
+    stage:       (formData.get("stage")       as string) || null,
+    country:     (formData.get("country")     as string) || null,
+    website:     (formData.get("website")     as string) || null,
+    description: (formData.get("description") as string) || null,
+    team_size:   formData.get("team_size") ? Number(formData.get("team_size")) : null,
+  };
+  if (logoUrl !== undefined) update.logo_url = logoUrl;
+
   await service
     .from("startups")
-    .update({
-      org_name:    (formData.get("org_name")    as string) || undefined,
-      industry:    (formData.get("industry")    as string) || null,
-      stage:       (formData.get("stage")       as string) || null,
-      country:     (formData.get("country")     as string) || null,
-      website:     (formData.get("website")     as string) || null,
-      description: (formData.get("description") as string) || null,
-      team_size:   formData.get("team_size") ? Number(formData.get("team_size")) : null,
-    })
+    .update(update)
     .eq("id", profile.entity_id);
 
   revalidatePath("/app/startup/profile");
@@ -93,18 +119,18 @@ export default async function StartupProfilePage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
-          <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
             Startup Portal
           </span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight">Profile</h1>
-        <p className="text-[8px] font-mono text-cs-400 mt-1">{user.email}</p>
+        <p className="text-[13px] font-mono text-cs-400 mt-1">{user.email}</p>
       </div>
 
       <form action={updateStartupProfile} className="flex flex-col gap-6">
         <div className="border border-cs-200 bg-white">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-            <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
               Organization Info
             </span>
           </div>
@@ -163,6 +189,9 @@ export default async function StartupProfilePage() {
                 className="cs-input resize-none"
               />
             </div>
+            <LogoUploadField
+              currentLogoUrl={(startup as unknown as { logo_url?: string })?.logo_url}
+            />
           </div>
         </div>
 

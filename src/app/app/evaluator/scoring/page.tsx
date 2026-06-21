@@ -144,12 +144,12 @@ export default async function EvaluatorScoringPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
-          <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
             Evaluator Portal
           </span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight">Competition Scoring</h1>
-        <p className="text-[8px] font-mono text-cs-400 mt-1">
+        <p className="text-[13px] font-mono text-cs-400 mt-1">
           {pending.length} pending · {scored.length} scored
         </p>
       </div>
@@ -157,14 +157,14 @@ export default async function EvaluatorScoringPage() {
       {/* Pending */}
       <div className="border border-cs-200 bg-white mb-8">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-          <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
             Pending Scoring
           </span>
         </div>
 
         {pending.length === 0 ? (
           <div className="px-5 py-8 text-center">
-            <p className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+            <p className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
               All entries have been scored ✓
             </p>
           </div>
@@ -178,10 +178,10 @@ export default async function EvaluatorScoringPage() {
                 className="px-5 py-4 border-b border-cs-100 flex items-start justify-between gap-6"
               >
                 <div>
-                  <div className="text-[8px] font-semibold mb-0.5">
+                  <div className="text-[13px] font-semibold mb-0.5">
                     {startup?.org_name ?? "Unknown Startup"}
                   </div>
-                  <div className="text-[7px] font-mono text-cs-400">
+                  <div className="text-[14px] font-mono text-cs-400">
                     {comp?.name ?? "—"} · Entered {fmt(entry.entered_at)}
                   </div>
                 </div>
@@ -190,18 +190,18 @@ export default async function EvaluatorScoringPage() {
                   <input type="hidden" name="competition_id" value={entry.competition_id} />
                   <input type="hidden" name="startup_id"     value={entry.startup_id} />
                   <div>
-                    <label className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest block mb-1">
+                    <label className="text-[14px] font-mono text-cs-400 uppercase tracking-widest block mb-1">
                       Notes
                     </label>
                     <input
                       name="notes"
                       type="text"
                       placeholder="Optional…"
-                      className="w-36 border border-cs-200 bg-cs-50 px-2 py-1.5 text-[7.5px] font-mono focus:outline-none focus:border-black"
+                      className="w-36 border border-cs-200 bg-cs-50 px-2 py-1.5 text-[12px] font-mono focus:outline-none focus:border-black"
                     />
                   </div>
                   <div>
-                    <label className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest block mb-1">
+                    <label className="text-[14px] font-mono text-cs-400 uppercase tracking-widest block mb-1">
                       Score (0–100)
                     </label>
                     <input
@@ -212,7 +212,7 @@ export default async function EvaluatorScoringPage() {
                       step={0.5}
                       required
                       placeholder="85"
-                      className="w-20 border border-cs-200 bg-cs-50 px-2 py-1.5 text-[8px] font-mono focus:outline-none focus:border-black"
+                      className="w-20 border border-cs-200 bg-cs-50 px-2 py-1.5 text-[13px] font-mono focus:outline-none focus:border-black"
                     />
                   </div>
                   <button type="submit" className="btn-accent btn-sm">
@@ -229,7 +229,7 @@ export default async function EvaluatorScoringPage() {
       {scored.length > 0 && (
         <div className="border border-cs-200 bg-white">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-            <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+            <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
               Scored Entries
             </span>
           </div>
@@ -243,20 +243,20 @@ export default async function EvaluatorScoringPage() {
                 className="px-5 py-3 border-b border-cs-100 flex items-center justify-between"
               >
                 <div>
-                  <div className="text-[8px] font-semibold">{startup?.org_name ?? "—"}</div>
-                  <div className="text-[7px] font-mono text-cs-400">{comp?.name ?? "—"}</div>
+                  <div className="text-[13px] font-semibold">{startup?.org_name ?? "—"}</div>
+                  <div className="text-[14px] font-mono text-cs-400">{comp?.name ?? "—"}</div>
                 </div>
                 <div className="flex items-center gap-6">
                   {scoreRow.notes && (
-                    <span className="text-[7px] font-mono text-cs-400 max-w-[160px] truncate">
+                    <span className="text-[14px] font-mono text-cs-400 max-w-[160px] truncate">
                       {scoreRow.notes}
                     </span>
                   )}
                   <div className="text-right">
-                    <div className="text-[6.5px] font-mono text-cs-400 uppercase tracking-widest">Score</div>
-                    <div className="text-[9px] font-bold text-sb-text">{scoreRow.score}/100</div>
+                    <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">Score</div>
+                    <div className="text-[13px] font-bold text-sb-text">{scoreRow.score}/100</div>
                   </div>
-                  <div className="text-[7px] font-mono text-cs-400">
+                  <div className="text-[14px] font-mono text-cs-400">
                     {fmt(scoreRow.scored_at)}
                   </div>
                 </div>
@@ -279,7 +279,7 @@ function EmptyState() {
         <h1 className="text-2xl font-bold tracking-tight">Competition Scoring</h1>
       </div>
       <div className="border border-cs-200 bg-white px-5 py-10 text-center">
-        <p className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+        <p className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
           You have not been assigned to any active competitions yet.
         </p>
       </div>

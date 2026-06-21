@@ -53,12 +53,12 @@ export default async function AcceleratorCompetitionsPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
-          <span className="text-[8px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
             Accelerator Portal
           </span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight">Competitions</h1>
-        <p className="text-[8px] font-mono text-cs-400 mt-1">
+        <p className="text-[13px] font-mono text-cs-400 mt-1">
           {total} competition{total !== 1 ? "s" : ""} linked to your accelerator
         </p>
       </div>
@@ -66,14 +66,14 @@ export default async function AcceleratorCompetitionsPage() {
       {/* List */}
       <div className="bg-white border border-cs-200">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
-          <span className="text-[7.5px] font-mono text-cs-400 uppercase tracking-widest">
+          <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
             Your Competitions · {total}
           </span>
         </div>
 
         {total === 0 ? (
           <div className="px-5 py-12 text-center">
-            <p className="text-[8px] font-mono text-cs-400">
+            <p className="text-[13px] font-mono text-cs-400">
               No competitions yet. Ask an admin to create one linked to your accelerator.
             </p>
           </div>
@@ -88,17 +88,17 @@ export default async function AcceleratorCompetitionsPage() {
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[9px] font-bold">{comp.name}</span>
-                        <span className={`text-[6.5px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 ${statusColor}`}>
+                        <span className="text-[13px] font-bold">{comp.name}</span>
+                        <span className={`text-[14px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 ${statusColor}`}>
                           {statusLabel}
                         </span>
                       </div>
                       {comp.description && (
-                        <p className="text-[7.5px] font-mono text-cs-500 mb-2 leading-relaxed">
+                        <p className="text-[12px] font-mono text-cs-500 mb-2 leading-relaxed">
                           {comp.description}
                         </p>
                       )}
-                      <div className="flex items-center gap-5 text-[7px] font-mono text-cs-400">
+                      <div className="flex items-center gap-5 text-[14px] font-mono text-cs-400">
                         {comp.industry && (
                           <span className="uppercase tracking-widest">{comp.industry}</span>
                         )}
