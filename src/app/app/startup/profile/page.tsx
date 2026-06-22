@@ -3,6 +3,7 @@ import { createServiceClient } from "@/lib/supabase/service";
 import { redirect }            from "next/navigation";
 import { revalidatePath }      from "next/cache";
 import { LogoUploadField }     from "@/components/ui/LogoUploadField";
+import { getAppDictionary }    from "@/lib/i18n/loader";
 
 // ─── Server Action ────────────────────────────────────────────────────────────
 
@@ -92,6 +93,9 @@ const STAGES = [
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function StartupProfilePage() {
+  const { dict } = await getAppDictionary();
+  const t = dict.startupProfile;
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/en/login");
@@ -120,10 +124,10 @@ export default async function StartupProfilePage() {
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
           <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-            Startup Portal
+            {t.portal}
           </span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight">Profile</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{t.profileHeading}</h1>
         <p className="text-[13px] font-mono text-cs-400 mt-1">{user.email}</p>
       </div>
 
@@ -131,12 +135,12 @@ export default async function StartupProfilePage() {
         <div className="border border-cs-200 bg-white">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
             <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-              Organization Info
+              {t.orgInfo}
             </span>
           </div>
           <div className="p-5 flex flex-col gap-4">
             <div>
-              <label className="cs-label">Organization Name *</label>
+              <label className="cs-label">{t.orgName}</label>
               <input
                 name="org_name"
                 type="text"
@@ -147,7 +151,7 @@ export default async function StartupProfilePage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="cs-label">Industry</label>
+                <label className="cs-label">{t.industry}</label>
                 <select name="industry" defaultValue={startup?.industry ?? ""} className="cs-input">
                   <option value="">Select…</option>
                   {INDUSTRIES.map((o) => (
@@ -156,7 +160,7 @@ export default async function StartupProfilePage() {
                 </select>
               </div>
               <div>
-                <label className="cs-label">Stage</label>
+                <label className="cs-label">{t.stage}</label>
                 <select name="stage" defaultValue={startup?.stage ?? ""} className="cs-input">
                   <option value="">Select…</option>
                   {STAGES.map((o) => (
@@ -167,25 +171,25 @@ export default async function StartupProfilePage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="cs-label">Website</label>
-                <input name="website" type="text" defaultValue={startup?.website ?? ""} placeholder="yourstartup.com" className="cs-input" />
+                <label className="cs-label">{t.website}</label>
+                <input name="website" type="text" defaultValue={startup?.website ?? ""} placeholder={t.websitePH} className="cs-input" />
               </div>
               <div>
-                <label className="cs-label">Country</label>
-                <input name="country" type="text" defaultValue={startup?.country ?? ""} placeholder="Peru" className="cs-input" />
+                <label className="cs-label">{t.country}</label>
+                <input name="country" type="text" defaultValue={startup?.country ?? ""} placeholder={t.countryPH} className="cs-input" />
               </div>
             </div>
             <div>
-              <label className="cs-label">Team Size</label>
+              <label className="cs-label">{t.teamSize}</label>
               <input name="team_size" type="number" min={1} defaultValue={startup?.team_size ?? ""} className="cs-input w-28" />
             </div>
             <div>
-              <label className="cs-label">Description</label>
+              <label className="cs-label">{t.description}</label>
               <textarea
                 name="description"
                 rows={3}
                 defaultValue={startup?.description ?? ""}
-                placeholder="What does your startup do?"
+                placeholder={t.descriptionPH}
                 className="cs-input resize-none"
               />
             </div>
@@ -196,7 +200,7 @@ export default async function StartupProfilePage() {
         </div>
 
         <button type="submit" className="btn-primary btn-lg self-start">
-          Save Changes
+          {t.save}
         </button>
       </form>
 

@@ -3,6 +3,7 @@ import { createServiceClient } from "@/lib/supabase/service";
 import { redirect }            from "next/navigation";
 import Link                    from "next/link";
 import { Badge }               from "@/components/ui/Badge";
+import { getAppDictionary }    from "@/lib/i18n/loader";
 import type { AccreditationStatus } from "@/lib/supabase/types";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -18,17 +19,14 @@ type Assignment = {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function formatShort(iso: string) {
-  return new Date(iso).toLocaleDateString("en", {
-    month: "short", day: "numeric", year: "numeric",
-  });
-}
-
 const TERMINAL: AccreditationStatus[] = ["accredited", "rejected", "expired"];
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 
 export default async function EvaluatorDashboardPage() {
+  const { locale, dict } = await getAppDictionary();
+  const t = dict.evalDash;
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/en/login");
@@ -56,6 +54,12 @@ export default async function EvaluatorDashboardPage() {
   const accredited = assignments.filter((a) => a.status === "accredited").length;
   const actionNeeded = assignments.filter((a) => a.status === "evaluator_assigned").length;
 
+  function formatShort(iso: string) {
+    return new Date(iso).toLocaleDateString(locale, {
+      month: "short", day: "numeric", year: "numeric",
+    });
+  }
+
   return (
     <div className="max-w-[1280px] mx-auto px-7 py-8">
 
@@ -64,19 +68,19 @@ export default async function EvaluatorDashboardPage() {
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
           <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-            Evaluator Portal
+            {t.portalLabel}
           </span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{t.title}</h1>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-4 gap-0 border border-cs-200 bg-white mb-8">
         {[
-          { label: "Total Assignments", value: total, accent: false },
-          { label: "Active",            value: active, accent: false },
-          { label: "Accredited",        value: accredited, accent: true },
-          { label: "Action Needed",     value: actionNeeded, alert: actionNeeded > 0 },
+          { label: t.totalAssignments, value: total, accent: false },
+          { label: t.activeLabel,      value: active, accent: false },
+          { label: t.accreditedLabel,  value: accredited, accent: true },
+          { label: t.actionNeeded,     value: actionNeeded, alert: actionNeeded > 0 },
         ].map((s, i) => (
           <div
             key={s.label}
@@ -102,23 +106,23 @@ export default async function EvaluatorDashboardPage() {
         <div className="px-5 py-3 border-b border-cs-200 bg-cs-50 flex items-center justify-between">
           <div>
             <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-              My Assignments
+              {t.myAssignments}
             </span>
           </div>
-          <span className="text-[14px] font-mono text-cs-400">{total} total</span>
+          <span className="text-[14px] font-mono text-cs-400">{total} {t.totalSuffix}</span>
         </div>
 
         {assignments.length === 0 ? (
           <div className="px-5 py-10 text-center">
             <p className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-              No assignments yet. You will be notified when a startup is assigned to you.
+              {t.noAssignments}
             </p>
           </div>
         ) : (
           <>
             {/* Column headers */}
             <div className="grid grid-cols-[1fr_120px_160px_120px_80px] px-5 py-2 border-b border-cs-100 bg-cs-50">
-              {["Startup", "Industry", "Status", "Updated", ""].map((h) => (
+              {[t.colStartup, t.colIndustry, t.colStatus, t.colUpdated, ""].map((h) => (
                 <span key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
                   {h}
                 </span>
@@ -140,7 +144,7 @@ export default async function EvaluatorDashboardPage() {
                   {a.industry || "—"}
                 </span>
                 <div>
-                  <Badge variant={a.status} />
+                  <Badge variant={a.status}>{dict.status[a.status]}</Badge>
                 </div>
                 <span className="text-[14px] font-mono text-cs-400">
                   {formatShort(a.updated_at)}
@@ -149,7 +153,7 @@ export default async function EvaluatorDashboardPage() {
                   href={`/app/evaluator/assignments/${a.id}`}
                   className="text-[12px] font-mono cs-link underline-offset-2"
                 >
-                  View →
+                  {t.view}
                 </Link>
               </div>
             ))}

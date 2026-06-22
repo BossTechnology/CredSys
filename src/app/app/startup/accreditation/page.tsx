@@ -6,6 +6,7 @@ import { Badge }                 from "@/components/ui/Badge";
 import { WorkflowStatusBar }     from "@/components/ui/WorkflowStatusBar";
 import { VerificationPanel }     from "@/components/accreditation/VerificationPanel";
 import { submitAccreditationRequest } from "@/app/actions/apply";
+import { getAppDictionary }      from "@/lib/i18n/loader";
 import type { AccreditationStatus, BLIPSData, ADDISData } from "@/lib/supabase/types";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -32,9 +33,9 @@ const STAGE_OPTIONS = [
 
 const TERMINAL: AccreditationStatus[] = ["accredited", "rejected", "expired"];
 
-function fmt(iso: string | null | undefined) {
+function fmt(iso: string | null | undefined, locale = "en") {
   if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en", {
+  return new Date(iso).toLocaleDateString(locale, {
     month: "long", day: "numeric", year: "numeric",
   });
 }
@@ -42,6 +43,9 @@ function fmt(iso: string | null | undefined) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function StartupAccreditationPage() {
+  const { locale, dict } = await getAppDictionary();
+  const t = dict.startupAccred;
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/en/login");
@@ -84,17 +88,17 @@ export default async function StartupAccreditationPage() {
             href="/app/startup/dashboard"
             className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors block mb-6"
           >
-            ← Dashboard
+            ← {t.backDashboard}
           </Link>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-2 h-2 bg-sb-default" />
             <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-              Apply for Accreditation
+              {t.applyHeading}
             </span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">Accreditation Request</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t.requestTitle}</h1>
           <p className="text-sm text-cs-500 mt-1 leading-relaxed">
-            Submit your startup for the CRED evaluation process.
+            {t.requestSubtitle}
           </p>
         </div>
 
@@ -103,12 +107,12 @@ export default async function StartupAccreditationPage() {
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                01 — Startup Information
+                {t.section01}
               </span>
             </div>
             <div className="p-5 flex flex-col gap-4">
               <div>
-                <label className="cs-label">Startup Name *</label>
+                <label className="cs-label">{t.startupName}</label>
                 <input
                   name="startup_name"
                   type="text"
@@ -119,7 +123,7 @@ export default async function StartupAccreditationPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="cs-label">Industry *</label>
+                  <label className="cs-label">{t.industryReq}</label>
                   <select name="industry" defaultValue={startup?.industry ?? ""} className="cs-input" required>
                     <option value="">Select…</option>
                     {INDUSTRY_OPTIONS.map((o) => (
@@ -128,7 +132,7 @@ export default async function StartupAccreditationPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="cs-label">Stage</label>
+                  <label className="cs-label">{t.stage}</label>
                   <select name="stage" defaultValue={startup?.stage ?? ""} className="cs-input">
                     <option value="">Select…</option>
                     {STAGE_OPTIONS.map((o) => (
@@ -139,16 +143,16 @@ export default async function StartupAccreditationPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="cs-label">Website</label>
-                  <input name="website" type="text" defaultValue={startup?.website ?? ""} placeholder="yourstartup.com" className="cs-input" />
+                  <label className="cs-label">{t.website}</label>
+                  <input name="website" type="text" defaultValue={startup?.website ?? ""} placeholder={t.websitePH} className="cs-input" />
                 </div>
                 <div>
-                  <label className="cs-label">Country</label>
-                  <input name="country" type="text" defaultValue={startup?.country ?? ""} placeholder="Peru" className="cs-input" />
+                  <label className="cs-label">{t.country}</label>
+                  <input name="country" type="text" defaultValue={startup?.country ?? ""} placeholder={t.countryPH} className="cs-input" />
                 </div>
               </div>
               <div>
-                <label className="cs-label">Team Size</label>
+                <label className="cs-label">{t.teamSize}</label>
                 <input name="team_size" type="number" min={1} defaultValue={startup?.team_size ?? ""} className="cs-input w-28" />
               </div>
             </div>
@@ -157,21 +161,21 @@ export default async function StartupAccreditationPage() {
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                02 — About Your Startup
+                {t.section02}
               </span>
             </div>
             <div className="p-5 flex flex-col gap-4">
               <div>
-                <label className="cs-label">What does your startup do? *</label>
-                <textarea name="description" required rows={3} defaultValue={startup?.description ?? ""} placeholder="Describe your product, market, and traction…" className="cs-input resize-none" />
+                <label className="cs-label">{t.whatDoes}</label>
+                <textarea name="description" required rows={3} defaultValue={startup?.description ?? ""} placeholder={t.whatDoesPH} className="cs-input resize-none" />
               </div>
               <div>
-                <label className="cs-label">What problem are you solving?</label>
-                <textarea name="problem" rows={2} placeholder="Describe the problem and your solution…" className="cs-input resize-none" />
+                <label className="cs-label">{t.problem}</label>
+                <textarea name="problem" rows={2} placeholder={t.problemPH} className="cs-input resize-none" />
               </div>
               <div>
-                <label className="cs-label">Current Traction / Metrics</label>
-                <textarea name="traction" rows={2} placeholder="Revenue, users, growth rate…" className="cs-input resize-none" />
+                <label className="cs-label">{t.traction}</label>
+                <textarea name="traction" rows={2} placeholder={t.tractionPH} className="cs-input resize-none" />
               </div>
             </div>
           </div>
@@ -179,21 +183,21 @@ export default async function StartupAccreditationPage() {
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                03 — Supporting Evidence
+                {t.section03}
               </span>
             </div>
             <div className="p-5 flex flex-col gap-4">
               <div>
-                <label className="cs-label">Demo / Product Link</label>
-                <input name="demo_url" type="text" placeholder="demo.yourstartup.com" className="cs-input" />
+                <label className="cs-label">{t.demoUrl}</label>
+                <input name="demo_url" type="text" placeholder={t.demoPH} className="cs-input" />
               </div>
               <div>
-                <label className="cs-label">Pitch Deck URL</label>
-                <input name="pitch_deck_url" type="text" placeholder="drive.google.com/..." className="cs-input" />
+                <label className="cs-label">{t.pitchDeck}</label>
+                <input name="pitch_deck_url" type="text" placeholder={t.pitchDeckPH} className="cs-input" />
               </div>
               <div>
-                <label className="cs-label">Additional Notes</label>
-                <textarea name="additional_notes" rows={2} placeholder="Any other relevant information…" className="cs-input resize-none" />
+                <label className="cs-label">{t.additionalNotes}</label>
+                <textarea name="additional_notes" rows={2} placeholder={t.additionalNotesPH} className="cs-input resize-none" />
               </div>
             </div>
           </div>

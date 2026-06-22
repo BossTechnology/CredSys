@@ -4,6 +4,7 @@ import { redirect }            from "next/navigation";
 import { AcceleratorNav }      from "@/components/ui/Navigation";
 import { PendingBanner }       from "@/components/ui/Navigation";
 import { signOut }             from "@/app/actions/auth";
+import { getAppLocale }        from "@/lib/i18n/loader";
 
 export default async function AcceleratorLayout({
   children,
@@ -32,6 +33,8 @@ export default async function AcceleratorLayout({
     .eq("id", profile.entity_id)
     .single();
 
+  const locale = await getAppLocale();
+
   async function handleSignOut() {
     "use server";
     await signOut();
@@ -39,11 +42,12 @@ export default async function AcceleratorLayout({
 
   return (
     <div className="min-h-screen bg-cs-50 flex flex-col">
-      <AcceleratorNav onSignOut={handleSignOut} />
+      <AcceleratorNav onSignOut={handleSignOut} locale={locale} />
 
       {accelerator && !accelerator.is_active && (
         <PendingBanner
           message="Your accelerator account is pending activation. Our team will notify you once you are activated."
+          locale={locale}
         />
       )}
 

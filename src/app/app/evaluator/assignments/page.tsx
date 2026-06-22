@@ -2,12 +2,7 @@ import { createClient }        from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { redirect }            from "next/navigation";
 import Link                    from "next/link";
-
-function fmt(iso: string) {
-  return new Date(iso).toLocaleDateString("en", {
-    month: "short", day: "numeric", year: "numeric",
-  });
-}
+import { getAppDictionary }    from "@/lib/i18n/loader";
 
 const STATUS_COLOR: Record<string, string> = {
   evaluator_assigned:         "text-blue-600 bg-blue-50",
@@ -23,18 +18,20 @@ const STATUS_COLOR: Record<string, string> = {
 
 const TERMINAL = ["accredited", "rejected", "expired"];
 
-const FILTERS = [
-  { label: "All",    value: ""         },
-  { label: "Active", value: "active"   },
-  { label: "Done",   value: "done"     },
-];
-
 export default async function EvaluatorAssignmentsPage({
   searchParams,
 }: {
   searchParams: Promise<{ filter?: string }>;
 }) {
   const { filter } = await searchParams;
+  const { locale, dict } = await getAppDictionary();
+  const t = dict.evalAssignments;
+
+  const FILTERS = [
+    { label: t.all,    value: ""         },
+    { label: t.active, value: "active"   },
+    { label: t.done,   value: "done"     },
+  ];
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -66,6 +63,12 @@ export default async function EvaluatorAssignmentsPage({
   const assignments = rows ?? [];
   const total = assignments.length;
 
+  function fmt(iso: string) {
+    return new Date(iso).toLocaleDateString(locale, {
+      month: "short", day: "numeric", year: "numeric",
+    });
+  }
+
   return (
     <div className="max-w-[1060px] mx-auto px-7 py-8">
 
@@ -75,11 +78,11 @@ export default async function EvaluatorAssignmentsPage({
           <div className="flex items-center gap-3 mb-2">
             <div className="w-2 h-2 bg-sb-default" />
             <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-              Evaluator Portal
+              {t.portalLabel}
             </span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">Assignments</h1>
-          <p className="text-[13px] font-mono text-cs-400 mt-1">{total} requests</p>
+          <h1 className="text-2xl font-bold tracking-tight">{t.title}</h1>
+          <p className="text-[13px] font-mono text-cs-400 mt-1">{total} {t.requests}</p>
         </div>
 
         {/* Filter tabs */}
@@ -104,7 +107,7 @@ export default async function EvaluatorAssignmentsPage({
       <div className="bg-white border border-cs-200">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-            Assigned Startups · {total}
+            {t.assignedStartups} · {total}
           </span>
         </div>
 
@@ -112,16 +115,16 @@ export default async function EvaluatorAssignmentsPage({
           <div className="px-5 py-12 text-center">
             <p className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
               {filter === "active"
-                ? "No active assignments."
+                ? t.noActive
                 : filter === "done"
-                ? "No completed assignments yet."
-                : "No assignments yet. You will be notified when a startup is assigned to you."}
+                ? t.noDone
+                : t.noRequests}
             </p>
           </div>
         ) : (
           <>
             <div className="grid grid-cols-[1fr_110px_160px_110px_70px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
-              {["Startup", "Industry", "Status", "Updated", ""].map((h) => (
+              {[t.colStartup, t.colIndustry, t.colStatus, t.colUpdated, ""].map((h) => (
                 <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
@@ -147,7 +150,7 @@ export default async function EvaluatorAssignmentsPage({
 
                     <div>
                       <span className={`text-[14px] font-mono font-bold uppercase tracking-widest px-1.5 py-0.5 ${STATUS_COLOR[a.status] ?? "text-cs-400 bg-cs-100"}`}>
-                        {a.status.replace(/_/g, " ")}
+                        {dict.status[a.status as keyof typeof dict.status] ?? a.status.replace(/_/g, " ")}
                       </span>
                     </div>
 
@@ -159,14 +162,14 @@ export default async function EvaluatorAssignmentsPage({
                           href={`/app/evaluator/assignments/${a.id}`}
                           className="text-[12px] font-mono font-bold cs-link underline-offset-2"
                         >
-                          Review →
+                          {t.review}
                         </Link>
                       ) : (
                         <Link
                           href={`/app/evaluator/assignments/${a.id}`}
                           className="text-[12px] font-mono text-cs-400 hover:text-black transition-colors"
                         >
-                          View →
+                          {t.viewDetails}
                         </Link>
                       )}
                     </div>

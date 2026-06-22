@@ -5,6 +5,40 @@ import Image      from "next/image";
 import Link       from "next/link";
 import { usePathname } from "next/navigation";
 import { LangDropdown } from "@/components/ui/LangDropdown";
+import type { Locale } from "@/lib/i18n/types";
+
+// =============================================
+// Inline nav dict — minimal translations for client components
+// =============================================
+
+const NAV_DICT: Record<Locale, {
+  signOut: string;
+  admin: string;
+  evaluator: string;
+  startup: string;
+  accelerator: string;
+  investor: string;
+  pendingActivation: string;
+}> = {
+  en: {
+    signOut: "Sign Out",
+    admin: "Admin",
+    evaluator: "Evaluator",
+    startup: "Startup",
+    accelerator: "Accelerator",
+    investor: "Investor",
+    pendingActivation: "Pending Activation",
+  },
+  es: {
+    signOut: "Cerrar Sesión",
+    admin: "Admin",
+    evaluator: "Evaluador",
+    startup: "Startup",
+    accelerator: "Aceleradora",
+    investor: "Inversionista",
+    pendingActivation: "Activación Pendiente",
+  },
+};
 
 // =============================================
 // Shared nav link helper
@@ -52,9 +86,10 @@ const ADMIN_NAV = [
   { label: "Cred List",     href: "/admin/cred-list"     },
 ];
 
-interface AdminNavProps { onSignOut?: () => void }
+interface AdminNavProps { onSignOut?: () => void; locale?: Locale }
 
-export function AdminNav({ onSignOut }: AdminNavProps) {
+export function AdminNav({ onSignOut, locale = "en" }: AdminNavProps) {
+  const t = NAV_DICT[locale];
   return (
     <nav className="h-12 bg-black flex items-center px-7 gap-6 shrink-0">
       <Link href="/admin/overview" className="shrink-0">
@@ -64,7 +99,7 @@ export function AdminNav({ onSignOut }: AdminNavProps) {
                priority />
       </Link>
       <span className="text-[14px] font-mono text-cs-600 uppercase tracking-widest border-l border-cs-700 pl-4 shrink-0">
-        Admin
+        {t.admin}
       </span>
       <div className="flex-1 flex items-center gap-5 ml-2">
         {ADMIN_NAV.map((item) => (
@@ -77,7 +112,7 @@ export function AdminNav({ onSignOut }: AdminNavProps) {
           onClick={onSignOut}
           className="text-[12px] font-mono text-cs-500 uppercase tracking-widest hover:text-white transition-colors"
         >
-          Sign Out
+          {t.signOut}
         </button>
       )}
     </nav>
@@ -95,9 +130,10 @@ const EVALUATOR_NAV = [
   { label: "Profile",      href: "/app/evaluator/profile"      },
 ];
 
-interface EvaluatorNavProps { onSignOut?: () => void }
+interface EvaluatorNavProps { onSignOut?: () => void; locale?: Locale }
 
-export function EvaluatorNav({ onSignOut }: EvaluatorNavProps) {
+export function EvaluatorNav({ onSignOut, locale = "en" }: EvaluatorNavProps) {
+  const t = NAV_DICT[locale];
   return (
     <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0">
       <Link href="/app/evaluator/dashboard" className="shrink-0">
@@ -105,7 +141,7 @@ export function EvaluatorNav({ onSignOut }: EvaluatorNavProps) {
                className="object-contain" priority />
       </Link>
       <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
-        Evaluator
+        {t.evaluator}
       </span>
       <div className="flex-1 flex items-center gap-5 ml-2">
         {EVALUATOR_NAV.map((item) => (
@@ -118,7 +154,7 @@ export function EvaluatorNav({ onSignOut }: EvaluatorNavProps) {
           onClick={onSignOut}
           className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
         >
-          Sign Out
+          {t.signOut}
         </button>
       )}
     </nav>
@@ -136,9 +172,10 @@ const STARTUP_NAV = [
   { label: "Profile",       href: "/app/startup/profile"       },
 ];
 
-interface StartupNavProps { onSignOut?: () => void }
+interface StartupNavProps { onSignOut?: () => void; locale?: Locale }
 
-export function StartupNav({ onSignOut }: StartupNavProps) {
+export function StartupNav({ onSignOut, locale = "en" }: StartupNavProps) {
+  const t = NAV_DICT[locale];
   return (
     <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0">
       <Link href="/app/startup/dashboard" className="shrink-0">
@@ -146,7 +183,7 @@ export function StartupNav({ onSignOut }: StartupNavProps) {
                className="object-contain" priority />
       </Link>
       <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
-        Startup
+        {t.startup}
       </span>
       <div className="flex-1 flex items-center gap-5 ml-2">
         {STARTUP_NAV.map((item) => (
@@ -159,7 +196,7 @@ export function StartupNav({ onSignOut }: StartupNavProps) {
           onClick={onSignOut}
           className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
         >
-          Sign Out
+          {t.signOut}
         </button>
       )}
     </nav>
@@ -177,9 +214,10 @@ const ACCELERATOR_NAV = [
   { label: "Profile",      href: "/app/accelerator/profile"      },
 ];
 
-interface AcceleratorNavProps { onSignOut?: () => void }
+interface AcceleratorNavProps { onSignOut?: () => void; locale?: Locale }
 
-export function AcceleratorNav({ onSignOut }: AcceleratorNavProps) {
+export function AcceleratorNav({ onSignOut, locale = "en" }: AcceleratorNavProps) {
+  const t = NAV_DICT[locale];
   return (
     <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0">
       <Link href="/app/accelerator/dashboard" className="shrink-0">
@@ -187,7 +225,7 @@ export function AcceleratorNav({ onSignOut }: AcceleratorNavProps) {
                className="object-contain" priority />
       </Link>
       <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
-        Accelerator
+        {t.accelerator}
       </span>
       <div className="flex-1 flex items-center gap-5 ml-2">
         {ACCELERATOR_NAV.map((item) => (
@@ -200,7 +238,7 @@ export function AcceleratorNav({ onSignOut }: AcceleratorNavProps) {
           onClick={onSignOut}
           className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
         >
-          Sign Out
+          {t.signOut}
         </button>
       )}
     </nav>
@@ -218,9 +256,10 @@ const INVESTOR_NAV = [
   { label: "Profile",   href: "/app/investor/profile"   },
 ];
 
-interface InvestorNavProps { onSignOut?: () => void }
+interface InvestorNavProps { onSignOut?: () => void; locale?: Locale }
 
-export function InvestorNav({ onSignOut }: InvestorNavProps) {
+export function InvestorNav({ onSignOut, locale = "en" }: InvestorNavProps) {
+  const t = NAV_DICT[locale];
   return (
     <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0">
       <Link href="/app/investor/dashboard" className="shrink-0">
@@ -228,7 +267,7 @@ export function InvestorNav({ onSignOut }: InvestorNavProps) {
                className="object-contain" priority />
       </Link>
       <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest border-l border-cs-200 pl-4 shrink-0">
-        Investor
+        {t.investor}
       </span>
       <div className="flex-1 flex items-center gap-5 ml-2">
         {INVESTOR_NAV.map((item) => (
@@ -238,7 +277,7 @@ export function InvestorNav({ onSignOut }: InvestorNavProps) {
       <LangDropdown />
       {onSignOut && (
         <button onClick={onSignOut} className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors">
-          Sign Out
+          {t.signOut}
         </button>
       )}
     </nav>
@@ -252,18 +291,25 @@ export function InvestorNav({ onSignOut }: InvestorNavProps) {
 interface PendingBannerProps {
   role?: string;
   message?: string;
+  locale?: Locale;
 }
 
 export function PendingBanner({
   role,
-  message = "Your account is pending activation by an administrator.",
+  message,
+  locale = "en",
 }: PendingBannerProps) {
+  const t = NAV_DICT[locale];
+  const defaultMsg = locale === "es"
+    ? "Tu cuenta está pendiente de activación por un administrador."
+    : "Your account is pending activation by an administrator.";
+
   return (
     <div className="bg-sb-light border-b border-sb-default px-7 py-2 flex items-center gap-3">
       <span className="text-[14px] font-mono text-sb-text uppercase tracking-widest font-semibold">
-        Pending Activation
+        {t.pendingActivation}
       </span>
-      <span className="text-[13px] text-sb-text">{message}</span>
+      <span className="text-[13px] text-sb-text">{message ?? defaultMsg}</span>
       {role && (
         <span className="text-[14px] font-mono text-sb-dark uppercase tracking-widest ml-auto">
           {role}

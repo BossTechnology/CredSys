@@ -4,6 +4,7 @@ import { redirect }            from "next/navigation";
 import { EvaluatorNav }        from "@/components/ui/Navigation";
 import { PendingBanner }       from "@/components/ui/Navigation";
 import { signOut }             from "@/app/actions/auth";
+import { getAppLocale }        from "@/lib/i18n/loader";
 
 export default async function EvaluatorLayout({
   children,
@@ -33,6 +34,8 @@ export default async function EvaluatorLayout({
     .eq("id", profile.entity_id)
     .single();
 
+  const locale = await getAppLocale();
+
   async function handleSignOut() {
     "use server";
     await signOut();
@@ -40,11 +43,12 @@ export default async function EvaluatorLayout({
 
   return (
     <div className="min-h-screen bg-cs-50 flex flex-col">
-      <EvaluatorNav onSignOut={handleSignOut} />
+      <EvaluatorNav onSignOut={handleSignOut} locale={locale} />
 
       {evaluator && !evaluator.is_active && (
         <PendingBanner
           message="Your evaluator account is pending activation. Our team will notify you once you are activated."
+          locale={locale}
         />
       )}
 

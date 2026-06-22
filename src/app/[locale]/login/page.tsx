@@ -7,9 +7,34 @@ import { signIn }             from "@/app/actions/auth";
 import { MarketingNav }       from "@/components/marketing/MarketingNav";
 import type { Locale }        from "@/lib/i18n/types";
 
+/* ─── i18n dict (client component — inline) ────────────────────── */
+const DICT = {
+  en: {
+    emailLabel:  "Email Address",
+    emailPH:     "you@startup.com",
+    passwordLabel: "Password",
+    passwordPH:  "••••••••",
+    submit:      "Sign In",
+    submitting:  "Signing in…",
+    noAccount:   "No account?",
+    applyLink:   "Apply for Accreditation",
+  },
+  es: {
+    emailLabel:  "Correo Electrónico",
+    emailPH:     "tu@startup.com",
+    passwordLabel: "Contraseña",
+    passwordPH:  "••••••••",
+    submit:      "Iniciar Sesión",
+    submitting:  "Iniciando sesión…",
+    noAccount:   "¿No tienes cuenta?",
+    applyLink:   "Solicitar Acreditación",
+  },
+} as const;
+
 export default function LoginPage() {
   const params  = useParams<{ locale: string }>();
   const locale  = (params.locale ?? "en") as Locale;
+  const t       = DICT[locale as keyof typeof DICT] ?? DICT.en;
 
   const [error,   setError]   = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -33,11 +58,11 @@ export default function LoginPage() {
         {/* Form */}
         <form action={handleSubmit} className="flex flex-col gap-4">
           <div>
-            <label className="cs-label">Email Address</label>
+            <label className="cs-label">{t.emailLabel}</label>
             <input
               name="email"
               type="email"
-              placeholder="you@startup.com"
+              placeholder={t.emailPH}
               required
               autoComplete="email"
               className="cs-input"
@@ -45,11 +70,11 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="cs-label">Password</label>
+            <label className="cs-label">{t.passwordLabel}</label>
             <input
               name="password"
               type="password"
-              placeholder="••••••••"
+              placeholder={t.passwordPH}
               required
               autoComplete="current-password"
               className="cs-input"
@@ -67,19 +92,19 @@ export default function LoginPage() {
             disabled={loading}
             className="btn-primary btn-lg w-full mt-2"
           >
-            {loading ? "Signing in…" : "Sign In"}
+            {loading ? t.submitting : t.submit}
           </button>
         </form>
 
         {/* Footer links */}
         <div className="mt-6 text-center">
           <span className="text-[13px] font-mono text-cs-400">
-            No account?{" "}
+            {t.noAccount}{" "}
             <Link
               href={`/${locale}/getcred`}
               className="cs-link"
             >
-              Apply for Accreditation
+              {t.applyLink}
             </Link>
           </span>
         </div>

@@ -1,5 +1,6 @@
 import { createServiceClient } from "@/lib/supabase/service";
 import { isValidLocale }        from "@/lib/i18n/types";
+import { getDictionary }        from "@/lib/i18n/loader";
 import { redirect }             from "next/navigation";
 import Link                     from "next/link";
 import { SetupForm }            from "./SetupForm";
@@ -16,6 +17,9 @@ export default async function SetupPage({ params, searchParams }: SetupPageProps
   if (!isValidLocale(locale)) redirect("/en");
   if (!token) redirect(`/${locale}/login`);
 
+  const dict = await getDictionary(locale);
+  const t    = dict.setup;
+
   const service = createServiceClient();
   const { data: tokenRow } = await service
     .from("account_setup_tokens")
@@ -25,7 +29,7 @@ export default async function SetupPage({ params, searchParams }: SetupPageProps
 
   // Token not found
   if (!tokenRow) {
-    return <SetupError locale={locale} message="This setup link is invalid or has already been used." />;
+    return <SetupError locale={locale} dict={dict} message={t.errorInvalid} />;
   }
 
   // Already used
@@ -33,8 +37,9 @@ export default async function SetupPage({ params, searchParams }: SetupPageProps
     return (
       <SetupError
         locale={locale}
-        message="This setup link has already been used."
-        hint="Sign in to access your account."
+        dict={dict}
+        message={t.errorUsed}
+        hint={t.errorUsedHint}
         loginLocale={locale}
       />
     );
@@ -45,8 +50,9 @@ export default async function SetupPage({ params, searchParams }: SetupPageProps
     return (
       <SetupError
         locale={locale}
-        message="This setup link has expired."
-        hint="Please contact support to receive a new activation link."
+        dict={dict}
+        message={t.errorExpired}
+        hint={t.errorExpiredHint}
       />
     );
   }
@@ -65,16 +71,16 @@ export default async function SetupPage({ params, searchParams }: SetupPageProps
             <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">StartupBoss.org</span>
           </div>
           <div className="bg-black text-white px-4 py-2 mb-1 inline-block">
-            <span className="text-[13px] font-mono uppercase tracking-widest">Activate Account</span>
+            <span className="text-[13px] font-mono uppercase tracking-widest">{t.activateAccount}</span>
           </div>
           <div className="h-0.5 bg-sb-default w-full" />
         </div>
 
         <p className="text-[14px] text-cs-500 mb-6">
-          Welcome, <strong>{tokenRow.email}</strong>. Set a password to activate your account.
+          {t.welcome} <strong>{tokenRow.email}</strong>. {t.setPassword}
         </p>
 
-        <SetupForm token={token} />
+        <SetupForm token={token} locale={locale} />
 
       </div>
     </div>
@@ -85,11 +91,13 @@ export default async function SetupPage({ params, searchParams }: SetupPageProps
 
 function SetupError({
   locale,
+  dict,
   message,
   hint,
   loginLocale,
 }: {
   locale:       string;
+  dict:         { setup: { errorTitle: string; backHome: string }; nav: { login: string } };
   message:      string;
   hint?:        string;
   loginLocale?: string;
@@ -98,7 +106,7 @@ function SetupError({
     <div className="min-h-screen bg-cs-50 flex items-center justify-center px-4">
       <div className="w-full max-w-[420px] text-center">
         <div className="w-8 h-8 bg-black mx-auto mb-6" />
-        <h1 className="text-lg font-bold tracking-tight mb-2">Setup Link Error</h1>
+        <h1 className="text-lg font-bold tracking-tight mb-2">{dict.setup.errorTitle}</h1>
         <p className="text-sm text-cs-500 mb-2">{message}</p>
         {hint && <p className="text-[14px] text-cs-400 mb-6">{hint}</p>}
         {loginLocale && (
@@ -106,7 +114,7 @@ function SetupError({
             href={`/${loginLocale}/login`}
             className="btn-primary btn-sm"
           >
-            Sign In
+            {dict.nav.login}
           </Link>
         )}
         {!loginLocale && (
@@ -114,7 +122,7 @@ function SetupError({
             href={`/${locale}`}
             className="text-[13px] font-mono text-cs-400 uppercase tracking-widest hover:text-black"
           >
-            ← Back to home
+            {dict.setup.backHome}
           </Link>
         )}
       </div>
