@@ -140,7 +140,7 @@ export default async function StartupAccreditationPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="cs-label">Website</label>
-                  <input name="website" type="url" defaultValue={startup?.website ?? ""} placeholder="https://" className="cs-input" />
+                  <input name="website" type="text" defaultValue={startup?.website ?? ""} placeholder="yourstartup.com" className="cs-input" />
                 </div>
                 <div>
                   <label className="cs-label">Country</label>
@@ -185,11 +185,11 @@ export default async function StartupAccreditationPage() {
             <div className="p-5 flex flex-col gap-4">
               <div>
                 <label className="cs-label">Demo / Product Link</label>
-                <input name="demo_url" type="url" placeholder="https://demo.yourstartup.com" className="cs-input" />
+                <input name="demo_url" type="text" placeholder="demo.yourstartup.com" className="cs-input" />
               </div>
               <div>
                 <label className="cs-label">Pitch Deck URL</label>
-                <input name="pitch_deck_url" type="url" placeholder="https://drive.google.com/…" className="cs-input" />
+                <input name="pitch_deck_url" type="text" placeholder="drive.google.com/..." className="cs-input" />
               </div>
               <div>
                 <label className="cs-label">Additional Notes</label>

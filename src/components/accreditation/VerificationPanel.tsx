@@ -534,8 +534,8 @@ export function VerificationPanel({
                 </p>
               </div>
               <input
-                type="url"
-                placeholder="https://www.chass1s.com/api/share/…"
+                type="text"
+                placeholder="www.chass1s.com/api/share/..."
                 value={importUrl}
                 onChange={(e) => setImportUrl(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleFetch()}

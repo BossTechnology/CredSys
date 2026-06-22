@@ -168,7 +168,7 @@ export default async function StartupProfilePage() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="cs-label">Website</label>
-                <input name="website" type="url" defaultValue={startup?.website ?? ""} placeholder="https://" className="cs-input" />
+                <input name="website" type="text" defaultValue={startup?.website ?? ""} placeholder="yourstartup.com" className="cs-input" />
               </div>
               <div>
                 <label className="cs-label">Country</label>

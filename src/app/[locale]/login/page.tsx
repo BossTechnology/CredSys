@@ -26,7 +26,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <MarketingNav locale={locale} showSignIn={false} showLangDropdown={true} />
+      <MarketingNav locale={locale} showSignIn={false} />
       <div className="min-h-[calc(100vh-56px)] bg-cs-50 flex items-center justify-center px-4">
       <div className="w-full max-w-[400px]">
 

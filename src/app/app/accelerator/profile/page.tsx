@@ -153,9 +153,9 @@ export default async function AcceleratorProfilePage() {
               <label className="cs-label">Website</label>
               <input
                 name="website"
-                type="url"
+                type="text"
                 defaultValue={accelerator?.website ?? ""}
-                placeholder="https://"
+                placeholder="yourstartup.com"
                 className="cs-input"
               />
             </div>

@@ -1,6 +1,7 @@
 import { NextResponse }        from "next/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { sendAccountSetup }    from "@/lib/email/templates/e1-account-setup";
+import { normalizeUrl }        from "@/lib/utils";
 
 export async function POST(request: Request) {
   let body: Record<string, unknown>;
@@ -48,7 +49,7 @@ export async function POST(request: Request) {
       phone_whatsapp: phone_whatsapp || null,
       industry:       industry       || null,
       country:        country        || null,
-      website:        website        || null,
+      website:        normalizeUrl(website),
       description:    description    || null,
       org_type:       org_type       || null,
       is_active:      false,

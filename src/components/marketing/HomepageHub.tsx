@@ -266,7 +266,7 @@ function GetCredForm({ isEs }: { isEs: boolean }) {
   return (
     <form onSubmit={submit}>
       <Field><input name="org_name"       required style={inputStyle} placeholder={isEs ? "Nombre de la Startup"         : "Startup Name"}          /></Field>
-      <Field><input name="website"                 style={inputStyle} placeholder="Website / URL / Link" type="url"                                 /></Field>
+      <Field><input name="website"                 style={inputStyle} placeholder="Website / URL / Link" type="text"                                 /></Field>
       <Field><input name="contact_person" required style={inputStyle} placeholder={isEs ? "Persona de contacto / Puesto" : "Contact Person / Title"} /></Field>
       <Field><input name="email"          required style={inputStyle} placeholder="e-Mail" type="email"                                              /></Field>
       <Field><input name="phone_whatsapp"          style={inputStyle} placeholder="Whatsapp"                                                          /></Field>
@@ -292,7 +292,7 @@ function AcceleratorForm({ isEs }: { isEs: boolean }) {
   return (
     <form onSubmit={submit}>
       <Field><input name="org_name"       required style={inputStyle} placeholder={isEs ? "Nombre del Acelerador"         : "Accelerator Name"}          /></Field>
-      <Field><input name="website"                 style={inputStyle} placeholder="Website / URL / LinkedIn" type="url"                                  /></Field>
+      <Field><input name="website"                 style={inputStyle} placeholder="Website / URL / LinkedIn" type="text"                                  /></Field>
       <Field><input name="contact_person" required style={inputStyle} placeholder={isEs ? "Persona de Contacto / Cargo"   : "Contact Person / Position"}  /></Field>
       <Field><input name="email"          required style={inputStyle} placeholder="e-Mail" type="email"                                                   /></Field>
       <Field><input name="phone_whatsapp"          style={inputStyle} placeholder={isEs ? "Phone # / Whatsapp (opcional)" : "Phone # / Whatsapp (optional)"} /></Field>
@@ -318,7 +318,7 @@ function EvaluatorForm({ isEs }: { isEs: boolean }) {
   return (
     <form onSubmit={submit}>
       <Field><input name="org_name"       required style={inputStyle} placeholder={isEs ? "Nombre del Grupo / Organización" : "Group / Organization Name"}    /></Field>
-      <Field><input name="website"                 style={inputStyle} placeholder="Website / URL / LinkedIn" type="url"                                        /></Field>
+      <Field><input name="website"                 style={inputStyle} placeholder="Website / URL / LinkedIn" type="text"                                        /></Field>
       <Field><input name="contact_person" required style={inputStyle} placeholder={isEs ? "Persona de Contacto / Cargo"     : "Contact Person / Position"}     /></Field>
       <Field><input name="email"          required style={inputStyle} placeholder="e-Mail" type="email"                                                         /></Field>
       <Field><input name="phone_whatsapp"          style={inputStyle} placeholder={isEs ? "Phone # / Whatsapp (opcional)"   : "Phone # / Whatsapp (optional)"} /></Field>
@@ -344,7 +344,7 @@ function InvestorForm({ isEs }: { isEs: boolean }) {
   return (
     <form onSubmit={submit}>
       <Field><input name="org_name"       required style={inputStyle} placeholder={isEs ? "Grupo de Inversión / Fondo"    : "Investment Group / Fund"}          /></Field>
-      <Field><input name="website"                 style={inputStyle} placeholder="Website / URL / LinkedIn" type="url"                                          /></Field>
+      <Field><input name="website"                 style={inputStyle} placeholder="Website / URL / LinkedIn" type="text"                                          /></Field>
       <Field><input name="contact_person" required style={inputStyle} placeholder={isEs ? "Persona de contacto / Cargo"   : "Contact Person / Position"}         /></Field>
       <Field><input name="email"          required style={inputStyle} placeholder="e-Mail" type="email"                                                            /></Field>
       <Field><input name="phone_whatsapp"          style={inputStyle} placeholder={isEs ? "Phone # / Whatsapp (opcional)" : "Phone # / Whatsapp (optional)"}     /></Field>
