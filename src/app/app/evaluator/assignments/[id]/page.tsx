@@ -7,6 +7,7 @@ import { WorkflowStatusBar }   from "@/components/ui/WorkflowStatusBar";
 import { VerificationPanel }   from "@/components/accreditation/VerificationPanel";
 import { advanceAccreditationStatus } from "@/app/actions/accreditation";
 import { rejectWithReason }           from "@/app/actions/verification";
+import { getAppDictionary }    from "@/lib/i18n/loader";
 import type { AccreditationStatus, BLIPSData, ADDISData } from "@/lib/supabase/types";
 
 // ─── Workflow map ─────────────────────────────────────────────────────────────
@@ -60,6 +61,8 @@ export default async function AssignmentDetailPage({
   if (!user) redirect("/en/login");
 
   const service = createServiceClient();
+  const { dict } = await getAppDictionary();
+  const t = dict.evalAssignDetail;
 
   // Resolve evaluator entity_id
   const { data: profile } = await service
@@ -111,14 +114,14 @@ export default async function AssignmentDetailPage({
         href="/app/evaluator/dashboard"
         className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors block mb-6"
       >
-        ← Back to Dashboard
+        {t.backToDashboard}
       </Link>
 
       {/* Header */}
       <div className="flex items-start justify-between gap-4 mb-6">
         <div>
           <div className="text-[13px] font-mono text-cs-400 uppercase tracking-widest mb-1">
-            Assignment Detail
+            {t.assignmentDetail}
           </div>
           <h1 className="text-2xl font-bold tracking-tight">{req.startup_name}</h1>
           <p className="text-[13px] font-mono text-cs-500 mt-1">{req.startup_email}</p>
@@ -138,7 +141,7 @@ export default async function AssignmentDetailPage({
         <div className="bg-sb-light border border-sb-default px-5 py-3 mb-6 flex items-center justify-between">
           <div>
             <div className="text-[14px] font-mono text-sb-text uppercase tracking-widest mb-0.5">
-              Accredited
+              {t.accreditedBanner}
             </div>
             <div className="text-[13px] font-mono font-semibold tracking-widest">
               {credCode.toUpperCase()}
@@ -149,7 +152,7 @@ export default async function AssignmentDetailPage({
             target="_blank"
             className="text-[12px] font-mono text-sb-text underline underline-offset-2 hover:opacity-80"
           >
-            View Credential →
+            {t.viewCredential}
           </Link>
         </div>
       )}
@@ -161,7 +164,7 @@ export default async function AssignmentDetailPage({
         <div className="mb-6">
           <div className="flex items-center mb-3">
             <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest border-b border-cs-200 pb-1 flex-1">
-              BLIPS / ADDIS Verification
+              {t.blipsAddisVerification}
             </span>
           </div>
           <VerificationPanel
@@ -182,30 +185,30 @@ export default async function AssignmentDetailPage({
         return (
           <div className="border border-blue-200 bg-blue-50 px-5 py-3 mb-6">
             <div className="text-[14px] font-mono text-blue-600 uppercase tracking-widest mb-2 font-bold">
-              Sponsored Accreditation · {sponsorship.sponsor_type}
+              {t.sponsoredAccreditation} · {sponsorship.sponsor_type}
             </div>
             <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-[12px] font-mono">
               <div>
-                <span className="text-cs-400 uppercase tracking-widest text-[14px]">Sponsor</span>
+                <span className="text-cs-400 uppercase tracking-widest text-[14px]">{t.sponsor}</span>
                 <div className="font-semibold">{sponsorName}</div>
               </div>
               <div>
-                <span className="text-cs-400 uppercase tracking-widest text-[14px]">Billing Contact</span>
+                <span className="text-cs-400 uppercase tracking-widest text-[14px]">{t.billingContact}</span>
                 <div className="font-semibold">{sponsorship.billing_contact_name}</div>
               </div>
               <div>
-                <span className="text-cs-400 uppercase tracking-widest text-[14px]">Billing Email</span>
+                <span className="text-cs-400 uppercase tracking-widest text-[14px]">{t.billingEmail}</span>
                 <div>{sponsorship.billing_contact_email}</div>
               </div>
               {sponsorship.billing_contact_phone && (
                 <div>
-                  <span className="text-cs-400 uppercase tracking-widest text-[14px]">Phone</span>
+                  <span className="text-cs-400 uppercase tracking-widest text-[14px]">{t.phone}</span>
                   <div>{sponsorship.billing_contact_phone}</div>
                 </div>
               )}
               {sponsorship.billing_contact_address && (
                 <div className="col-span-2">
-                  <span className="text-cs-400 uppercase tracking-widest text-[14px]">Address</span>
+                  <span className="text-cs-400 uppercase tracking-widest text-[14px]">{t.address}</span>
                   <div>{sponsorship.billing_contact_address}</div>
                 </div>
               )}
@@ -218,17 +221,17 @@ export default async function AssignmentDetailPage({
       <div className="border border-cs-200 bg-white mb-6">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-            Startup Profile
+            {t.startupProfile}
           </span>
         </div>
         <div className="p-5 grid grid-cols-2 gap-x-8 gap-y-4">
           {[
-            { label: "Industry",    value: req.industry  },
-            { label: "Stage",       value: req.stage     },
-            { label: "Country",     value: req.country   },
-            { label: "Website",     value: req.website   },
-            { label: "Team Size",   value: req.team_size },
-            { label: "Submitted",   value: fmt(req.created_at) },
+            { label: t.industry,   value: req.industry  },
+            { label: t.stage,      value: req.stage     },
+            { label: t.country,    value: req.country   },
+            { label: t.website,    value: req.website   },
+            { label: t.teamSize,   value: req.team_size },
+            { label: t.submitted,  value: fmt(req.created_at) },
           ].map((f) => (
             <div key={f.label}>
               <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
@@ -243,7 +246,7 @@ export default async function AssignmentDetailPage({
           {req.description && (
             <div className="col-span-2">
               <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
-                Description
+                {t.description}
               </div>
               <p className="text-[13px] text-cs-700 leading-relaxed">{req.description}</p>
             </div>
@@ -251,7 +254,7 @@ export default async function AssignmentDetailPage({
           {req.problem && (
             <div className="col-span-2">
               <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
-                Problem
+                {t.problem}
               </div>
               <p className="text-[13px] text-cs-700 leading-relaxed">{req.problem}</p>
             </div>
@@ -259,7 +262,7 @@ export default async function AssignmentDetailPage({
           {req.traction && (
             <div className="col-span-2">
               <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
-                Traction
+                {t.traction}
               </div>
               <p className="text-[13px] text-cs-700 leading-relaxed">{req.traction}</p>
             </div>
@@ -267,7 +270,7 @@ export default async function AssignmentDetailPage({
           {req.demo_url && (
             <div>
               <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
-                Demo
+                {t.demo}
               </div>
               <a href={req.demo_url} target="_blank" rel="noopener noreferrer"
                  className="text-[13px] cs-link underline-offset-2 break-all">
@@ -278,7 +281,7 @@ export default async function AssignmentDetailPage({
           {req.pitch_deck_url && (
             <div>
               <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
-                Pitch Deck
+                {t.pitchDeck}
               </div>
               <a href={req.pitch_deck_url} target="_blank" rel="noopener noreferrer"
                  className="text-[13px] cs-link underline-offset-2 break-all">
@@ -294,7 +297,7 @@ export default async function AssignmentDetailPage({
         <div className="border border-cs-200 bg-white">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
             <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-              Evaluator Actions
+              {t.evaluatorActions}
             </span>
           </div>
           <div className="p-5 flex flex-col gap-4">
@@ -313,7 +316,7 @@ export default async function AssignmentDetailPage({
               </form>
               {nextStatus === "accredited" && (
                 <span className="text-[14px] font-mono text-cs-400">
-                  Save verification progress first, then accredit.
+                  {t.saveVerificationFirst}
                 </span>
               )}
             </div>
@@ -322,17 +325,17 @@ export default async function AssignmentDetailPage({
             <form action={rejectAction} className="border-t border-cs-100 pt-4 flex flex-col gap-2">
               <input type="hidden" name="request_id" value={req.id} />
               <label className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
-                Rejection Reason (optional)
+                {t.rejectionReason}
               </label>
               <div className="flex items-start gap-3">
                 <textarea
                   name="rejection_reason"
                   rows={2}
-                  placeholder="Explain why the application is being rejected…"
+                  placeholder={t.rejectionPH}
                   className="cs-input resize-none flex-1 text-[12px]"
                 />
                 <button type="submit" className="btn-danger btn-sm shrink-0 mt-0.5">
-                  Reject
+                  {t.reject}
                 </button>
               </div>
             </form>

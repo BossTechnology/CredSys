@@ -2,6 +2,7 @@ import { createClient }        from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { redirect }            from "next/navigation";
 import { revalidatePath }      from "next/cache";
+import { getAppDictionary }    from "@/lib/i18n/loader";
 
 // ─── Server Action ────────────────────────────────────────────────────────────
 
@@ -89,9 +90,9 @@ async function createSponsorship(formData: FormData) {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function fmt(iso: string | null | undefined) {
+function fmt(iso: string | null | undefined, locale = "en") {
   if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en", {
+  return new Date(iso).toLocaleDateString(locale, {
     month: "short", day: "numeric", year: "numeric",
   });
 }
@@ -107,6 +108,9 @@ const STATUS_COLORS: Record<string, string> = {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function InvestorSponsorPage() {
+  const { locale, dict } = await getAppDictionary();
+  const t = dict.investorSponsor;
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/en/login");
@@ -140,12 +144,12 @@ export default async function InvestorSponsorPage() {
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
           <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-            Investor Portal
+            {t.portal}
           </span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight">Sponsor an Accreditation</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{t.title}</h1>
         <p className="text-[13px] font-mono text-cs-400 mt-1">
-          Fund a startup&apos;s accreditation process on their behalf.
+          {t.subtitle}
         </p>
       </div>
 
@@ -156,13 +160,13 @@ export default async function InvestorSponsorPage() {
         <div className="bg-white border border-cs-200">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
             <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-              Billing Contact
+              {t.billingContact}
             </span>
           </div>
           <div className="p-5 flex flex-col gap-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="cs-label">Contact Name *</label>
+                <label className="cs-label">{t.contactName}</label>
                 <input
                   name="billing_contact_name"
                   type="text"
@@ -172,7 +176,7 @@ export default async function InvestorSponsorPage() {
                 />
               </div>
               <div>
-                <label className="cs-label">Contact Email *</label>
+                <label className="cs-label">{t.contactEmail}</label>
                 <input
                   name="billing_contact_email"
                   type="email"
@@ -184,7 +188,7 @@ export default async function InvestorSponsorPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="cs-label">Phone / WhatsApp</label>
+                <label className="cs-label">{t.billingPhone}</label>
                 <input
                   name="billing_contact_phone"
                   type="text"
@@ -192,7 +196,7 @@ export default async function InvestorSponsorPage() {
                 />
               </div>
               <div>
-                <label className="cs-label">Billing Address</label>
+                <label className="cs-label">{t.billingAddress}</label>
                 <input
                   name="billing_contact_address"
                   type="text"
@@ -207,31 +211,31 @@ export default async function InvestorSponsorPage() {
         <div className="bg-white border border-cs-200">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
             <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-              Startup to Sponsor
+              {t.startupToSponsor}
             </span>
           </div>
           <div className="p-5 flex flex-col gap-4">
             <div>
-              <label className="cs-label">Startup Name *</label>
+              <label className="cs-label">{t.startupName}</label>
               <input
                 name="startup_name_input"
                 type="text"
                 required
-                placeholder="Startup organization name"
+                placeholder={t.startupNamePH}
                 className="cs-input"
               />
             </div>
             <div>
-              <label className="cs-label">Startup Email *</label>
+              <label className="cs-label">{t.startupEmail}</label>
               <input
                 name="startup_email_input"
                 type="email"
                 required
-                placeholder="startup@example.com"
+                placeholder={t.startupEmailPH}
                 className="cs-input"
               />
               <p className="text-[14px] font-mono text-cs-400 mt-1">
-                We will send the sponsorship offer to this email address.
+                {t.startupEmailHint}
               </p>
             </div>
           </div>
@@ -241,21 +245,21 @@ export default async function InvestorSponsorPage() {
         <div className="bg-white border border-cs-200">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
             <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-              Message to Startup (Optional)
+              {t.messageToStartup}
             </span>
           </div>
           <div className="p-5">
             <textarea
               name="notes"
               rows={3}
-              placeholder="Introduce yourself and explain why you are sponsoring this startup…"
+              placeholder={t.notesPH}
               className="cs-input resize-none w-full"
             />
           </div>
         </div>
 
         <button type="submit" className="btn-primary btn-lg self-start">
-          Send Sponsorship Offer →
+          {t.submit}
         </button>
       </form>
 
@@ -264,7 +268,7 @@ export default async function InvestorSponsorPage() {
         <div className="mt-10 bg-white border border-cs-200">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
             <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-              Your Sponsorships · {existingSponsorships!.length}
+              {t.yourSponsorships} · {existingSponsorships!.length}
             </span>
           </div>
           <div className="divide-y divide-cs-100">
@@ -280,7 +284,7 @@ export default async function InvestorSponsorPage() {
                   )}
                 </div>
                 <div className="flex items-center gap-4 shrink-0">
-                  <span className="text-[14px] font-mono text-cs-400">{fmt(s.created_at)}</span>
+                  <span className="text-[14px] font-mono text-cs-400">{fmt(s.created_at, locale)}</span>
                   <span className={`text-[14px] font-mono font-bold uppercase tracking-widest ${STATUS_COLORS[s.status] ?? "text-cs-400"}`}>
                     {s.status.replace(/_/g, " ")}
                   </span>

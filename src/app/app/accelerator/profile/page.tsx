@@ -2,6 +2,7 @@ import { createClient }        from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { redirect }            from "next/navigation";
 import { revalidatePath }      from "next/cache";
+import { getAppDictionary }    from "@/lib/i18n/loader";
 
 // ─── Server Action ────────────────────────────────────────────────────────────
 
@@ -56,6 +57,9 @@ const INDUSTRIES = [
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function AcceleratorProfilePage() {
+  const { dict } = await getAppDictionary();
+  const t = dict.accelProfile;
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/en/login");
@@ -84,27 +88,27 @@ export default async function AcceleratorProfilePage() {
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
           <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-            Accelerator Portal
+            {t.portal}
           </span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight">Profile</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{t.title}</h1>
         <p className="text-[13px] font-mono text-cs-400 mt-1">{user.email}</p>
       </div>
 
       {/* Status card */}
       <div className="bg-white border border-cs-200 px-5 py-3 flex gap-8 mb-6 text-[12px] font-mono">
         <div>
-          <div className="text-cs-400 uppercase tracking-widest mb-0.5">Role</div>
-          <div className="font-bold uppercase">Accelerator</div>
+          <div className="text-cs-400 uppercase tracking-widest mb-0.5">{t.role}</div>
+          <div className="font-bold uppercase">{t.roleAccelerator}</div>
         </div>
         <div>
-          <div className="text-cs-400 uppercase tracking-widest mb-0.5">Status</div>
+          <div className="text-cs-400 uppercase tracking-widest mb-0.5">{t.statusLabel}</div>
           <div className={accelerator?.is_active ? "font-bold text-green-600" : "font-bold text-cs-400"}>
-            {accelerator?.is_active ? "Active" : "Pending Activation"}
+            {accelerator?.is_active ? t.statusActive : t.statusPending}
           </div>
         </div>
         <div>
-          <div className="text-cs-400 uppercase tracking-widest mb-0.5">Email</div>
+          <div className="text-cs-400 uppercase tracking-widest mb-0.5">{t.email}</div>
           <div>{accelerator?.email ?? user.email}</div>
         </div>
       </div>
@@ -114,12 +118,12 @@ export default async function AcceleratorProfilePage() {
         <div className="bg-white border border-cs-200">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
             <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-              Organization Info
+              {t.orgInfo}
             </span>
           </div>
           <div className="p-5 flex flex-col gap-4">
             <div>
-              <label className="cs-label">Accelerator Name *</label>
+              <label className="cs-label">{t.orgName}</label>
               <input
                 name="org_name"
                 type="text"
@@ -130,42 +134,42 @@ export default async function AcceleratorProfilePage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="cs-label">Focus Industry</label>
+                <label className="cs-label">{t.industry}</label>
                 <select name="industry" defaultValue={accelerator?.industry ?? ""} className="cs-input">
-                  <option value="">Select…</option>
+                  <option value="">{t.selectIndustry}</option>
                   {INDUSTRIES.map((o) => (
                     <option key={o.value} value={o.value}>{o.label}</option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="cs-label">Country</label>
+                <label className="cs-label">{t.country}</label>
                 <input
                   name="country"
                   type="text"
                   defaultValue={accelerator?.country ?? ""}
-                  placeholder="Peru"
+                  placeholder={t.countryPH}
                   className="cs-input"
                 />
               </div>
             </div>
             <div>
-              <label className="cs-label">Website</label>
+              <label className="cs-label">{t.website}</label>
               <input
                 name="website"
                 type="text"
                 defaultValue={accelerator?.website ?? ""}
-                placeholder="yourstartup.com"
+                placeholder={t.websitePH}
                 className="cs-input"
               />
             </div>
             <div>
-              <label className="cs-label">About your Program</label>
+              <label className="cs-label">{t.description}</label>
               <textarea
                 name="description"
                 rows={3}
                 defaultValue={accelerator?.description ?? ""}
-                placeholder="Describe your accelerator program…"
+                placeholder={t.descriptionPH}
                 className="cs-input resize-none"
               />
             </div>
@@ -173,7 +177,7 @@ export default async function AcceleratorProfilePage() {
         </div>
 
         <button type="submit" className="btn-primary btn-lg self-start">
-          Save Changes
+          {t.save}
         </button>
       </form>
 
