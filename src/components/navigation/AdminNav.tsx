@@ -26,7 +26,7 @@ export function AdminNav({ locale, onSignOut }: AdminNavProps) {
   const pathname = usePathname();
 
   return (
-    <nav className="h-12 bg-black flex items-center px-7 gap-6">
+    <nav className="h-12 bg-black flex items-center px-7 gap-6 relative z-50">
       <Link href="/admin/overview" className="shrink-0">
         <Image
           src="/logo.png"

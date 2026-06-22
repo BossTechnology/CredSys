@@ -91,7 +91,7 @@ interface AdminNavProps { onSignOut?: () => void; locale?: Locale }
 export function AdminNav({ onSignOut, locale = "en" }: AdminNavProps) {
   const t = NAV_DICT[locale];
   return (
-    <nav className="h-12 bg-black flex items-center px-7 gap-6 shrink-0">
+    <nav className="h-12 bg-black flex items-center px-7 gap-6 shrink-0 relative z-50">
       <Link href="/admin/overview" className="shrink-0">
         <Image src="/logo.png" alt="StartupBoss.org" width={160} height={28}
                className="object-contain"
@@ -135,7 +135,7 @@ interface EvaluatorNavProps { onSignOut?: () => void; locale?: Locale }
 export function EvaluatorNav({ onSignOut, locale = "en" }: EvaluatorNavProps) {
   const t = NAV_DICT[locale];
   return (
-    <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0">
+    <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0 relative z-50">
       <Link href="/app/evaluator/dashboard" className="shrink-0">
         <Image src="/logo.png" alt="StartupBoss.org" width={160} height={28}
                className="object-contain" priority />
@@ -177,7 +177,7 @@ interface StartupNavProps { onSignOut?: () => void; locale?: Locale }
 export function StartupNav({ onSignOut, locale = "en" }: StartupNavProps) {
   const t = NAV_DICT[locale];
   return (
-    <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0">
+    <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0 relative z-50">
       <Link href="/app/startup/dashboard" className="shrink-0">
         <Image src="/logo.png" alt="StartupBoss.org" width={160} height={28}
                className="object-contain" priority />
@@ -219,7 +219,7 @@ interface AcceleratorNavProps { onSignOut?: () => void; locale?: Locale }
 export function AcceleratorNav({ onSignOut, locale = "en" }: AcceleratorNavProps) {
   const t = NAV_DICT[locale];
   return (
-    <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0">
+    <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0 relative z-50">
       <Link href="/app/accelerator/dashboard" className="shrink-0">
         <Image src="/logo.png" alt="StartupBoss.org" width={160} height={28}
                className="object-contain" priority />
@@ -261,7 +261,7 @@ interface InvestorNavProps { onSignOut?: () => void; locale?: Locale }
 export function InvestorNav({ onSignOut, locale = "en" }: InvestorNavProps) {
   const t = NAV_DICT[locale];
   return (
-    <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0">
+    <nav className="h-12 bg-white border-b border-cs-200 flex items-center px-7 gap-6 shrink-0 relative z-50">
       <Link href="/app/investor/dashboard" className="shrink-0">
         <Image src="/logo.png" alt="StartupBoss.org" width={160} height={28}
                className="object-contain" priority />

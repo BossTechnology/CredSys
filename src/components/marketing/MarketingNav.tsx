@@ -17,7 +17,7 @@ export function MarketingNav({
   const isEs = locale === "es";
 
   return (
-    <nav className="h-14 bg-white border-b border-cs-200 flex items-center px-7 gap-6">
+    <nav className="h-14 bg-white border-b border-cs-200 flex items-center px-7 gap-6 relative z-50">
       <Link href={`/${locale}`} className="shrink-0">
         <Image
           src="/logo.png"
