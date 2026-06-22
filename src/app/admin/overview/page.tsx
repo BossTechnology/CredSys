@@ -32,10 +32,10 @@ export default async function AdminOverviewPage() {
 
   const stats = [
     { value: activeEvaluators  ?? 0, label: "Active Evaluators",  href: "/admin/evaluators"                                    },
-    { value: pendingEvaluators ?? 0, label: "Pending Activation",  href: "/admin/evaluators",    alert: (pendingEvaluators ?? 0) > 0 },
-    { value: totalAccredited   ?? 0, label: "Accredited Startups", href: "/admin/cred-list",      accent: true                  },
-    { value: pendingAssignment ?? 0, label: "Unassigned Requests", href: "/admin/accreditations", alert: (pendingAssignment ?? 0) > 0 },
-    { value: inProgress        ?? 0, label: "In Progress",         href: "/admin/accreditations"                                },
+    { value: pendingEvaluators ?? 0, label: "Pending Activation",  href: "/admin/evaluators?filter=pending", alert: (pendingEvaluators ?? 0) > 0 },
+    { value: totalAccredited   ?? 0, label: "Accredited Startups", href: "/admin/accreditations?filter=accredited", accent: true },
+    { value: pendingAssignment ?? 0, label: "Unassigned Requests", href: "/admin/accreditations?filter=unassigned", alert: (pendingAssignment ?? 0) > 0 },
+    { value: inProgress        ?? 0, label: "In Progress",         href: "/admin/accreditations?filter=active"                   },
     { value: activeComps       ?? 0, label: "Active Competitions", href: "/admin/competitions",   accent: true                  },
     { value: totalStartups     ?? 0, label: "Total Startups",      href: "/admin/startups"                                      },
   ];

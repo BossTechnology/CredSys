@@ -123,6 +123,14 @@
   .font-mono {
     font-family: var(--font-mono);
   }
+
+  button, [role="button"] {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
 }
 
 @layer components {
@@ -131,14 +139,14 @@
      ============================================= */
   .btn-primary {
     @apply inline-flex items-center justify-center bg-cs-btn text-white
-           text-[14px] tracking-[.02em]
+           text-[14px] tracking-[.02em] cursor-pointer
            px-4 py-2.5 transition-opacity hover:opacity-80 disabled:opacity-40
            disabled:cursor-not-allowed;
   }
 
   .btn-outline {
     @apply inline-flex items-center justify-center bg-white text-cs-btn
-           border border-cs-btn text-[14px] tracking-[.02em]
+           border border-cs-btn text-[14px] tracking-[.02em] cursor-pointer
            px-4 py-2.5 transition-colors
            hover:bg-cs-btn hover:text-white disabled:opacity-40
            disabled:cursor-not-allowed;
@@ -146,21 +154,21 @@
 
   .btn-ghost {
     @apply inline-flex items-center justify-center bg-transparent text-cs-500
-           text-[14px] tracking-[.02em] px-4 py-2.5
+           text-[14px] tracking-[.02em] cursor-pointer px-4 py-2.5
            transition-colors hover:text-cs-btn disabled:opacity-40
            disabled:cursor-not-allowed;
   }
 
   .btn-danger {
     @apply inline-flex items-center justify-center bg-cs-red text-white
-           text-[14px] tracking-[.02em]
+           text-[14px] tracking-[.02em] cursor-pointer
            px-4 py-2.5 transition-opacity hover:opacity-80 disabled:opacity-40
            disabled:cursor-not-allowed;
   }
 
   .btn-accent {
     @apply inline-flex items-center justify-center bg-cs-btn text-white
-           text-[14px] tracking-[.02em]
+           text-[14px] tracking-[.02em] cursor-pointer
            px-4 py-2.5 transition-opacity hover:opacity-80 disabled:opacity-40
            disabled:cursor-not-allowed;
   }
