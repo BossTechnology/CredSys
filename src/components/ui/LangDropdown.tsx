@@ -1,11 +1,16 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback } from "react";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
 interface LangDropdownProps {
   dark?: boolean;
+}
+
+function getCookieLocale(): "en" | "es" {
+  if (typeof document === "undefined") return "en";
+  const match = document.cookie.match(/preferred_locale=(en|es)/);
+  return (match?.[1] as "en" | "es") ?? "en";
 }
 
 export function LangDropdown({ dark = false }: LangDropdownProps) {
@@ -15,10 +20,20 @@ export function LangDropdown({ dark = false }: LangDropdownProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   const hasLocalePrefix = /^\/(en|es)(\/|$)/.test(pathname);
-  const locale = pathname.startsWith("/es") ? "es" : "en";
+  const localeFromUrl = pathname.startsWith("/es") ? "es" : "en";
+  const [locale, setLocale] = useState<"en" | "es">(hasLocalePrefix ? localeFromUrl : "en");
 
-  const handleLangChange = useCallback((lang: string) => {
+  useEffect(() => {
+    if (!hasLocalePrefix) {
+      setLocale(getCookieLocale());
+    } else {
+      setLocale(localeFromUrl);
+    }
+  }, [hasLocalePrefix, localeFromUrl]);
+
+  const handleLangChange = useCallback((lang: "en" | "es") => {
     document.cookie = `preferred_locale=${lang};path=/;max-age=31536000`;
+    setLocale(lang);
     setOpen(false);
 
     if (hasLocalePrefix) {
