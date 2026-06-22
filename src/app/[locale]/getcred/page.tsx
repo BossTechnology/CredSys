@@ -28,7 +28,7 @@ const DICT = {
     orgName:           "Startup Name",
     orgNamePH:         "Acme Inc.",
     website:           "Website / URL",
-    websitePH:         "https://yourstartup.com",
+    websitePH:         "yourstartup.com",
     contactPerson:     "Contact Person",
     contactPersonPH:   "John Doe",
     contactRole:       "Role / Position",
@@ -58,7 +58,7 @@ const DICT = {
     orgName:           "Nombre de la Startup",
     orgNamePH:         "Acme Inc.",
     website:           "Website / URL / Link",
-    websitePH:         "https://tustartup.com",
+    websitePH:         "tustartup.com",
     contactPerson:     "Persona de contacto",
     contactPersonPH:   "Juan García",
     contactRole:       "Puesto / Cargo",
@@ -132,7 +132,7 @@ export default function GetCredPage() {
   if (step === "success") {
     return (
       <>
-        <MarketingNav locale={locale} showSignIn={false} showLangDropdown={true} />
+        <MarketingNav locale={locale} showSignIn={false} />
         <div className="min-h-[80vh] flex items-center justify-center px-4">
           <div className="max-w-[480px] w-full text-center">
             <div className="w-10 h-10 mx-auto mb-6" style={{ background: "rgb(156,139,188)" }} />
@@ -163,7 +163,7 @@ export default function GetCredPage() {
   /* ── Form screen ── */
   return (
     <>
-      <MarketingNav locale={locale} showSignIn={false} showLangDropdown={true} />
+      <MarketingNav locale={locale} showSignIn={false} />
 
       <div className="max-w-[600px] mx-auto px-7 py-10">
 
@@ -189,7 +189,7 @@ export default function GetCredPage() {
           {/* Website */}
           <div>
             <label className="cs-label">{t.website}</label>
-            <input name="website" type="url"
+            <input name="website" type="text"
                    placeholder={t.websitePH} className="cs-input" />
           </div>
 

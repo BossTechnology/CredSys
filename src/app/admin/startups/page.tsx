@@ -8,23 +8,23 @@ function fmt(iso: string | null | undefined) {
 }
 
 const STATUS_COLOR: Record<string, string> = {
-  pending_evaluator_assignment: "text-yellow-600 bg-yellow-50",
-  evaluator_assigned:           "text-blue-600 bg-blue-50",
-  meeting_scheduled:            "text-blue-600 bg-blue-50",
-  chass1s_shared:               "text-blue-600 bg-blue-50",
-  implementation_in_progress:   "text-blue-600 bg-blue-50",
-  ready_for_verification:       "text-purple-600 bg-purple-50",
-  verification_in_progress:     "text-purple-600 bg-purple-50",
-  accredited:                   "text-sb-default bg-[#1a1030]",
-  rejected:                     "text-red-600 bg-red-50",
-  expired:                      "text-cs-400 bg-cs-100",
+  pending_evaluator_assignment: "text-amber-700 bg-amber-50 border border-amber-200",
+  evaluator_assigned:           "text-blue-700 bg-blue-50 border border-blue-200",
+  meeting_scheduled:            "text-blue-700 bg-blue-50 border border-blue-200",
+  chass1s_shared:               "text-blue-700 bg-blue-50 border border-blue-200",
+  implementation_in_progress:   "text-blue-700 bg-blue-50 border border-blue-200",
+  ready_for_verification:       "text-violet-700 bg-violet-50 border border-violet-200",
+  verification_in_progress:     "text-violet-700 bg-violet-50 border border-violet-200",
+  accredited:                   "text-white bg-black border border-black",
+  rejected:                     "text-red-700 bg-red-50 border border-red-200",
+  expired:                      "text-cs-500 bg-cs-100 border border-cs-200",
 };
 
 const ACCOUNT_BADGE: Record<string, string> = {
-  activated: "text-green-700 bg-green-50",
-  pending:   "text-yellow-700 bg-yellow-50",
-  expired:   "text-red-600 bg-red-50",
-  no_token:  "text-cs-400 bg-cs-100",
+  activated: "text-emerald-700 bg-emerald-50 border border-emerald-200",
+  pending:   "text-amber-700 bg-amber-50 border border-amber-200",
+  expired:   "text-red-700 bg-red-50 border border-red-200",
+  no_token:  "text-cs-500 bg-cs-100 border border-cs-200",
 };
 
 const FILTERS = [
@@ -148,9 +148,9 @@ export default async function AdminStartupsPage({
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-[1fr_90px_110px_130px_130px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
-              {["Startup", "Industry", "Account", "Accreditation", "Actions"].map((h) => (
-                <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
+            <div className="grid grid-cols-[1fr_90px_110px_140px_110px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
+              {["Startup", "Joined", "Account", "Accreditation", "Actions"].map((h) => (
+                <div key={h} className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
             <div className="divide-y divide-cs-100">
@@ -160,7 +160,7 @@ export default async function AdminStartupsPage({
                 return (
                   <div
                     key={s.id}
-                    className="grid grid-cols-[1fr_90px_110px_130px_130px] gap-4 px-5 py-3 items-center"
+                    className="grid grid-cols-[1fr_90px_110px_140px_110px] gap-4 px-5 py-3 items-center"
                   >
                     {/* Startup name + email */}
                     <div className="min-w-0">
@@ -173,22 +173,22 @@ export default async function AdminStartupsPage({
                             className="w-6 h-6 object-contain shrink-0 border border-cs-200"
                           />
                         )}
-                        <div className="text-[13px] font-semibold truncate">{s.org_name}</div>
+                        <div className="text-[12px] font-semibold truncate">{s.org_name}</div>
                       </div>
-                      <div className="text-[14px] font-mono text-cs-400 truncate">{s.email}</div>
-                      <div className="text-[14px] font-mono text-cs-400">
+                      <div className="text-[12px] font-mono text-cs-400 truncate">{s.email}</div>
+                      <div className="text-[12px] font-mono text-cs-400">
                         {s.country ?? ""}{s.country && s.industry ? " · " : ""}{s.industry ?? ""}
                       </div>
                     </div>
 
-                    {/* Industry */}
-                    <div className="text-[12px] font-mono text-cs-500 capitalize">
+                    {/* Joined date */}
+                    <div className="text-[12px] font-mono text-cs-500">
                       {fmt(s.created_at)}
                     </div>
 
                     {/* Account status */}
                     <div>
-                      <span className={`text-[14px] font-mono font-bold uppercase tracking-widest px-1.5 py-0.5 ${
+                      <span className={`text-[11px] font-mono font-semibold uppercase tracking-widest px-2 py-0.5 rounded-sm ${
                         ACCOUNT_BADGE[s.account]
                       }`}>
                         {s.account === "no_token" ? "No token" : s.account}
@@ -200,15 +200,15 @@ export default async function AdminStartupsPage({
                       {s.request ? (
                         <Link
                           href="/admin/accreditations"
-                          className={`text-[14px] font-mono font-bold uppercase tracking-widest px-1.5 py-0.5 ${
-                            STATUS_COLOR[s.request.status] ?? "text-cs-400 bg-cs-100"
+                          className={`text-[11px] font-mono font-semibold uppercase tracking-widest px-2 py-0.5 rounded-sm ${
+                            STATUS_COLOR[s.request.status] ?? "text-cs-500 bg-cs-100 border border-cs-200"
                           }`}
                         >
                           {s.request.status.replace(/_/g, " ")}
                         </Link>
                       ) : (
-                        <span className="text-[14px] font-mono text-cs-300 uppercase tracking-widest px-1.5 py-0.5 bg-cs-50">
-                          No request
+                        <span className="text-[11px] font-mono text-cs-300 uppercase tracking-widest px-2 py-0.5">
+                          —
                         </span>
                       )}
                     </div>
@@ -221,14 +221,14 @@ export default async function AdminStartupsPage({
                           <input type="hidden" name="email" value={s.email} />
                           <input type="hidden" name="org_name" value={s.org_name} />
                           <input type="hidden" name="role" value="startup" />
-                          <button type="submit" className="btn-primary btn-sm text-[11px]">
-                            {s.account === "expired" ? "Resend Link" : "Send Link"}
+                          <button type="submit" className="text-[11px] font-mono font-semibold uppercase tracking-widest px-3 py-1 bg-black text-white hover:bg-cs-800 transition-colors">
+                            {s.account === "expired" ? "Resend" : "Send"}
                           </button>
                         </form>
                       )}
                       {s.account === "activated" && (
-                        <span className="text-[14px] font-mono text-green-600">
-                          ✓ Active
+                        <span className="text-[11px] font-mono text-emerald-600 font-semibold uppercase tracking-widest">
+                          Active
                         </span>
                       )}
                     </div>

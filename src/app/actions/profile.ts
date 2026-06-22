@@ -5,6 +5,7 @@ import { createServiceClient } from "@/lib/supabase/service";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import type { UserRole } from "@/lib/supabase/types";
+import { normalizeUrl } from "@/lib/utils";
 
 const PROFILE_PATHS: Record<UserRole, string[]> = {
   startup:     ["/startup/profile",     "/startup/dashboard"    ],
@@ -23,7 +24,7 @@ export async function updateProfile(formData: FormData) {
 
   const orgName = formData.get("org_name") as string;
   const industry = (formData.get("industry") as string) || null;
-  const website = (formData.get("website") as string) || null;
+  const website = normalizeUrl(formData.get("website") as string);
   const country = (formData.get("country") as string) || null;
   const description = (formData.get("description") as string) || null;
 

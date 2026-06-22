@@ -167,9 +167,9 @@ export default async function EvaluatorProfilePage() {
               <label className="cs-label">Website</label>
               <input
                 name="website"
-                type="url"
+                type="text"
                 defaultValue={evaluator?.website ?? ""}
-                placeholder="https://yourevaluator.com"
+                placeholder="yourstartup.com"
                 className="cs-input"
               />
             </div>

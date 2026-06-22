@@ -4,6 +4,7 @@ import { cn }    from "@/lib/utils";
 import Image      from "next/image";
 import Link       from "next/link";
 import { usePathname } from "next/navigation";
+import { LangDropdown } from "@/components/ui/LangDropdown";
 
 interface AdminNavProps {
   onSignOut?: () => void;
@@ -57,6 +58,8 @@ export function AdminNav({ onSignOut }: AdminNavProps) {
           </Link>
         ))}
       </div>
+
+      <LangDropdown dark />
 
       {onSignOut && (
         <button

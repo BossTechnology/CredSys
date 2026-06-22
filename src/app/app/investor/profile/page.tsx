@@ -163,9 +163,9 @@ export default async function InvestorProfilePage() {
               <label className="cs-label">Website</label>
               <input
                 name="website"
-                type="url"
+                type="text"
                 defaultValue={investor?.website ?? ""}
-                placeholder="https://"
+                placeholder="yourstartup.com"
                 className="cs-input"
               />
             </div>

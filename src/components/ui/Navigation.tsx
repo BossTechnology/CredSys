@@ -4,6 +4,7 @@ import { cn }    from "@/lib/utils";
 import Image      from "next/image";
 import Link       from "next/link";
 import { usePathname } from "next/navigation";
+import { LangDropdown } from "@/components/ui/LangDropdown";
 
 // =============================================
 // Shared nav link helper
@@ -70,6 +71,7 @@ export function AdminNav({ onSignOut }: AdminNavProps) {
           <NavLink key={item.href} href={item.href} label={item.label} dark />
         ))}
       </div>
+      <LangDropdown dark />
       {onSignOut && (
         <button
           onClick={onSignOut}
@@ -110,6 +112,7 @@ export function EvaluatorNav({ onSignOut }: EvaluatorNavProps) {
           <NavLink key={item.href} href={item.href} label={item.label} />
         ))}
       </div>
+      <LangDropdown />
       {onSignOut && (
         <button
           onClick={onSignOut}
@@ -150,6 +153,7 @@ export function StartupNav({ onSignOut }: StartupNavProps) {
           <NavLink key={item.href} href={item.href} label={item.label} />
         ))}
       </div>
+      <LangDropdown />
       {onSignOut && (
         <button
           onClick={onSignOut}
@@ -190,6 +194,7 @@ export function AcceleratorNav({ onSignOut }: AcceleratorNavProps) {
           <NavLink key={item.href} href={item.href} label={item.label} />
         ))}
       </div>
+      <LangDropdown />
       {onSignOut && (
         <button
           onClick={onSignOut}
@@ -230,6 +235,7 @@ export function InvestorNav({ onSignOut }: InvestorNavProps) {
           <NavLink key={item.href} href={item.href} label={item.label} />
         ))}
       </div>
+      <LangDropdown />
       {onSignOut && (
         <button onClick={onSignOut} className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors">
           Sign Out
