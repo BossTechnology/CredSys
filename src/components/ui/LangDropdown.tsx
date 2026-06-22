@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface LangDropdownProps {
   dark?: boolean;
@@ -10,21 +10,24 @@ interface LangDropdownProps {
 
 export function LangDropdown({ dark = false }: LangDropdownProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
+  const hasLocalePrefix = /^\/(en|es)(\/|$)/.test(pathname);
   const locale = pathname.startsWith("/es") ? "es" : "en";
 
-  function targetPath(target: string) {
-    if (pathname.startsWith("/en/") || pathname.startsWith("/es/")) {
-      return pathname.replace(/^\/(en|es)/, `/${target}`);
+  const handleLangChange = useCallback((lang: string) => {
+    document.cookie = `preferred_locale=${lang};path=/;max-age=31536000`;
+    setOpen(false);
+
+    if (hasLocalePrefix) {
+      const newPath = pathname.replace(/^\/(en|es)/, `/${lang}`);
+      router.push(newPath);
+    } else {
+      router.refresh();
     }
-    if (pathname === "/en" || pathname === "/es") {
-      return `/${target}`;
-    }
-    document.cookie = `preferred_locale=${target};path=/;max-age=31536000`;
-    return pathname;
-  }
+  }, [pathname, hasLocalePrefix, router]);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -44,7 +47,7 @@ export function LangDropdown({ dark = false }: LangDropdownProps) {
       <button
         onClick={() => setOpen((o) => !o)}
         className="flex items-center gap-1 text-[12px] font-mono uppercase tracking-widest transition-colors"
-        style={{ color: textColor, background: "none", border: "none", cursor: "pointer", padding: "4px 8px" }}
+        style={{ color: textColor, background: "none", border: "none", padding: "4px 8px" }}
       >
         {locale.toUpperCase()}
         <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
@@ -65,26 +68,25 @@ export function LangDropdown({ dark = false }: LangDropdownProps) {
           }}
         >
           {(["en", "es"] as const).map((lang) => (
-            <Link
+            <button
               key={lang}
-              href={targetPath(lang)}
-              onClick={() => {
-                document.cookie = `preferred_locale=${lang};path=/;max-age=31536000`;
-                setOpen(false);
-              }}
+              onClick={() => handleLangChange(lang)}
               style={{
                 display: "block",
+                width: "100%",
+                textAlign: "left",
                 padding: "6px 14px",
                 fontSize: "12px",
                 fontFamily: "var(--font-mono, monospace)",
                 letterSpacing: ".08em",
                 color: locale === lang ? activeColor : dark ? "#aaa" : "#4A4A4A",
-                textDecoration: "none",
+                background: "none",
+                border: "none",
                 fontWeight: locale === lang ? 600 : 400,
               }}
             >
               {lang.toUpperCase()}
-            </Link>
+            </button>
           ))}
         </div>
       )}
