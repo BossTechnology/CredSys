@@ -40,7 +40,7 @@ export function LangDropdown({ dark = false }: LangDropdownProps) {
       const newPath = pathname.replace(/^\/(en|es)/, `/${lang}`);
       router.push(newPath);
     } else {
-      router.refresh();
+      window.location.reload();
     }
   }, [pathname, hasLocalePrefix, router]);
 
