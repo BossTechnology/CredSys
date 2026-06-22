@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { LangDropdown } from "@/components/ui/LangDropdown";
 
 interface AdminNavProps {
+  locale?: string;
   onSignOut?: () => void;
 }
 
@@ -21,7 +22,7 @@ const NAV_ITEMS = [
   { label: "Cred List",      href: "/admin/cred-list"      },
 ];
 
-export function AdminNav({ onSignOut }: AdminNavProps) {
+export function AdminNav({ locale, onSignOut }: AdminNavProps) {
   const pathname = usePathname();
 
   return (

@@ -1,7 +1,10 @@
 import { createServiceClient } from "@/lib/supabase/service";
+import { getAppDictionary }    from "@/lib/i18n/loader";
 import Link                    from "next/link";
 
 export default async function AdminOverviewPage() {
+  const { locale, dict } = await getAppDictionary();
+  const t = dict.admin;
   const service = createServiceClient();
 
   const [
@@ -31,13 +34,13 @@ export default async function AdminOverviewPage() {
   ]);
 
   const stats = [
-    { value: activeEvaluators  ?? 0, label: "Active Evaluators",  href: "/admin/evaluators"                                    },
-    { value: pendingEvaluators ?? 0, label: "Pending Activation",  href: "/admin/evaluators?filter=pending", alert: (pendingEvaluators ?? 0) > 0 },
-    { value: totalAccredited   ?? 0, label: "Accredited Startups", href: "/admin/accreditations?filter=accredited", accent: true },
-    { value: pendingAssignment ?? 0, label: "Unassigned Requests", href: "/admin/accreditations?filter=unassigned", alert: (pendingAssignment ?? 0) > 0 },
-    { value: inProgress        ?? 0, label: "In Progress",         href: "/admin/accreditations?filter=active"                   },
-    { value: activeComps       ?? 0, label: "Active Competitions", href: "/admin/competitions",   accent: true                  },
-    { value: totalStartups     ?? 0, label: "Total Startups",      href: "/admin/startups"                                      },
+    { value: activeEvaluators  ?? 0, label: t.activeEvaluators,    href: "/admin/evaluators"                                    },
+    { value: pendingEvaluators ?? 0, label: t.pendingActivation,   href: "/admin/evaluators?filter=pending", alert: (pendingEvaluators ?? 0) > 0 },
+    { value: totalAccredited   ?? 0, label: t.accreditedStartups,  href: "/admin/accreditations?filter=accredited", accent: true },
+    { value: pendingAssignment ?? 0, label: t.unassignedRequests,  href: "/admin/accreditations?filter=unassigned", alert: (pendingAssignment ?? 0) > 0 },
+    { value: inProgress        ?? 0, label: t.inProgress,          href: "/admin/accreditations?filter=active"                   },
+    { value: activeComps       ?? 0, label: t.activeCompetitions,  href: "/admin/competitions",   accent: true                  },
+    { value: totalStartups     ?? 0, label: t.totalStartups,       href: "/admin/startups"                                      },
   ];
 
   const STATUS_COLOR: Record<string, string> = {
@@ -60,10 +63,10 @@ export default async function AdminOverviewPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-white" />
-          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">Admin</span>
+          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">{t.label}</span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight">Overview</h1>
-        <p className="text-[13px] font-mono text-cs-400 mt-1">System dashboard — StartupBoss.org</p>
+        <h1 className="text-2xl font-bold tracking-tight">{t.overview}</h1>
+        <p className="text-[13px] font-mono text-cs-400 mt-1">{t.systemDashboard}</p>
       </div>
 
       {/* Alert banners */}
@@ -75,9 +78,9 @@ export default async function AdminOverviewPage() {
               className="bg-yellow-50 border border-yellow-200 px-4 py-2.5 flex items-center justify-between hover:bg-yellow-100 transition-colors"
             >
               <span className="text-[12px] font-mono font-bold text-yellow-700 uppercase tracking-widest">
-                ⚠ {pendingEvaluators} evaluator{(pendingEvaluators ?? 0) !== 1 ? "s" : ""} pending activation
+                ⚠ {pendingEvaluators} {t.evalPendingAlert}
               </span>
-              <span className="text-[14px] font-mono text-yellow-600">Review →</span>
+              <span className="text-[14px] font-mono text-yellow-600">{t.review}</span>
             </Link>
           )}
           {(pendingAssignment ?? 0) > 0 && (
@@ -86,9 +89,9 @@ export default async function AdminOverviewPage() {
               className="bg-yellow-50 border border-yellow-200 px-4 py-2.5 flex items-center justify-between hover:bg-yellow-100 transition-colors"
             >
               <span className="text-[12px] font-mono font-bold text-yellow-700 uppercase tracking-widest">
-                ⚠ {pendingAssignment} request{(pendingAssignment ?? 0) !== 1 ? "s" : ""} awaiting evaluator assignment
+                ⚠ {pendingAssignment} {t.reqAwaitingAlert}
               </span>
-              <span className="text-[14px] font-mono text-yellow-600">Assign →</span>
+              <span className="text-[14px] font-mono text-yellow-600">{t.assign}</span>
             </Link>
           )}
         </div>
@@ -123,14 +126,14 @@ export default async function AdminOverviewPage() {
       {/* Recent requests */}
       <div className="bg-white border border-cs-200 mb-6">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50 flex items-center justify-between">
-          <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">Recent Requests</span>
+          <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">{t.recentRequests}</span>
           <Link href="/admin/accreditations" className="text-[12px] font-mono text-sb-default hover:underline uppercase tracking-widest">
-            View All →
+            {t.viewAll}
           </Link>
         </div>
         {(recentRequests ?? []).length === 0 ? (
           <div className="px-5 py-8 text-center">
-            <p className="text-[13px] font-mono text-cs-400">No requests yet.</p>
+            <p className="text-[13px] font-mono text-cs-400">{t.noRequestsYet}</p>
           </div>
         ) : (
           <div className="divide-y divide-cs-100">
@@ -142,10 +145,10 @@ export default async function AdminOverviewPage() {
                 </div>
                 <div className="flex items-center gap-5">
                   <span className={`text-[14px] font-mono uppercase tracking-widest ${STATUS_COLOR[r.status] ?? "text-cs-400"}`}>
-                    {r.status.replace(/_/g, " ")}
+                    {dict.status[r.status as keyof typeof dict.status] ?? r.status.replace(/_/g, " ")}
                   </span>
                   <span className="text-[14px] font-mono text-cs-400">
-                    {new Date(r.updated_at).toLocaleDateString("en", { month: "short", day: "numeric" })}
+                    {new Date(r.updated_at).toLocaleDateString(locale, { month: "short", day: "numeric" })}
                   </span>
                 </div>
               </div>
@@ -157,9 +160,9 @@ export default async function AdminOverviewPage() {
       {/* Quick actions */}
       <div className="grid grid-cols-3 gap-3">
         {[
-          { label: "Activate Evaluators",  desc: "Review pending evaluator accounts",       href: "/admin/evaluators"     },
-          { label: "Assign Evaluators",     desc: "Match unassigned requests to evaluators", href: "/admin/accreditations" },
-          { label: "Manage Competitions",   desc: "Create and manage scoring competitions",  href: "/admin/competitions"   },
+          { label: t.activateEvaluators,  desc: t.activateEvalDesc,  href: "/admin/evaluators"     },
+          { label: t.assignEvaluators,    desc: t.assignEvalDesc,    href: "/admin/accreditations" },
+          { label: t.manageCompetitions,  desc: t.manageCompDesc,    href: "/admin/competitions"   },
         ].map((a) => (
           <Link
             key={a.label}

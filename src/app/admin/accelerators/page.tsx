@@ -1,10 +1,6 @@
 import { createServiceClient }  from "@/lib/supabase/service";
 import { activateAccelerator }  from "@/app/actions/admin";
-
-function fmt(iso: string | null | undefined) {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" });
-}
+import { getAppDictionary }     from "@/lib/i18n/loader";
 
 export default async function AdminAcceleratorsPage({
   searchParams,
@@ -12,7 +8,14 @@ export default async function AdminAcceleratorsPage({
   searchParams: Promise<{ filter?: string }>;
 }) {
   const { filter } = await searchParams;
+  const { locale, dict } = await getAppDictionary();
+  const t = dict.admin;
   const service = createServiceClient();
+
+  function fmt(iso: string | null | undefined) {
+    if (!iso) return "—";
+    return new Date(iso).toLocaleDateString(locale, { month: "short", day: "numeric", year: "numeric" });
+  }
 
   let query = service
     .from("accelerators")
@@ -36,23 +39,23 @@ export default async function AdminAcceleratorsPage({
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-2 h-2 bg-white" />
-            <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">Admin</span>
+            <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">{t.label}</span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">Accelerators</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t.accelerators}</h1>
           <p className="text-[13px] font-mono text-cs-400 mt-1">
-            {total} total · {pending} pending activation
+            {total} {t.total} · {pending} {t.pendingActivationAlert}
           </p>
         </div>
         <div className="flex gap-2">
           {[
-            { label: "All",     href: "/admin/accelerators"               },
-            { label: "Pending", href: "/admin/accelerators?filter=pending" },
+            { label: t.all,     href: "/admin/accelerators",               value: ""        },
+            { label: t.pending, href: "/admin/accelerators?filter=pending", value: "pending" },
           ].map((tab) => (
             <a
-              key={tab.label}
+              key={tab.value}
               href={tab.href}
               className={`text-[12px] font-mono uppercase tracking-widest px-3 py-1.5 border transition-colors ${
-                (filter === "pending") === (tab.label === "Pending")
+                (filter ?? "") === tab.value
                   ? "bg-black text-white border-black"
                   : "bg-white text-cs-500 border-cs-200 hover:border-black"
               }`}
@@ -67,7 +70,7 @@ export default async function AdminAcceleratorsPage({
       {pending > 0 && (
         <div className="bg-yellow-50 border border-yellow-200 px-4 py-2.5 mb-6">
           <span className="text-[12px] font-mono font-bold text-yellow-700 uppercase tracking-widest">
-            ⚠ {pending} accelerator{pending !== 1 ? "s" : ""} pending activation
+            ⚠ {pending} {t.pendingActivationAlert}
           </span>
         </div>
       )}
@@ -76,18 +79,18 @@ export default async function AdminAcceleratorsPage({
       <div className="bg-white border border-cs-200">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-            Accelerator Accounts · {total}
+            {t.accelerators} · {total}
           </span>
         </div>
 
         {total === 0 ? (
           <div className="px-5 py-10 text-center">
-            <p className="text-[13px] font-mono text-cs-400">No accelerators found.</p>
+            <p className="text-[13px] font-mono text-cs-400">{t.noAcceleratorsFound}</p>
           </div>
         ) : (
           <>
             <div className="grid grid-cols-[1fr_120px_100px_90px_100px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
-              {["Organization", "Industry", "Country", "Status", "Actions"].map((h) => (
+              {[t.organization, t.industry, t.country, t.status, t.actions].map((h) => (
                 <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
@@ -103,7 +106,7 @@ export default async function AdminAcceleratorsPage({
                   <div>
                     <div className="text-[13px] font-semibold">{acc.org_name}</div>
                     <div className="text-[14px] font-mono text-cs-400">{acc.email}</div>
-                    <div className="text-[14px] font-mono text-cs-300 mt-0.5">Since {fmt(acc.created_at)}</div>
+                    <div className="text-[14px] font-mono text-cs-300 mt-0.5">{t.since} {fmt(acc.created_at)}</div>
                   </div>
                   <div className="text-[12px] font-mono text-cs-500 capitalize">{acc.industry ?? "—"}</div>
                   <div className="text-[12px] font-mono text-cs-500">{acc.country ?? "—"}</div>
@@ -111,7 +114,7 @@ export default async function AdminAcceleratorsPage({
                     <span className={`text-[14px] font-mono font-bold uppercase tracking-widest ${
                       acc.is_active ? "text-green-600" : "text-yellow-600"
                     }`}>
-                      {acc.is_active ? "Active" : "Pending"}
+                      {acc.is_active ? t.active : t.pending}
                     </span>
                   </div>
                   <div>
@@ -126,7 +129,7 @@ export default async function AdminAcceleratorsPage({
                             : "btn-primary btn-sm"
                         }`}
                       >
-                        {acc.is_active ? "Deactivate" : "Activate"}
+                        {acc.is_active ? t.deactivate : t.activate}
                       </button>
                     </form>
                   </div>

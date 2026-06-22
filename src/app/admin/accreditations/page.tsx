@@ -1,10 +1,6 @@
 import { createServiceClient }     from "@/lib/supabase/service";
 import { assignEvaluatorToRequest } from "@/app/actions/admin";
-
-function fmt(iso: string | null | undefined) {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" });
-}
+import { getAppDictionary }         from "@/lib/i18n/loader";
 
 const STATUS_COLOR: Record<string, string> = {
   pending_evaluator_assignment: "text-yellow-600 bg-yellow-50",
@@ -19,20 +15,27 @@ const STATUS_COLOR: Record<string, string> = {
   expired:                      "text-cs-400 bg-cs-100",
 };
 
-const FILTERS = [
-  { label: "All",        value: ""           },
-  { label: "Unassigned", value: "unassigned" },
-  { label: "Active",     value: "active"     },
-  { label: "Accredited", value: "accredited" },
-];
-
 export default async function AdminAccreditationsPage({
   searchParams,
 }: {
   searchParams: Promise<{ filter?: string }>;
 }) {
   const { filter } = await searchParams;
+  const { locale, dict } = await getAppDictionary();
+  const t = dict.admin;
   const service = createServiceClient();
+
+  function fmt(iso: string | null | undefined) {
+    if (!iso) return "—";
+    return new Date(iso).toLocaleDateString(locale, { month: "short", day: "numeric", year: "numeric" });
+  }
+
+  const FILTERS = [
+    { label: t.all,        value: ""           },
+    { label: t.unassigned, value: "unassigned" },
+    { label: t.active,     value: "active"     },
+    { label: t.accredited, value: "accredited" },
+  ];
 
   let query = service
     .from("accreditation_requests")
@@ -66,10 +69,10 @@ export default async function AdminAccreditationsPage({
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-2 h-2 bg-white" />
-            <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">Admin</span>
+            <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">{t.label}</span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">Accreditations</h1>
-          <p className="text-[13px] font-mono text-cs-400 mt-1">{total} requests</p>
+          <h1 className="text-2xl font-bold tracking-tight">{t.accreditations}</h1>
+          <p className="text-[13px] font-mono text-cs-400 mt-1">{total} {t.requests}</p>
         </div>
         <div className="flex gap-2">
           {FILTERS.map((tab) => (
@@ -92,18 +95,18 @@ export default async function AdminAccreditationsPage({
       <div className="bg-white border border-cs-200">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-            Requests · {total}
+            {t.accreditations} · {total}
           </span>
         </div>
 
         {total === 0 ? (
           <div className="px-5 py-10 text-center">
-            <p className="text-[13px] font-mono text-cs-400">No requests found.</p>
+            <p className="text-[13px] font-mono text-cs-400">{t.noRequestsFound}</p>
           </div>
         ) : (
           <>
             <div className="grid grid-cols-[1fr_100px_140px_200px_80px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
-              {["Startup", "Industry", "Status", "Evaluator", "Submitted"].map((h) => (
+              {[t.startup, t.industry, t.status, t.evaluator, t.submitted].map((h) => (
                 <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
@@ -130,7 +133,7 @@ export default async function AdminAccreditationsPage({
 
                     <div className="pt-0.5">
                       <span className={`text-[14px] font-mono font-bold uppercase tracking-widest px-1.5 py-0.5 ${STATUS_COLOR[req.status] ?? "text-cs-400 bg-cs-100"}`}>
-                        {req.status.replace(/_/g, " ")}
+                        {dict.status[req.status as keyof typeof dict.status] ?? req.status.replace(/_/g, " ")}
                       </span>
                     </div>
 
@@ -145,13 +148,13 @@ export default async function AdminAccreditationsPage({
                             required
                             className="text-[14px] font-mono border border-cs-200 bg-white px-1.5 py-1 focus:outline-none focus:border-black flex-1 min-w-0"
                           >
-                            <option value="">Select…</option>
+                            <option value="">{t.select}</option>
                             {(evaluators ?? []).map((e) => (
                               <option key={e.id} value={e.id}>{e.org_name}</option>
                             ))}
                           </select>
                           <button type="submit" className="btn-primary btn-sm shrink-0">
-                            Assign
+                            {t.assignBtn}
                           </button>
                         </form>
                       ) : (

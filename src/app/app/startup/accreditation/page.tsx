@@ -204,10 +204,10 @@ export default async function StartupAccreditationPage() {
 
           <div className="flex items-center gap-4">
             <button type="submit" className="btn-primary btn-lg">
-              Submit Accreditation Request
+              {t.submit}
             </button>
             <Link href="/app/startup/dashboard" className="btn-ghost btn-lg">
-              Cancel
+              {t.cancelLink}
             </Link>
           </div>
 
@@ -236,18 +236,18 @@ export default async function StartupAccreditationPage() {
         href="/app/startup/dashboard"
         className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors block mb-6"
       >
-        ← Dashboard
+        ← {t.backDashboard}
       </Link>
 
       {/* Header */}
       <div className="flex items-start justify-between gap-4 mb-6">
         <div>
           <div className="text-[13px] font-mono text-cs-400 uppercase tracking-widest mb-1">
-            Accreditation Request
+            {t.requestTitle}
           </div>
           <h1 className="text-2xl font-bold tracking-tight">{request.startup_name}</h1>
           <p className="text-[13px] font-mono text-cs-400 mt-1">
-            Submitted {fmt(request.created_at)}
+            {t.submitted} {fmt(request.created_at, locale)}
           </p>
         </div>
         <Badge variant={status!} />
@@ -265,18 +265,18 @@ export default async function StartupAccreditationPage() {
         <div className="bg-sb-light border border-sb-default px-5 py-4 mb-6 flex items-center justify-between">
           <div>
             <div className="text-[14px] font-mono text-sb-text uppercase tracking-widest mb-0.5">
-              Credential ID
+              {t.credentialId}
             </div>
             <div className="text-lg font-bold font-mono tracking-widest">
               {credCode.toUpperCase()}
             </div>
             <div className="text-[14px] font-mono text-cs-400 mt-0.5">
-              Accredited {fmt(request.accredited_at)}
-              {request.expires_at && ` · Expires ${fmt(request.expires_at)}`}
+              {t.accredited} {fmt(request.accredited_at, locale)}
+              {request.expires_at && ` · ${t.expires} ${fmt(request.expires_at, locale)}`}
             </div>
           </div>
           <Link href={`/startup/${credCode}`} target="_blank" className="btn-accent btn-sm">
-            View Public Credential →
+            {t.viewPublicCredential} →
           </Link>
         </div>
       )}
@@ -285,7 +285,7 @@ export default async function StartupAccreditationPage() {
       {request.evaluator_notes && (
         <div className="border border-cs-200 bg-cs-50 px-5 py-3 mb-6">
           <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-1">
-            Evaluator Notes
+            {t.evaluatorNotes}
           </div>
           <p className="text-[13px] text-cs-700 leading-relaxed">{request.evaluator_notes}</p>
         </div>
@@ -295,7 +295,7 @@ export default async function StartupAccreditationPage() {
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-3">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest border-b border-cs-200 pb-1 flex-1">
-            Verification Progress
+            {t.verificationProgress}
           </span>
         </div>
         <VerificationPanel
@@ -311,15 +311,15 @@ export default async function StartupAccreditationPage() {
       <div className="border border-cs-200 bg-white">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-            Submission Snapshot
+            {t.submissionSnapshot}
           </span>
         </div>
         <div className="p-5 grid grid-cols-2 gap-x-8 gap-y-3">
           {[
-            { label: "Industry",  value: request.industry  },
-            { label: "Stage",     value: request.stage     },
-            { label: "Country",   value: request.country   },
-            { label: "Team Size", value: request.team_size },
+            { label: t.industry,       value: request.industry  },
+            { label: t.stageLabel,     value: request.stage     },
+            { label: t.countryLabel,   value: request.country   },
+            { label: t.teamSizeLabel,  value: request.team_size },
           ].map((f) => (
             <div key={f.label}>
               <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
@@ -330,7 +330,7 @@ export default async function StartupAccreditationPage() {
           ))}
           {request.description && (
             <div className="col-span-2">
-              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">Description</div>
+              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">{t.descriptionLabel}</div>
               <p className="text-[13px] text-cs-600 leading-relaxed">{request.description}</p>
             </div>
           )}

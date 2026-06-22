@@ -1,5 +1,6 @@
 import { createServiceClient } from "@/lib/supabase/service";
 import { revalidatePath }      from "next/cache";
+import { getAppDictionary }    from "@/lib/i18n/loader";
 
 // ─── Server Action ────────────────────────────────────────────────────────────
 
@@ -20,11 +21,6 @@ async function markCompleted(formData: FormData) {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function fmt(iso: string | null | undefined) {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" });
-}
-
 const STATUS_COLORS: Record<string, string> = {
   pending_startup_acceptance: "text-yellow-600",
   accepted:   "text-blue-600",
@@ -41,7 +37,14 @@ export default async function AdminSponsorshipsPage({
   searchParams: Promise<{ filter?: string }>;
 }) {
   const { filter } = await searchParams;
+  const { locale, dict } = await getAppDictionary();
+  const t = dict.admin;
   const service    = createServiceClient();
+
+  function fmt(iso: string | null | undefined) {
+    if (!iso) return "—";
+    return new Date(iso).toLocaleDateString(locale, { month: "short", day: "numeric", year: "numeric" });
+  }
 
   let query = service
     .from("accreditation_sponsorships")
@@ -69,20 +72,20 @@ export default async function AdminSponsorshipsPage({
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-2 h-2 bg-white" />
-            <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">Admin</span>
+            <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">{t.label}</span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">Sponsorships</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t.sponsorships}</h1>
           <p className="text-[13px] font-mono text-cs-400 mt-1">
-            {total} {filter && filter !== "all" ? filter.replace(/_/g, " ") : "total"}
+            {total} {filter && filter !== "all" ? filter.replace(/_/g, " ") : t.total}
           </p>
         </div>
         <div className="flex gap-2 flex-wrap">
           {[
-            { label: "All",       href: "/admin/sponsorships"                                     },
-            { label: "Pending",   href: "/admin/sponsorships?filter=pending_startup_acceptance"   },
-            { label: "Accepted",  href: "/admin/sponsorships?filter=accepted"                     },
-            { label: "Completed", href: "/admin/sponsorships?filter=completed"                    },
-            { label: "Declined",  href: "/admin/sponsorships?filter=declined"                     },
+            { label: t.all,       href: "/admin/sponsorships"                                     },
+            { label: t.pending,   href: "/admin/sponsorships?filter=pending_startup_acceptance"   },
+            { label: t.accepted,  href: "/admin/sponsorships?filter=accepted"                     },
+            { label: t.completed, href: "/admin/sponsorships?filter=completed"                    },
+            { label: t.declined,  href: "/admin/sponsorships?filter=declined"                     },
           ].map((tab) => {
             const tabFilter = tab.href.includes("filter=") ? tab.href.split("filter=")[1] : undefined;
             const isActive  = (!filter || filter === "all") ? !tabFilter : filter === tabFilter;
@@ -107,18 +110,18 @@ export default async function AdminSponsorshipsPage({
       <div className="bg-white border border-cs-200">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-            Sponsorships · {total}
+            {t.sponsorships} · {total}
           </span>
         </div>
 
         {total === 0 ? (
           <div className="px-5 py-10 text-center">
-            <p className="text-[13px] font-mono text-cs-400">No sponsorships found.</p>
+            <p className="text-[13px] font-mono text-cs-400">{t.noSponsorshipsFound}</p>
           </div>
         ) : (
           <>
             <div className="grid grid-cols-[60px_1fr_1fr_1fr_80px_80px_100px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
-              {["Type", "Sponsor", "Startup", "Billing Contact", "Date", "Status", "Action"].map((h) => (
+              {[t.type, t.sponsor, t.startup, t.billingContact, t.date, t.status, t.action].map((h) => (
                 <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
@@ -149,7 +152,7 @@ export default async function AdminSponsorshipsPage({
                     <div className="text-[12px] font-mono text-cs-400">{fmt(s.created_at)}</div>
                     <div>
                       <span className={`text-[14px] font-mono font-bold uppercase tracking-widest ${STATUS_COLORS[s.status] ?? "text-cs-400"}`}>
-                        {s.status.replace(/_/g, " ")}
+                        {dict.status[s.status as keyof typeof dict.status] ?? s.status.replace(/_/g, " ")}
                       </span>
                     </div>
                     <div>
@@ -157,7 +160,7 @@ export default async function AdminSponsorshipsPage({
                         <form action={markCompleted}>
                           <input type="hidden" name="sponsorship_id" value={s.id} />
                           <button type="submit" className="btn-primary btn-sm">
-                            Mark Completed
+                            {t.markCompleted}
                           </button>
                         </form>
                       )}

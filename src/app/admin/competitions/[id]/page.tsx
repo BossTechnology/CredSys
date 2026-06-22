@@ -1,5 +1,6 @@
 import { createServiceClient }         from "@/lib/supabase/service";
 import { notFound }                     from "next/navigation";
+import { getAppDictionary }             from "@/lib/i18n/loader";
 import {
   assignEvaluatorToCompetition,
   updateCompetitionStatus,
@@ -36,6 +37,8 @@ export default async function AdminCompetitionDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const { dict } = await getAppDictionary();
+  const t = dict.admin;
   const service = createServiceClient();
 
   const [
@@ -116,13 +119,13 @@ export default async function AdminCompetitionDetailPage({
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <a href="/admin/competitions" className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black">
-            ← Competitions
+            ← {t.competitions}
           </a>
         </div>
         <div className="flex items-center gap-3 mb-1">
           <h1 className="text-2xl font-bold tracking-tight">{comp.name}</h1>
           <span className={`text-[14px] font-mono font-bold uppercase tracking-widest px-2 py-1 ${STATUS_COLOR[comp.status] ?? "text-cs-400 bg-cs-100"}`}>
-            {comp.status}
+            {comp.status === "active" ? t.active : comp.status}
           </span>
         </div>
         <div className="flex gap-5 text-[14px] font-mono text-cs-400">
@@ -146,18 +149,18 @@ export default async function AdminCompetitionDetailPage({
           <div className="bg-white border border-cs-200">
             <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                Startups Entered · {entries?.length ?? 0}
+                {t.entries} · {entries?.length ?? 0}
               </span>
             </div>
             {(entries ?? []).length === 0 ? (
               <div className="px-5 py-8 text-center">
-                <p className="text-[13px] font-mono text-cs-400">No entries yet.</p>
+                <p className="text-[13px] font-mono text-cs-400">{t.noEntries}</p>
               </div>
             ) : (
               <>
                 {/* Column headers */}
                 <div className="grid grid-cols-[1fr_80px_80px_100px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
-                  {["Startup", "Scores", "Avg", "Entered"].map((h) => (
+                  {[t.startup, t.scores, t.avgScore, t.submitted].map((h) => (
                     <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
                   ))}
                 </div>
@@ -199,7 +202,7 @@ export default async function AdminCompetitionDetailPage({
             <div className="bg-white border border-cs-200">
               <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
                 <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                  Individual Scores · {scores?.length}
+                  {t.scores} · {scores?.length}
                 </span>
               </div>
               <div className="divide-y divide-cs-100">
@@ -238,7 +241,7 @@ export default async function AdminCompetitionDetailPage({
             <div className="bg-white border border-cs-200">
               <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
                 <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                  Update Status
+                  {t.updateStatus}
                 </span>
               </div>
               <div className="p-4 flex flex-col gap-2">
@@ -265,7 +268,7 @@ export default async function AdminCompetitionDetailPage({
             <div className="bg-white border border-cs-200">
               <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
                 <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                  Publish Results
+                  {t.publishResults}
                 </span>
               </div>
               <div className="p-4">
@@ -275,7 +278,7 @@ export default async function AdminCompetitionDetailPage({
                 <form action={publishResults}>
                   <input type="hidden" name="competition_id" value={comp.id} />
                   <button type="submit" className="w-full btn-accent btn-sm">
-                    Publish &amp; Send Results
+                    {t.publishResults}
                   </button>
                 </form>
               </div>
@@ -286,7 +289,7 @@ export default async function AdminCompetitionDetailPage({
           <div className="bg-white border border-cs-200">
             <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                Assigned Evaluators · {compEvaluators?.length ?? 0}
+                {t.evaluators} · {compEvaluators?.length ?? 0}
               </span>
             </div>
             {(compEvaluators ?? []).length > 0 && (
@@ -307,13 +310,13 @@ export default async function AdminCompetitionDetailPage({
                 <form action={assignEvaluatorToCompetition} className="flex gap-2">
                   <input type="hidden" name="competition_id" value={comp.id} />
                   <select name="evaluator_id" required className="cs-input flex-1 text-[12px]">
-                    <option value="">Select evaluator…</option>
+                    <option value="">{t.select}</option>
                     {unassignedEvals.map((e) => (
                       <option key={e.id} value={e.id}>{e.org_name}</option>
                     ))}
                   </select>
                   <button type="submit" className="btn-primary btn-sm shrink-0">
-                    Assign
+                    {t.assignEvaluatorComp}
                   </button>
                 </form>
               </div>

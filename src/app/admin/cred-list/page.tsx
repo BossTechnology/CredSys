@@ -1,12 +1,16 @@
 import { createServiceClient } from "@/lib/supabase/service";
+import { getAppDictionary }    from "@/lib/i18n/loader";
 import Link                    from "next/link";
 
-function fmt(iso: string | null | undefined) {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" });
-}
-
 export default async function AdminCredListPage() {
+  const { locale, dict } = await getAppDictionary();
+  const t = dict.admin;
+
+  function fmt(iso: string | null | undefined) {
+    if (!iso) return "—";
+    return new Date(iso).toLocaleDateString(locale, { month: "short", day: "numeric", year: "numeric" });
+  }
+
   const service = createServiceClient();
 
   const { data: creds } = await service
@@ -28,11 +32,11 @@ export default async function AdminCredListPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-white" />
-          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">Admin</span>
+          <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">{t.label}</span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight">Credential List</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{t.credList}</h1>
         <p className="text-[13px] font-mono text-cs-400 mt-1">
-          {total} issued · {expired} expired
+          {total} {t.issued} · {expired} {t.expires}
         </p>
       </div>
 
@@ -40,18 +44,18 @@ export default async function AdminCredListPage() {
       <div className="bg-white border border-cs-200">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-            Issued Credentials · {total}
+            {t.credList} · {total}
           </span>
         </div>
 
         {total === 0 ? (
           <div className="px-5 py-10 text-center">
-            <p className="text-[13px] font-mono text-cs-400">No credentials issued yet.</p>
+            <p className="text-[13px] font-mono text-cs-400">{t.noCredentialsFound}</p>
           </div>
         ) : (
           <>
             <div className="grid grid-cols-[1fr_100px_100px_110px_110px_80px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
-              {["Organization", "Industry", "Country", "Issued", "Expires", "Credential"].map((h) => (
+              {[t.organization, t.industry, t.country, t.issued, t.expires, t.credential].map((h) => (
                 <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
@@ -92,7 +96,7 @@ export default async function AdminCredListPage() {
                         {c.unique_code} ↗
                       </Link>
                       {!c.is_active && (
-                        <div className="text-[14px] font-mono text-cs-400 mt-0.5 uppercase">Inactive</div>
+                        <div className="text-[14px] font-mono text-cs-400 mt-0.5 uppercase">{dict.common.inactive}</div>
                       )}
                     </div>
                   </div>

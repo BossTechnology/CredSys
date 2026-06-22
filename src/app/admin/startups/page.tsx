@@ -1,11 +1,7 @@
 import { createServiceClient } from "@/lib/supabase/service";
+import { getAppDictionary }    from "@/lib/i18n/loader";
 import { resendSetupLink }     from "@/app/actions/admin";
 import Link                    from "next/link";
-
-function fmt(iso: string | null | undefined) {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" });
-}
 
 const STATUS_COLOR: Record<string, string> = {
   pending_evaluator_assignment: "text-amber-700 bg-amber-50 border border-amber-200",
@@ -27,19 +23,27 @@ const ACCOUNT_BADGE: Record<string, string> = {
   no_token:  "text-cs-500 bg-cs-100 border border-cs-200",
 };
 
-const FILTERS = [
-  { label: "All",            value: ""             },
-  { label: "With Request",   value: "with_request"  },
-  { label: "No Request",     value: "no_request"    },
-  { label: "Accredited",     value: "accredited"    },
-];
-
 export default async function AdminStartupsPage({
   searchParams,
 }: {
   searchParams: Promise<{ filter?: string }>;
 }) {
   const { filter } = await searchParams;
+  const { locale, dict } = await getAppDictionary();
+  const t = dict.admin;
+
+  function fmt(iso: string | null | undefined) {
+    if (!iso) return "—";
+    return new Date(iso).toLocaleDateString(locale, { month: "short", day: "numeric", year: "numeric" });
+  }
+
+  const FILTERS = [
+    { label: t.all,          value: ""             },
+    { label: t.withRequest,  value: "with_request"  },
+    { label: t.noRequest,    value: "no_request"    },
+    { label: t.accredited,   value: "accredited"    },
+  ];
+
   const service = createServiceClient();
 
   const { data: startups } = await service
@@ -110,11 +114,11 @@ export default async function AdminStartupsPage({
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-2 h-2 bg-white" />
-            <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">Admin</span>
+            <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">{t.label}</span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">Startups</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t.startups}</h1>
           <p className="text-[13px] font-mono text-cs-400 mt-1">
-            {total} startup{total !== 1 ? "s" : ""} registered
+            {total} {t.registered}
           </p>
         </div>
         <div className="flex gap-2">
@@ -138,18 +142,18 @@ export default async function AdminStartupsPage({
       <div className="bg-white border border-cs-200">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-            Startups · {total}
+            {t.startups} · {total}
           </span>
         </div>
 
         {total === 0 ? (
           <div className="px-5 py-10 text-center">
-            <p className="text-[13px] font-mono text-cs-400">No startups found.</p>
+            <p className="text-[13px] font-mono text-cs-400">{t.noStartupsFound}</p>
           </div>
         ) : (
           <>
             <div className="grid grid-cols-[1fr_90px_110px_140px_110px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
-              {["Startup", "Joined", "Account", "Accreditation", "Actions"].map((h) => (
+              {[t.startup, t.joined, t.account, t.accreditation, t.actions].map((h) => (
                 <div key={h} className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
@@ -191,7 +195,7 @@ export default async function AdminStartupsPage({
                       <span className={`text-[11px] font-mono font-semibold uppercase tracking-widest px-2 py-0.5 rounded-sm ${
                         ACCOUNT_BADGE[s.account]
                       }`}>
-                        {s.account === "no_token" ? "No token" : s.account}
+                        {s.account === "no_token" ? t.noToken : s.account}
                       </span>
                     </div>
 
@@ -204,7 +208,7 @@ export default async function AdminStartupsPage({
                             STATUS_COLOR[s.request.status] ?? "text-cs-500 bg-cs-100 border border-cs-200"
                           }`}
                         >
-                          {s.request.status.replace(/_/g, " ")}
+                          {dict.status[s.request.status as keyof typeof dict.status] ?? s.request.status.replace(/_/g, " ")}
                         </Link>
                       ) : (
                         <span className="text-[11px] font-mono text-cs-300 uppercase tracking-widest px-2 py-0.5">
@@ -222,7 +226,7 @@ export default async function AdminStartupsPage({
                           <input type="hidden" name="org_name" value={s.org_name} />
                           <input type="hidden" name="role" value="startup" />
                           <button type="submit" className="text-[11px] font-mono font-semibold uppercase tracking-widest px-3 py-1 bg-black text-white hover:bg-cs-800 transition-colors">
-                            {s.account === "expired" ? "Resend" : "Send"}
+                            {s.account === "expired" ? t.resend : t.send}
                           </button>
                         </form>
                       )}
