@@ -179,49 +179,51 @@ export default async function EvaluatorScoringPage() {
             return (
               <div
                 key={`${entry.competition_id}:${entry.startup_id}`}
-                className="px-5 py-4 border-b border-cs-100 flex items-start justify-between gap-6"
+                className="px-5 py-4 border-b border-cs-100 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4"
               >
-                <div>
+                <div className="min-w-0">
                   <div className="text-[13px] font-semibold mb-0.5">
                     {startup?.org_name ?? "Unknown Startup"}
                   </div>
-                  <div className="text-[14px] font-mono text-cs-400">
+                  <div className="text-[12px] font-mono text-cs-400">
                     {comp?.name ?? "—"} · {t.entered} {fmt(entry.entered_at)}
                   </div>
                 </div>
 
-                <form action={submitScore} className="flex items-end gap-3 shrink-0">
+                <form action={submitScore} className="flex flex-col sm:flex-row sm:items-end gap-3 shrink-0">
                   <input type="hidden" name="competition_id" value={entry.competition_id} />
                   <input type="hidden" name="startup_id"     value={entry.startup_id} />
                   <div>
-                    <label className="text-[14px] font-mono text-cs-400 uppercase tracking-widest block mb-1">
+                    <label className="text-[12px] font-mono text-cs-400 uppercase tracking-widest block mb-1">
                       {t.notesLabel}
                     </label>
                     <input
                       name="notes"
                       type="text"
                       placeholder={t.notesPH}
-                      className="w-36 border border-cs-200 bg-cs-50 px-2 py-1.5 text-[12px] font-mono focus:outline-none focus:border-black"
+                      className="w-full sm:w-36 border border-cs-200 bg-cs-50 px-2 py-1.5 text-[12px] font-mono focus:outline-none focus:border-black"
                     />
                   </div>
-                  <div>
-                    <label className="text-[14px] font-mono text-cs-400 uppercase tracking-widest block mb-1">
-                      {t.scoreLabel}
-                    </label>
-                    <input
-                      name="score"
-                      type="number"
-                      min={0}
-                      max={100}
-                      step={0.5}
-                      required
-                      placeholder="85"
-                      className="w-20 border border-cs-200 bg-cs-50 px-2 py-1.5 text-[13px] font-mono focus:outline-none focus:border-black"
-                    />
+                  <div className="flex items-end gap-3">
+                    <div>
+                      <label className="text-[12px] font-mono text-cs-400 uppercase tracking-widest block mb-1">
+                        {t.scoreLabel}
+                      </label>
+                      <input
+                        name="score"
+                        type="number"
+                        min={0}
+                        max={100}
+                        step={0.5}
+                        required
+                        placeholder="85"
+                        className="w-20 border border-cs-200 bg-cs-50 px-2 py-1.5 text-[13px] font-mono focus:outline-none focus:border-black"
+                      />
+                    </div>
+                    <button type="submit" className="btn-accent btn-sm">
+                      {t.submit}
+                    </button>
                   </div>
-                  <button type="submit" className="btn-accent btn-sm">
-                    {t.submit}
-                  </button>
                 </form>
               </div>
             );
@@ -244,23 +246,23 @@ export default async function EvaluatorScoringPage() {
             return (
               <div
                 key={`${entry.competition_id}:${entry.startup_id}`}
-                className="px-5 py-3 border-b border-cs-100 flex items-center justify-between"
+                className="px-5 py-3 border-b border-cs-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4"
               >
-                <div>
-                  <div className="text-[13px] font-semibold">{startup?.org_name ?? "—"}</div>
-                  <div className="text-[14px] font-mono text-cs-400">{comp?.name ?? "—"}</div>
+                <div className="min-w-0">
+                  <div className="text-[13px] font-semibold truncate">{startup?.org_name ?? "—"}</div>
+                  <div className="text-[12px] font-mono text-cs-400">{comp?.name ?? "—"}</div>
                 </div>
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-4 sm:gap-6 shrink-0">
                   {scoreRow.notes && (
-                    <span className="text-[14px] font-mono text-cs-400 max-w-[160px] truncate">
+                    <span className="text-[12px] font-mono text-cs-400 max-w-[160px] truncate hidden sm:inline">
                       {scoreRow.notes}
                     </span>
                   )}
                   <div className="text-right">
-                    <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{t.scoreDisplay}</div>
+                    <div className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">{t.scoreDisplay}</div>
                     <div className="text-[13px] font-bold text-sb-text">{scoreRow.score}/100</div>
                   </div>
-                  <div className="text-[14px] font-mono text-cs-400">
+                  <div className="text-[12px] font-mono text-cs-400">
                     {fmt(scoreRow.scored_at)}
                   </div>
                 </div>

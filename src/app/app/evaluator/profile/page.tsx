@@ -105,7 +105,7 @@ export default async function EvaluatorProfilePage() {
       </div>
 
       {/* Stats strip */}
-      <div className="border border-cs-200 bg-white flex divide-x divide-cs-200 mb-8">
+      <div className="border border-cs-200 bg-white grid grid-cols-2 sm:grid-cols-4 mb-8">
         {[
           { label: t.statusLabel,     value: evaluator?.is_active ? t.statusActive : t.statusPending, accent: evaluator?.is_active },
           { label: t.assignments,     value: String(assignmentCount ?? 0) },
@@ -113,9 +113,9 @@ export default async function EvaluatorProfilePage() {
           { label: t.memberSince,     value: evaluator?.created_at
               ? new Date(evaluator.created_at).toLocaleDateString("en", { month: "short", year: "numeric" })
               : "—" },
-        ].map((s) => (
-          <div key={s.label} className="flex-1 px-5 py-3">
-            <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+        ].map((s, i) => (
+          <div key={s.label} className={`px-5 py-3 ${i % 2 === 0 ? "border-r border-cs-200" : ""} ${i < 2 ? "border-b sm:border-b-0 sm:border-r sm:border-cs-200" : ""}`}>
+            <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
               {s.label}
             </div>
             <div className={`text-[13px] font-semibold ${s.accent ? "text-sb-text" : ""}`}>

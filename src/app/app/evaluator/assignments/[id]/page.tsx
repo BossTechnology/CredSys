@@ -118,7 +118,7 @@ export default async function AssignmentDetailPage({
       </Link>
 
       {/* Header */}
-      <div className="flex items-start justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
         <div>
           <div className="text-[13px] font-mono text-cs-400 uppercase tracking-widest mb-1">
             {t.assignmentDetail}
@@ -138,9 +138,9 @@ export default async function AssignmentDetailPage({
 
       {/* Accredited credential banner */}
       {status === "accredited" && credCode && (
-        <div className="bg-sb-light border border-sb-default px-5 py-3 mb-6 flex items-center justify-between">
+        <div className="bg-sb-light border border-sb-default px-5 py-3 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
-            <div className="text-[14px] font-mono text-sb-text uppercase tracking-widest mb-0.5">
+            <div className="text-[12px] font-mono text-sb-text uppercase tracking-widest mb-0.5">
               {t.accreditedBanner}
             </div>
             <div className="text-[13px] font-mono font-semibold tracking-widest">
@@ -184,31 +184,31 @@ export default async function AssignmentDetailPage({
         const sponsorName = inv?.org_name ?? acc?.org_name ?? "Sponsor";
         return (
           <div className="border border-blue-200 bg-blue-50 px-5 py-3 mb-6">
-            <div className="text-[14px] font-mono text-blue-600 uppercase tracking-widest mb-2 font-bold">
+            <div className="text-[12px] font-mono text-blue-600 uppercase tracking-widest mb-2 font-bold">
               {t.sponsoredAccreditation} · {sponsorship.sponsor_type}
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-[12px] font-mono">
               <div>
-                <span className="text-cs-400 uppercase tracking-widest text-[14px]">{t.sponsor}</span>
+                <span className="text-cs-400 uppercase tracking-widest text-[12px]">{t.sponsor}</span>
                 <div className="font-semibold">{sponsorName}</div>
               </div>
               <div>
-                <span className="text-cs-400 uppercase tracking-widest text-[14px]">{t.billingContact}</span>
+                <span className="text-cs-400 uppercase tracking-widest text-[12px]">{t.billingContact}</span>
                 <div className="font-semibold">{sponsorship.billing_contact_name}</div>
               </div>
               <div>
-                <span className="text-cs-400 uppercase tracking-widest text-[14px]">{t.billingEmail}</span>
+                <span className="text-cs-400 uppercase tracking-widest text-[12px]">{t.billingEmail}</span>
                 <div>{sponsorship.billing_contact_email}</div>
               </div>
               {sponsorship.billing_contact_phone && (
                 <div>
-                  <span className="text-cs-400 uppercase tracking-widest text-[14px]">{t.phone}</span>
+                  <span className="text-cs-400 uppercase tracking-widest text-[12px]">{t.phone}</span>
                   <div>{sponsorship.billing_contact_phone}</div>
                 </div>
               )}
               {sponsorship.billing_contact_address && (
                 <div className="col-span-2">
-                  <span className="text-cs-400 uppercase tracking-widest text-[14px]">{t.address}</span>
+                  <span className="text-cs-400 uppercase tracking-widest text-[12px]">{t.address}</span>
                   <div>{sponsorship.billing_contact_address}</div>
                 </div>
               )}
@@ -234,7 +234,7 @@ export default async function AssignmentDetailPage({
             { label: t.submitted,  value: fmt(req.created_at) },
           ].map((f) => (
             <div key={f.label}>
-              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+              <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                 {f.label}
               </div>
               <div className="text-[13px] font-semibold">
@@ -245,7 +245,7 @@ export default async function AssignmentDetailPage({
 
           {req.description && (
             <div className="col-span-2">
-              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+              <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                 {t.description}
               </div>
               <p className="text-[13px] text-cs-700 leading-relaxed">{req.description}</p>
@@ -253,7 +253,7 @@ export default async function AssignmentDetailPage({
           )}
           {req.problem && (
             <div className="col-span-2">
-              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+              <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                 {t.problem}
               </div>
               <p className="text-[13px] text-cs-700 leading-relaxed">{req.problem}</p>
@@ -261,7 +261,7 @@ export default async function AssignmentDetailPage({
           )}
           {req.traction && (
             <div className="col-span-2">
-              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+              <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                 {t.traction}
               </div>
               <p className="text-[13px] text-cs-700 leading-relaxed">{req.traction}</p>
@@ -269,7 +269,7 @@ export default async function AssignmentDetailPage({
           )}
           {req.demo_url && (
             <div>
-              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+              <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                 {t.demo}
               </div>
               <a href={req.demo_url} target="_blank" rel="noopener noreferrer"
@@ -280,7 +280,7 @@ export default async function AssignmentDetailPage({
           )}
           {req.pitch_deck_url && (
             <div>
-              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+              <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                 {t.pitchDeck}
               </div>
               <a href={req.pitch_deck_url} target="_blank" rel="noopener noreferrer"
@@ -315,7 +315,7 @@ export default async function AssignmentDetailPage({
                 </button>
               </form>
               {nextStatus === "accredited" && (
-                <span className="text-[14px] font-mono text-cs-400">
+                <span className="text-[12px] font-mono text-cs-400">
                   {t.saveVerificationFirst}
                 </span>
               )}
@@ -324,7 +324,7 @@ export default async function AssignmentDetailPage({
             {/* Reject with reason */}
             <form action={rejectAction} className="border-t border-cs-100 pt-4 flex flex-col gap-2">
               <input type="hidden" name="request_id" value={req.id} />
-              <label className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
+              <label className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 {t.rejectionReason}
               </label>
               <div className="flex items-start gap-3">

@@ -91,7 +91,7 @@ export default async function AdminAcceleratorsPage({
           <>
             <div className="grid min-w-[640px] grid-cols-[1fr_120px_100px_90px_100px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
               {[t.organization, t.industry, t.country, t.status, t.actions].map((h) => (
-                <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
+                <div key={h} className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
 
@@ -105,13 +105,13 @@ export default async function AdminAcceleratorsPage({
                 >
                   <div>
                     <div className="text-[13px] font-semibold">{acc.org_name}</div>
-                    <div className="text-[14px] font-mono text-cs-400">{acc.email}</div>
-                    <div className="text-[14px] font-mono text-cs-300 mt-0.5">{t.since} {fmt(acc.created_at)}</div>
+                    <div className="text-[12px] font-mono text-cs-400">{acc.email}</div>
+                    <div className="text-[12px] font-mono text-cs-300 mt-0.5">{t.since} {fmt(acc.created_at)}</div>
                   </div>
                   <div className="text-[12px] font-mono text-cs-500 capitalize">{acc.industry ?? "—"}</div>
                   <div className="text-[12px] font-mono text-cs-500">{acc.country ?? "—"}</div>
                   <div>
-                    <span className={`text-[14px] font-mono font-bold uppercase tracking-widest ${
+                    <span className={`text-[11px] font-mono font-bold uppercase tracking-widest ${
                       acc.is_active ? "text-green-600" : "text-yellow-600"
                     }`}>
                       {acc.is_active ? t.active : t.pending}
@@ -123,7 +123,7 @@ export default async function AdminAcceleratorsPage({
                       <input type="hidden" name="deactivate" value={acc.is_active ? "true" : "false"} />
                       <button
                         type="submit"
-                        className={`text-[14px] font-mono uppercase tracking-widest px-2 py-1 border transition-colors ${
+                        className={`text-[11px] font-mono uppercase tracking-widest px-2 py-1 border transition-colors ${
                           acc.is_active
                             ? "border-red-200 text-red-500 hover:bg-red-50"
                             : "btn-primary btn-sm"

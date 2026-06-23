@@ -125,7 +125,7 @@ export default async function EvaluatorAssignmentsPage({
           <>
             <div className="grid min-w-[700px] grid-cols-[1fr_110px_160px_110px_70px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
               {[t.colStartup, t.colIndustry, t.colStatus, t.colUpdated, ""].map((h) => (
-                <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
+                <div key={h} className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
 
@@ -141,7 +141,7 @@ export default async function EvaluatorAssignmentsPage({
                   >
                     <div>
                       <div className="text-[13px] font-semibold">{a.startup_name}</div>
-                      <div className="text-[14px] font-mono text-cs-400">{a.startup_email}</div>
+                      <div className="text-[12px] font-mono text-cs-400">{a.startup_email}</div>
                     </div>
 
                     <div className="text-[12px] font-mono text-cs-500 capitalize">
@@ -149,12 +149,12 @@ export default async function EvaluatorAssignmentsPage({
                     </div>
 
                     <div>
-                      <span className={`text-[14px] font-mono font-bold uppercase tracking-widest px-1.5 py-0.5 ${STATUS_COLOR[a.status] ?? "text-cs-400 bg-cs-100"}`}>
+                      <span className={`text-[11px] font-mono font-bold uppercase tracking-widest px-1.5 py-0.5 ${STATUS_COLOR[a.status] ?? "text-cs-400 bg-cs-100"}`}>
                         {dict.status[a.status as keyof typeof dict.status] ?? a.status.replace(/_/g, " ")}
                       </span>
                     </div>
 
-                    <div className="text-[14px] font-mono text-cs-400">{fmt(a.updated_at)}</div>
+                    <div className="text-[12px] font-mono text-cs-400">{fmt(a.updated_at)}</div>
 
                     <div>
                       {isActive ? (

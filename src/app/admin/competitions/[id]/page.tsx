@@ -124,11 +124,11 @@ export default async function AdminCompetitionDetailPage({
         </div>
         <div className="flex items-center gap-3 mb-1">
           <h1 className="text-2xl font-bold tracking-tight">{comp.name}</h1>
-          <span className={`text-[14px] font-mono font-bold uppercase tracking-widest px-2 py-1 ${STATUS_COLOR[comp.status] ?? "text-cs-400 bg-cs-100"}`}>
+          <span className={`text-[11px] font-mono font-bold uppercase tracking-widest px-2 py-1 ${STATUS_COLOR[comp.status] ?? "text-cs-400 bg-cs-100"}`}>
             {comp.status === "active" ? t.active : comp.status}
           </span>
         </div>
-        <div className="flex gap-5 text-[14px] font-mono text-cs-400">
+        <div className="flex flex-wrap gap-3 sm:gap-5 text-[12px] font-mono text-cs-400">
           {comp.industry && <span className="uppercase">{comp.industry}</span>}
           {comp.start_date && <span>Opens: {fmt(comp.start_date)}</span>}
           {comp.end_date   && <span>Closes: {fmt(comp.end_date)}</span>}
@@ -161,7 +161,7 @@ export default async function AdminCompetitionDetailPage({
                 {/* Column headers */}
                 <div className="grid min-w-[480px] grid-cols-[1fr_80px_80px_100px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
                   {[t.startup, t.scores, t.avgScore, t.submitted].map((h) => (
-                    <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
+                    <div key={h} className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
                   ))}
                 </div>
                 <div className="divide-y divide-cs-100">
@@ -174,11 +174,11 @@ export default async function AdminCompetitionDetailPage({
                         <div>
                           <div className="flex items-center gap-2">
                             {avg != null && (
-                              <span className="text-[14px] font-mono text-cs-400 w-4">#{idx + 1}</span>
+                              <span className="text-[12px] font-mono text-cs-400 w-4">#{idx + 1}</span>
                             )}
                             <span className="text-[13px] font-semibold">{startup?.org_name ?? "—"}</span>
                           </div>
-                          <div className="text-[14px] font-mono text-cs-400">{startup?.email ?? ""}</div>
+                          <div className="text-[12px] font-mono text-cs-400">{startup?.email ?? ""}</div>
                         </div>
                         <div className="text-[12px] font-mono text-cs-400">
                           {count > 0 ? `${count} score${count !== 1 ? "s" : ""}` : "—"}
@@ -186,7 +186,7 @@ export default async function AdminCompetitionDetailPage({
                         <div className={`text-[13px] font-bold font-mono ${avg != null ? "text-sb-default" : "text-cs-300"}`}>
                           {avg != null ? `${avg}/100` : "—"}
                         </div>
-                        <div className="text-[14px] font-mono text-cs-400">
+                        <div className="text-[12px] font-mono text-cs-400">
                           {fmt(entry.entered_at)}
                         </div>
                       </div>
@@ -212,14 +212,14 @@ export default async function AdminCompetitionDetailPage({
                   const sInfo     = startup?.startups  as unknown as { org_name: string } | null;
                   const eInfo     = evaluator?.evaluators as unknown as { org_name: string } | null;
                   return (
-                    <div key={i} className="px-5 py-3 flex items-center justify-between gap-4">
-                      <div>
-                        <div className="text-[13px] font-semibold">{sInfo?.org_name ?? s.startup_id.slice(0,8)}</div>
-                        <div className="text-[14px] font-mono text-cs-400">
+                    <div key={i} className="px-5 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+                      <div className="min-w-0">
+                        <div className="text-[13px] font-semibold truncate">{sInfo?.org_name ?? s.startup_id.slice(0,8)}</div>
+                        <div className="text-[12px] font-mono text-cs-400">
                           by {eInfo?.org_name ?? "—"} · {fmt(s.scored_at)}
                         </div>
                         {s.notes && (
-                          <div className="text-[14px] font-mono text-cs-500 mt-0.5 italic">{s.notes}</div>
+                          <div className="text-[12px] font-mono text-cs-500 mt-0.5 italic">{s.notes}</div>
                         )}
                       </div>
                       <div className="text-[13px] font-bold font-mono text-sb-default shrink-0">
@@ -299,7 +299,7 @@ export default async function AdminCompetitionDetailPage({
                   return (
                     <div key={ce.evaluator_id} className="px-4 py-2.5 flex items-center justify-between">
                       <span className="text-[12px] font-mono">{eInfo?.org_name ?? ce.evaluator_id.slice(0,8)}</span>
-                      <span className="text-[14px] font-mono text-cs-400">{fmt(ce.assigned_at)}</span>
+                      <span className="text-[12px] font-mono text-cs-400">{fmt(ce.assigned_at)}</span>
                     </div>
                   );
                 })}

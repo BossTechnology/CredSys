@@ -80,7 +80,7 @@ export default async function AdminOverviewPage() {
               <span className="text-[12px] font-mono font-bold text-yellow-700 uppercase tracking-widest">
                 ⚠ {pendingEvaluators} {t.evalPendingAlert}
               </span>
-              <span className="text-[14px] font-mono text-yellow-600">{t.review}</span>
+              <span className="text-[12px] font-mono text-yellow-600">{t.review}</span>
             </Link>
           )}
           {(pendingAssignment ?? 0) > 0 && (
@@ -91,7 +91,7 @@ export default async function AdminOverviewPage() {
               <span className="text-[12px] font-mono font-bold text-yellow-700 uppercase tracking-widest">
                 ⚠ {pendingAssignment} {t.reqAwaitingAlert}
               </span>
-              <span className="text-[14px] font-mono text-yellow-600">{t.assign}</span>
+              <span className="text-[12px] font-mono text-yellow-600">{t.assign}</span>
             </Link>
           )}
         </div>
@@ -116,7 +116,7 @@ export default async function AdminOverviewPage() {
             }`}>
               {s.value}
             </div>
-            <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mt-1">
+            <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mt-1">
               {s.label}
             </div>
           </Link>
@@ -138,16 +138,16 @@ export default async function AdminOverviewPage() {
         ) : (
           <div className="divide-y divide-cs-100">
             {(recentRequests ?? []).map((r) => (
-              <div key={r.id} className="px-5 py-3 flex items-center justify-between gap-4">
-                <div>
-                  <div className="text-[13px] font-semibold">{r.startup_name}</div>
-                  <div className="text-[14px] font-mono text-cs-400">{r.startup_email}</div>
+              <div key={r.id} className="px-5 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+                <div className="min-w-0">
+                  <div className="text-[13px] font-semibold truncate">{r.startup_name}</div>
+                  <div className="text-[12px] font-mono text-cs-400 truncate">{r.startup_email}</div>
                 </div>
-                <div className="flex items-center gap-5">
-                  <span className={`text-[14px] font-mono uppercase tracking-widest ${STATUS_COLOR[r.status] ?? "text-cs-400"}`}>
+                <div className="flex items-center gap-3 sm:gap-5 shrink-0">
+                  <span className={`text-[11px] font-mono uppercase tracking-widest ${STATUS_COLOR[r.status] ?? "text-cs-400"}`}>
                     {dict.status[r.status as keyof typeof dict.status] ?? r.status.replace(/_/g, " ")}
                   </span>
-                  <span className="text-[14px] font-mono text-cs-400">
+                  <span className="text-[11px] font-mono text-cs-400">
                     {new Date(r.updated_at).toLocaleDateString(locale, { month: "short", day: "numeric" })}
                   </span>
                 </div>

@@ -264,13 +264,13 @@ export default async function StartupAccreditationPage() {
       {status === "accredited" && credCode && (
         <div className="bg-sb-light border border-sb-default px-5 py-4 mb-6 flex items-center justify-between">
           <div>
-            <div className="text-[14px] font-mono text-sb-text uppercase tracking-widest mb-0.5">
+            <div className="text-[12px] font-mono text-sb-text uppercase tracking-widest mb-0.5">
               {t.credentialId}
             </div>
             <div className="text-lg font-bold font-mono tracking-widest">
               {credCode.toUpperCase()}
             </div>
-            <div className="text-[14px] font-mono text-cs-400 mt-0.5">
+            <div className="text-[12px] font-mono text-cs-400 mt-0.5">
               {t.accredited} {fmt(request.accredited_at, locale)}
               {request.expires_at && ` · ${t.expires} ${fmt(request.expires_at, locale)}`}
             </div>
@@ -284,7 +284,7 @@ export default async function StartupAccreditationPage() {
       {/* Evaluator notes */}
       {request.evaluator_notes && (
         <div className="border border-cs-200 bg-cs-50 px-5 py-3 mb-6">
-          <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-1">
+          <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mb-1">
             {t.evaluatorNotes}
           </div>
           <p className="text-[13px] text-cs-700 leading-relaxed">{request.evaluator_notes}</p>
@@ -322,7 +322,7 @@ export default async function StartupAccreditationPage() {
             { label: t.teamSizeLabel,  value: request.team_size },
           ].map((f) => (
             <div key={f.label}>
-              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+              <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
                 {f.label}
               </div>
               <div className="text-[13px] font-semibold">{f.value ? String(f.value) : "—"}</div>
@@ -330,7 +330,7 @@ export default async function StartupAccreditationPage() {
           ))}
           {request.description && (
             <div className="col-span-2">
-              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">{t.descriptionLabel}</div>
+              <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">{t.descriptionLabel}</div>
               <p className="text-[13px] text-cs-600 leading-relaxed">{request.description}</p>
             </div>
           )}

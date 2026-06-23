@@ -122,7 +122,7 @@ export default async function AdminSponsorshipsPage({
           <>
             <div className="grid min-w-[760px] grid-cols-[60px_1fr_1fr_1fr_80px_80px_100px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
               {[t.type, t.sponsor, t.startup, t.billingContact, t.date, t.status, t.action].map((h) => (
-                <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
+                <div key={h} className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
             <div className="divide-y divide-cs-100">
@@ -134,7 +134,7 @@ export default async function AdminSponsorshipsPage({
                 return (
                   <div key={s.id} className="grid min-w-[760px] grid-cols-[60px_1fr_1fr_1fr_80px_80px_100px] gap-3 px-5 py-3 items-start">
                     <div>
-                      <span className="text-[14px] font-mono uppercase tracking-widest text-cs-400">
+                      <span className="text-[11px] font-mono uppercase tracking-widest text-cs-400">
                         {s.sponsor_type}
                       </span>
                     </div>
@@ -143,15 +143,15 @@ export default async function AdminSponsorshipsPage({
                     </div>
                     <div>
                       <div className="text-[13px] font-semibold">{s.startup_name_input}</div>
-                      <div className="text-[14px] font-mono text-cs-400">{s.startup_email_input}</div>
+                      <div className="text-[12px] font-mono text-cs-400">{s.startup_email_input}</div>
                     </div>
                     <div>
                       <div className="text-[13px]">{s.billing_contact_name}</div>
-                      <div className="text-[14px] font-mono text-cs-400">{s.billing_contact_email}</div>
+                      <div className="text-[12px] font-mono text-cs-400">{s.billing_contact_email}</div>
                     </div>
                     <div className="text-[12px] font-mono text-cs-400">{fmt(s.created_at)}</div>
                     <div>
-                      <span className={`text-[14px] font-mono font-bold uppercase tracking-widest ${STATUS_COLORS[s.status] ?? "text-cs-400"}`}>
+                      <span className={`text-[11px] font-mono font-bold uppercase tracking-widest ${STATUS_COLORS[s.status] ?? "text-cs-400"}`}>
                         {dict.status[s.status as keyof typeof dict.status] ?? s.status.replace(/_/g, " ")}
                       </span>
                     </div>

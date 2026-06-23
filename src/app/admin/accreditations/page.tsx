@@ -107,7 +107,7 @@ export default async function AdminAccreditationsPage({
           <>
             <div className="grid min-w-[760px] grid-cols-[1fr_100px_140px_200px_80px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
               {[t.startup, t.industry, t.status, t.evaluator, t.submitted].map((h) => (
-                <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
+                <div key={h} className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
             <div className="divide-y divide-cs-100">
@@ -124,7 +124,7 @@ export default async function AdminAccreditationsPage({
                   >
                     <div>
                       <div className="text-[13px] font-semibold">{req.startup_name}</div>
-                      <div className="text-[14px] font-mono text-cs-400">{req.startup_email}</div>
+                      <div className="text-[12px] font-mono text-cs-400">{req.startup_email}</div>
                     </div>
 
                     <div className="text-[12px] font-mono text-cs-500 capitalize pt-0.5">
@@ -132,7 +132,7 @@ export default async function AdminAccreditationsPage({
                     </div>
 
                     <div className="pt-0.5">
-                      <span className={`text-[14px] font-mono font-bold uppercase tracking-widest px-1.5 py-0.5 ${STATUS_COLOR[req.status] ?? "text-cs-400 bg-cs-100"}`}>
+                      <span className={`text-[11px] font-mono font-bold uppercase tracking-widest px-1.5 py-0.5 ${STATUS_COLOR[req.status] ?? "text-cs-400 bg-cs-100"}`}>
                         {dict.status[req.status as keyof typeof dict.status] ?? req.status.replace(/_/g, " ")}
                       </span>
                     </div>
@@ -146,7 +146,7 @@ export default async function AdminAccreditationsPage({
                           <select
                             name="evaluator_id"
                             required
-                            className="text-[14px] font-mono border border-cs-200 bg-white px-1.5 py-1 focus:outline-none focus:border-black flex-1 min-w-0"
+                            className="text-[12px] font-mono border border-cs-200 bg-white px-1.5 py-1 focus:outline-none focus:border-black flex-1 min-w-0"
                           >
                             <option value="">{t.select}</option>
                             {(evaluators ?? []).map((e) => (
@@ -158,11 +158,11 @@ export default async function AdminAccreditationsPage({
                           </button>
                         </form>
                       ) : (
-                        <span className="text-[14px] font-mono text-cs-300">—</span>
+                        <span className="text-[12px] font-mono text-cs-300">—</span>
                       )}
                     </div>
 
-                    <div className="text-[14px] font-mono text-cs-400 pt-0.5">{fmt(req.created_at)}</div>
+                    <div className="text-[12px] font-mono text-cs-400 pt-0.5">{fmt(req.created_at)}</div>
                   </div>
                 );
               })}

@@ -56,7 +56,7 @@ export default async function AdminCredListPage() {
           <>
             <div className="grid min-w-[760px] grid-cols-[1fr_100px_100px_110px_110px_80px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
               {[t.organization, t.industry, t.country, t.issued, t.expires, t.credential].map((h) => (
-                <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
+                <div key={h} className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
             <div className="divide-y divide-cs-100">
@@ -76,7 +76,7 @@ export default async function AdminCredListPage() {
                   >
                     <div>
                       <div className="text-[13px] font-semibold">{startup?.org_name ?? "—"}</div>
-                      <div className="text-[14px] font-mono text-cs-400">{startup?.email ?? ""}</div>
+                      <div className="text-[12px] font-mono text-cs-400">{startup?.email ?? ""}</div>
                     </div>
                     <div className="text-[12px] font-mono text-cs-500 capitalize">{startup?.industry ?? "—"}</div>
                     <div className="text-[12px] font-mono text-cs-500">{startup?.country ?? "—"}</div>
@@ -96,7 +96,7 @@ export default async function AdminCredListPage() {
                         {c.unique_code} ↗
                       </Link>
                       {!c.is_active && (
-                        <div className="text-[14px] font-mono text-cs-400 mt-0.5 uppercase">{dict.common.inactive}</div>
+                        <div className="text-[12px] font-mono text-cs-400 mt-0.5 uppercase">{dict.common.inactive}</div>
                       )}
                     </div>
                   </div>

@@ -520,7 +520,7 @@ export function VerificationPanel({
               Load Verification Data
             </span>
           </div>
-          <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
 
             {/* Import from CHASS1S URL */}
             <div className="border border-cs-200 p-4 flex flex-col gap-3">
@@ -599,7 +599,7 @@ export function VerificationPanel({
             ← Back
           </button>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <ManualSection
               label="BLIPS — Business Performance"
               data={manualBlips}
@@ -647,7 +647,7 @@ export function VerificationPanel({
           )}
 
           {/* BLIPS + ADDIS side by side */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {blipsData && blipsData.length > 0 && (
               <DataSection
                 label="BLIPS"
@@ -700,7 +700,7 @@ export function VerificationPanel({
 
           {readOnly && notes && (
             <div className="border border-cs-200 bg-cs-50 px-4 py-3">
-              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-1">
+              <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mb-1">
                 Evaluator Notes
               </div>
               <p className="text-[13px] text-cs-700 leading-relaxed">{notes}</p>

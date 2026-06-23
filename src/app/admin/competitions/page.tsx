@@ -130,15 +130,15 @@ export default async function AdminCompetitionsPage() {
         ) : (
           <div className="divide-y divide-cs-100">
             {(competitions ?? []).map((comp) => (
-              <div key={comp.id} className="px-5 py-4 flex items-start justify-between gap-4">
+              <div key={comp.id} className="px-5 py-4 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-[13px] font-bold">{comp.name}</span>
-                    <span className={`text-[14px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 ${STATUS_COLOR[comp.status] ?? "text-cs-400 bg-cs-100"}`}>
+                    <span className={`text-[11px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 ${STATUS_COLOR[comp.status] ?? "text-cs-400 bg-cs-100"}`}>
                       {comp.status === "active" ? t.active : comp.status}
                     </span>
                   </div>
-                  <div className="flex gap-5 text-[14px] font-mono text-cs-400">
+                  <div className="flex flex-wrap gap-3 sm:gap-5 text-[12px] font-mono text-cs-400">
                     {comp.industry && <span className="uppercase">{comp.industry}</span>}
                     {comp.accelerator_id && <span>{accelMap.get(comp.accelerator_id) ?? "—"}</span>}
                     {comp.start_date && <span>Opens: {fmt(comp.start_date)}</span>}

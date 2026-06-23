@@ -84,9 +84,9 @@ export default async function EvaluatorDashboardPage() {
         ].map((s, i) => (
           <div
             key={s.label}
-            className={`px-6 py-5 ${i < 3 ? "border-r border-cs-200" : ""}`}
+            className={`px-6 py-5 border-b sm:border-b-0 last:border-b-0 ${i % 2 === 0 ? "border-r border-cs-200" : ""} ${i < 2 ? "sm:border-r sm:border-cs-200" : ""}`}
           >
-            <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-1">
+            <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mb-1">
               {s.label}
             </div>
             <div
@@ -109,7 +109,7 @@ export default async function EvaluatorDashboardPage() {
               {t.myAssignments}
             </span>
           </div>
-          <span className="text-[14px] font-mono text-cs-400">{total} {t.totalSuffix}</span>
+          <span className="text-[12px] font-mono text-cs-400">{total} {t.totalSuffix}</span>
         </div>
 
         {assignments.length === 0 ? (
@@ -123,7 +123,7 @@ export default async function EvaluatorDashboardPage() {
             {/* Column headers */}
             <div className="grid min-w-[660px] grid-cols-[1fr_120px_160px_120px_80px] px-5 py-2 border-b border-cs-100 bg-cs-50">
               {[t.colStartup, t.colIndustry, t.colStatus, t.colUpdated, ""].map((h) => (
-                <span key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
+                <span key={h} className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">
                   {h}
                 </span>
               ))}
@@ -138,7 +138,7 @@ export default async function EvaluatorDashboardPage() {
               >
                 <div>
                   <div className="text-[13px] font-semibold">{a.startup_name}</div>
-                  <div className="text-[14px] font-mono text-cs-400">{a.startup_email}</div>
+                  <div className="text-[12px] font-mono text-cs-400">{a.startup_email}</div>
                 </div>
                 <span className="text-[13px] font-mono text-cs-500 capitalize">
                   {a.industry || "—"}
@@ -146,7 +146,7 @@ export default async function EvaluatorDashboardPage() {
                 <div>
                   <Badge variant={a.status}>{dict.status[a.status]}</Badge>
                 </div>
-                <span className="text-[14px] font-mono text-cs-400">
+                <span className="text-[12px] font-mono text-cs-400">
                   {formatShort(a.updated_at)}
                 </span>
                 <Link
