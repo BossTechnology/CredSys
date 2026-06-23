@@ -39,7 +39,7 @@ export default async function AdminAccreditationsPage({
 
   let query = service
     .from("accreditation_requests")
-    .select("id, startup_name, startup_email, industry, status, evaluator_id, created_at, updated_at")
+    .select("id, startup_name, startup_email, industry, status, evaluator_id, acceptance_status, evaluator_decline_reason, created_at, updated_at")
     .order("updated_at", { ascending: false });
 
   if (filter === "unassigned") {
@@ -139,24 +139,40 @@ export default async function AdminAccreditationsPage({
 
                     <div>
                       {assignedName ? (
-                        <span className="text-[12px] font-mono text-cs-500">{assignedName}</span>
-                      ) : needsAssign ? (
-                        <form action={assignEvaluatorToRequest} className="flex gap-1.5 items-center">
-                          <input type="hidden" name="request_id" value={req.id} />
-                          <select
-                            name="evaluator_id"
-                            required
-                            className="text-[12px] font-mono border border-cs-200 bg-white px-1.5 py-1 focus:outline-none focus:border-black flex-1 min-w-0"
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-[12px] font-mono text-cs-500">{assignedName}</span>
+                          <span
+                            className={`text-[10px] font-mono uppercase tracking-widest ${
+                              req.acceptance_status === "accepted" ? "text-green-700" : "text-yellow-600"
+                            }`}
                           >
-                            <option value="">{t.select}</option>
-                            {(evaluators ?? []).map((e) => (
-                              <option key={e.id} value={e.id}>{e.org_name}</option>
-                            ))}
-                          </select>
-                          <button type="submit" className="btn-primary btn-sm shrink-0">
-                            {t.assignBtn}
-                          </button>
-                        </form>
+                            {req.acceptance_status === "accepted" ? t.acceptanceAccepted : t.acceptancePending}
+                          </span>
+                        </div>
+                      ) : needsAssign ? (
+                        <div className="flex flex-col gap-1">
+                          <form action={assignEvaluatorToRequest} className="flex gap-1.5 items-center">
+                            <input type="hidden" name="request_id" value={req.id} />
+                            <select
+                              name="evaluator_id"
+                              required
+                              className="text-[12px] font-mono border border-cs-200 bg-white px-1.5 py-1 focus:outline-none focus:border-black flex-1 min-w-0"
+                            >
+                              <option value="">{t.select}</option>
+                              {(evaluators ?? []).map((e) => (
+                                <option key={e.id} value={e.id}>{e.org_name}</option>
+                              ))}
+                            </select>
+                            <button type="submit" className="btn-primary btn-sm shrink-0">
+                              {t.assignBtn}
+                            </button>
+                          </form>
+                          {req.evaluator_decline_reason && (
+                            <span className="text-[10px] font-mono text-red-600">
+                              {t.declinedReasonLabel}: {req.evaluator_decline_reason}
+                            </span>
+                          )}
+                        </div>
                       ) : (
                         <span className="text-[12px] font-mono text-cs-300">—</span>
                       )}
