@@ -15,6 +15,7 @@ type Assignment = {
   startup_email:string;
   industry:     string;
   updated_at:   string;
+  acceptance_status?: "pending" | "accepted";
 };
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -44,7 +45,7 @@ export default async function EvaluatorDashboardPage() {
 
   const { data: rows } = await service
     .from("accreditation_requests")
-    .select("id, status, startup_name, startup_email, industry, updated_at")
+    .select("id, status, startup_name, startup_email, industry, updated_at, acceptance_status")
     .eq("evaluator_id", profile.entity_id)
     .order("updated_at", { ascending: false });
 
@@ -52,7 +53,7 @@ export default async function EvaluatorDashboardPage() {
   const total      = assignments.length;
   const active     = assignments.filter((a) => !TERMINAL.includes(a.status)).length;
   const accredited = assignments.filter((a) => a.status === "accredited").length;
-  const actionNeeded = assignments.filter((a) => a.status === "evaluator_assigned").length;
+  const actionNeeded = assignments.filter((a) => a.acceptance_status === "pending").length;
 
   function formatShort(iso: string) {
     return new Date(iso).toLocaleDateString(locale, {
@@ -133,7 +134,7 @@ export default async function EvaluatorDashboardPage() {
               <div
                 key={a.id}
                 className={`grid min-w-[660px] grid-cols-[1fr_120px_160px_120px_80px] px-5 py-3 border-b border-cs-100 items-center hover:bg-cs-50 transition-colors ${
-                  a.status === "evaluator_assigned" ? "bg-sb-light/30" : ""
+                  a.acceptance_status === "pending" ? "bg-sb-light/30" : ""
                 }`}
               >
                 <div>
@@ -145,6 +146,11 @@ export default async function EvaluatorDashboardPage() {
                 </span>
                 <div>
                   <Badge variant={a.status}>{dict.status[a.status]}</Badge>
+                  {a.acceptance_status === "pending" && (
+                    <div className="text-[10px] font-mono text-sb-text uppercase tracking-widest mt-1">
+                      {t.pendingAcceptance}
+                    </div>
+                  )}
                 </div>
                 <span className="text-[12px] font-mono text-cs-400">
                   {formatShort(a.updated_at)}
