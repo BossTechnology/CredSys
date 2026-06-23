@@ -1,5 +1,6 @@
 import { createServiceClient }         from "@/lib/supabase/service";
 import { notFound }                     from "next/navigation";
+import { getAppDictionary }             from "@/lib/i18n/loader";
 import {
   assignEvaluatorToCompetition,
   updateCompetitionStatus,
@@ -36,6 +37,8 @@ export default async function AdminCompetitionDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const { dict } = await getAppDictionary();
+  const t = dict.admin;
   const service = createServiceClient();
 
   const [
@@ -110,22 +113,22 @@ export default async function AdminCompetitionDetailPage({
   const canPublish   = comp.status === "scoring" || comp.status === "closed";
 
   return (
-    <div className="max-w-[960px] mx-auto px-7 py-8">
+    <div className="max-w-[960px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <a href="/admin/competitions" className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black">
-            ← Competitions
+            ← {t.competitions}
           </a>
         </div>
         <div className="flex items-center gap-3 mb-1">
           <h1 className="text-2xl font-bold tracking-tight">{comp.name}</h1>
-          <span className={`text-[14px] font-mono font-bold uppercase tracking-widest px-2 py-1 ${STATUS_COLOR[comp.status] ?? "text-cs-400 bg-cs-100"}`}>
-            {comp.status}
+          <span className={`text-[11px] font-mono font-bold uppercase tracking-widest px-2 py-1 ${STATUS_COLOR[comp.status] ?? "text-cs-400 bg-cs-100"}`}>
+            {comp.status === "active" ? t.active : comp.status}
           </span>
         </div>
-        <div className="flex gap-5 text-[14px] font-mono text-cs-400">
+        <div className="flex flex-wrap gap-3 sm:gap-5 text-[12px] font-mono text-cs-400">
           {comp.industry && <span className="uppercase">{comp.industry}</span>}
           {comp.start_date && <span>Opens: {fmt(comp.start_date)}</span>}
           {comp.end_date   && <span>Closes: {fmt(comp.end_date)}</span>}
@@ -137,28 +140,28 @@ export default async function AdminCompetitionDetailPage({
         )}
       </div>
 
-      <div className="grid grid-cols-[1fr_280px] gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
 
         {/* ── Left column: roster + scores ── */}
         <div className="flex flex-col gap-6">
 
           {/* Roster */}
-          <div className="bg-white border border-cs-200">
+          <div className="bg-white border border-cs-200 overflow-x-auto">
             <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                Startups Entered · {entries?.length ?? 0}
+                {t.entries} · {entries?.length ?? 0}
               </span>
             </div>
             {(entries ?? []).length === 0 ? (
               <div className="px-5 py-8 text-center">
-                <p className="text-[13px] font-mono text-cs-400">No entries yet.</p>
+                <p className="text-[13px] font-mono text-cs-400">{t.noEntries}</p>
               </div>
             ) : (
               <>
                 {/* Column headers */}
-                <div className="grid grid-cols-[1fr_80px_80px_100px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
-                  {["Startup", "Scores", "Avg", "Entered"].map((h) => (
-                    <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
+                <div className="grid min-w-[480px] grid-cols-[1fr_80px_80px_100px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
+                  {[t.startup, t.scores, t.avgScore, t.submitted].map((h) => (
+                    <div key={h} className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
                   ))}
                 </div>
                 <div className="divide-y divide-cs-100">
@@ -167,15 +170,15 @@ export default async function AdminCompetitionDetailPage({
                     const avg     = avgScore(entry.startup_id);
                     const count   = (scoreMap.get(entry.startup_id) ?? []).length;
                     return (
-                      <div key={entry.startup_id} className="grid grid-cols-[1fr_80px_80px_100px] gap-3 px-5 py-3 items-center">
+                      <div key={entry.startup_id} className="grid min-w-[480px] grid-cols-[1fr_80px_80px_100px] gap-3 px-5 py-3 items-center">
                         <div>
                           <div className="flex items-center gap-2">
                             {avg != null && (
-                              <span className="text-[14px] font-mono text-cs-400 w-4">#{idx + 1}</span>
+                              <span className="text-[12px] font-mono text-cs-400 w-4">#{idx + 1}</span>
                             )}
                             <span className="text-[13px] font-semibold">{startup?.org_name ?? "—"}</span>
                           </div>
-                          <div className="text-[14px] font-mono text-cs-400">{startup?.email ?? ""}</div>
+                          <div className="text-[12px] font-mono text-cs-400">{startup?.email ?? ""}</div>
                         </div>
                         <div className="text-[12px] font-mono text-cs-400">
                           {count > 0 ? `${count} score${count !== 1 ? "s" : ""}` : "—"}
@@ -183,7 +186,7 @@ export default async function AdminCompetitionDetailPage({
                         <div className={`text-[13px] font-bold font-mono ${avg != null ? "text-sb-default" : "text-cs-300"}`}>
                           {avg != null ? `${avg}/100` : "—"}
                         </div>
-                        <div className="text-[14px] font-mono text-cs-400">
+                        <div className="text-[12px] font-mono text-cs-400">
                           {fmt(entry.entered_at)}
                         </div>
                       </div>
@@ -196,10 +199,10 @@ export default async function AdminCompetitionDetailPage({
 
           {/* Score detail (per evaluator) */}
           {(scores ?? []).length > 0 && (
-            <div className="bg-white border border-cs-200">
+            <div className="bg-white border border-cs-200 overflow-x-auto">
               <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
                 <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                  Individual Scores · {scores?.length}
+                  {t.scores} · {scores?.length}
                 </span>
               </div>
               <div className="divide-y divide-cs-100">
@@ -209,14 +212,14 @@ export default async function AdminCompetitionDetailPage({
                   const sInfo     = startup?.startups  as unknown as { org_name: string } | null;
                   const eInfo     = evaluator?.evaluators as unknown as { org_name: string } | null;
                   return (
-                    <div key={i} className="px-5 py-3 flex items-center justify-between gap-4">
-                      <div>
-                        <div className="text-[13px] font-semibold">{sInfo?.org_name ?? s.startup_id.slice(0,8)}</div>
-                        <div className="text-[14px] font-mono text-cs-400">
+                    <div key={i} className="px-5 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+                      <div className="min-w-0">
+                        <div className="text-[13px] font-semibold truncate">{sInfo?.org_name ?? s.startup_id.slice(0,8)}</div>
+                        <div className="text-[12px] font-mono text-cs-400">
                           by {eInfo?.org_name ?? "—"} · {fmt(s.scored_at)}
                         </div>
                         {s.notes && (
-                          <div className="text-[14px] font-mono text-cs-500 mt-0.5 italic">{s.notes}</div>
+                          <div className="text-[12px] font-mono text-cs-500 mt-0.5 italic">{s.notes}</div>
                         )}
                       </div>
                       <div className="text-[13px] font-bold font-mono text-sb-default shrink-0">
@@ -235,10 +238,10 @@ export default async function AdminCompetitionDetailPage({
 
           {/* Status controls */}
           {nextStatuses.length > 0 && (
-            <div className="bg-white border border-cs-200">
+            <div className="bg-white border border-cs-200 overflow-x-auto">
               <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
                 <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                  Update Status
+                  {t.updateStatus}
                 </span>
               </div>
               <div className="p-4 flex flex-col gap-2">
@@ -262,10 +265,10 @@ export default async function AdminCompetitionDetailPage({
 
           {/* Publish results */}
           {canPublish && (
-            <div className="bg-white border border-cs-200">
+            <div className="bg-white border border-cs-200 overflow-x-auto">
               <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
                 <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                  Publish Results
+                  {t.publishResults}
                 </span>
               </div>
               <div className="p-4">
@@ -275,7 +278,7 @@ export default async function AdminCompetitionDetailPage({
                 <form action={publishResults}>
                   <input type="hidden" name="competition_id" value={comp.id} />
                   <button type="submit" className="w-full btn-accent btn-sm">
-                    Publish &amp; Send Results
+                    {t.publishResults}
                   </button>
                 </form>
               </div>
@@ -283,10 +286,10 @@ export default async function AdminCompetitionDetailPage({
           )}
 
           {/* Evaluators */}
-          <div className="bg-white border border-cs-200">
+          <div className="bg-white border border-cs-200 overflow-x-auto">
             <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                Assigned Evaluators · {compEvaluators?.length ?? 0}
+                {t.evaluators} · {compEvaluators?.length ?? 0}
               </span>
             </div>
             {(compEvaluators ?? []).length > 0 && (
@@ -296,7 +299,7 @@ export default async function AdminCompetitionDetailPage({
                   return (
                     <div key={ce.evaluator_id} className="px-4 py-2.5 flex items-center justify-between">
                       <span className="text-[12px] font-mono">{eInfo?.org_name ?? ce.evaluator_id.slice(0,8)}</span>
-                      <span className="text-[14px] font-mono text-cs-400">{fmt(ce.assigned_at)}</span>
+                      <span className="text-[12px] font-mono text-cs-400">{fmt(ce.assigned_at)}</span>
                     </div>
                   );
                 })}
@@ -307,13 +310,13 @@ export default async function AdminCompetitionDetailPage({
                 <form action={assignEvaluatorToCompetition} className="flex gap-2">
                   <input type="hidden" name="competition_id" value={comp.id} />
                   <select name="evaluator_id" required className="cs-input flex-1 text-[12px]">
-                    <option value="">Select evaluator…</option>
+                    <option value="">{t.select}</option>
                     {unassignedEvals.map((e) => (
                       <option key={e.id} value={e.id}>{e.org_name}</option>
                     ))}
                   </select>
                   <button type="submit" className="btn-primary btn-sm shrink-0">
-                    Assign
+                    {t.assignEvaluatorComp}
                   </button>
                 </form>
               </div>

@@ -135,3 +135,118 @@ export async function rejectWithReason(formData: FormData): Promise<{ error?: st
 
   return {};
 }
+
+// ─── Evaluator accepts the assignment ────────────────────────────────────────
+
+export async function acceptAssignment(formData: FormData): Promise<{ error?: string }> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "Unauthorized" };
+
+  const service = createServiceClient();
+
+  const { data: profile } = await service
+    .from("user_profiles")
+    .select("entity_id, role")
+    .eq("user_id", user.id)
+    .single();
+
+  if (!profile || profile.role !== "evaluator") return { error: "Unauthorized" };
+
+  const requestId = formData.get("request_id") as string;
+  if (!requestId) return { error: "Missing request_id" };
+
+  // Enforce ownership + valid state
+  const { data: req } = await service
+    .from("accreditation_requests")
+    .select("startup_name, status, acceptance_status")
+    .eq("id", requestId)
+    .eq("evaluator_id", profile.entity_id)
+    .single();
+
+  if (!req) return { error: "Assignment not found" };
+  if (req.status !== "evaluator_assigned" || req.acceptance_status !== "pending") {
+    return { error: "Assignment cannot be accepted in its current state" };
+  }
+
+  await service
+    .from("accreditation_requests")
+    .update({ acceptance_status: "accepted" })
+    .eq("id", requestId);
+
+  // Notify admin
+  const { data: evaluator } = await service
+    .from("evaluators").select("org_name").eq("id", profile.entity_id).single();
+  const adminEmail = process.env.ADMIN_NOTIFY_EMAIL ?? "amadeus@boss.technology";
+  const { sendEvaluatorAccepted } = await import("@/lib/email/templates/e16-evaluator-response");
+  sendEvaluatorAccepted(adminEmail, evaluator?.org_name ?? "Evaluator", req.startup_name)
+    .catch((e) => console.error("[acceptAssignment] email error", e));
+
+  revalidatePath(`/app/evaluator/assignments/${requestId}`);
+  revalidatePath("/app/evaluator/dashboard");
+  revalidatePath("/admin/accreditations");
+
+  return {};
+}
+
+// ─── Evaluator declines the assignment (reason required) ─────────────────────
+
+export async function declineAssignment(formData: FormData): Promise<{ error?: string }> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "Unauthorized" };
+
+  const service = createServiceClient();
+
+  const { data: profile } = await service
+    .from("user_profiles")
+    .select("entity_id, role")
+    .eq("user_id", user.id)
+    .single();
+
+  if (!profile || profile.role !== "evaluator") return { error: "Unauthorized" };
+
+  const requestId = formData.get("request_id") as string;
+  const reason    = ((formData.get("decline_reason") as string) || "").trim();
+  if (!requestId) return { error: "Missing request_id" };
+  if (!reason)    return { error: "A reason is required to decline" };
+
+  // Enforce ownership + valid state
+  const { data: req } = await service
+    .from("accreditation_requests")
+    .select("startup_name, status, acceptance_status")
+    .eq("id", requestId)
+    .eq("evaluator_id", profile.entity_id)
+    .single();
+
+  if (!req) return { error: "Assignment not found" };
+  if (req.status !== "evaluator_assigned" || req.acceptance_status !== "pending") {
+    return { error: "Assignment cannot be declined in its current state" };
+  }
+
+  const { data: evaluator } = await service
+    .from("evaluators").select("org_name").eq("id", profile.entity_id).single();
+
+  // Return to the admin queue, clear the evaluator, keep the reason for admin view
+  await service
+    .from("accreditation_requests")
+    .update({
+      status:                   "pending_evaluator_assignment",
+      evaluator_id:             null,
+      acceptance_status:        "pending",
+      evaluator_decline_reason: reason,
+    })
+    .eq("id", requestId);
+
+  // Notify admin
+  const adminEmail = process.env.ADMIN_NOTIFY_EMAIL ?? "amadeus@boss.technology";
+  const { sendEvaluatorDeclined } = await import("@/lib/email/templates/e16-evaluator-response");
+  sendEvaluatorDeclined(adminEmail, evaluator?.org_name ?? "Evaluator", req.startup_name, reason)
+    .catch((e) => console.error("[declineAssignment] email error", e));
+
+  revalidatePath(`/app/evaluator/assignments/${requestId}`);
+  revalidatePath("/app/evaluator/dashboard");
+  revalidatePath("/admin/accreditations");
+
+  return {};
+}

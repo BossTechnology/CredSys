@@ -5,11 +5,12 @@ import Link                    from "next/link";
 import { Badge }               from "@/components/ui/Badge";
 import { WorkflowStatusBar }   from "@/components/ui/WorkflowStatusBar";
 import { acceptSponsorship, declineSponsorship } from "@/app/actions/sponsorship";
+import { getAppDictionary }    from "@/lib/i18n/loader";
 import type { AccreditationStatus } from "@/lib/supabase/types";
 
-function fmt(iso: string | null | undefined) {
+function fmt(iso: string | null | undefined, locale = "en") {
   if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en", {
+  return new Date(iso).toLocaleDateString(locale, {
     month: "long", day: "numeric", year: "numeric",
   });
 }
@@ -17,6 +18,9 @@ function fmt(iso: string | null | undefined) {
 const TERMINAL: AccreditationStatus[] = ["accredited", "rejected", "expired"];
 
 export default async function StartupDashboardPage() {
+  const { locale, dict } = await getAppDictionary();
+  const t = dict.startupDash;
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/en/login");
@@ -69,18 +73,18 @@ export default async function StartupDashboardPage() {
   }
 
   return (
-    <div className="max-w-[1280px] mx-auto px-7 py-8">
+    <div className="max-w-[1280px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
           <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-            Startup Portal
+            {t.portal}
           </span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight">
-          {startup?.org_name ?? "Dashboard"}
+          {startup?.org_name ?? dict.nav.dashboard}
         </h1>
         <p className="text-[13px] font-mono text-cs-400 mt-1">{user.email}</p>
       </div>
@@ -94,7 +98,7 @@ export default async function StartupDashboardPage() {
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50 flex items-center justify-between">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                Accreditation Status
+                {t.accreditationStatus}
               </span>
               {request && <Badge variant={status!} />}
             </div>
@@ -103,10 +107,10 @@ export default async function StartupDashboardPage() {
               {!request ? (
                 <div className="text-center py-6">
                   <p className="text-[13px] font-mono text-cs-400 mb-4">
-                    You have not submitted an accreditation request yet.
+                    {t.noRequest}
                   </p>
                   <Link href="/app/startup/accreditation" className="btn-primary btn-sm">
-                    Apply for Accreditation →
+                    {t.applyForAccreditation} →
                   </Link>
                 </div>
               ) : (
@@ -123,13 +127,13 @@ export default async function StartupDashboardPage() {
                     <div className="bg-sb-light border border-sb-default px-4 py-3 mb-4 flex items-center justify-between">
                       <div>
                         <div className="text-[14px] font-mono text-sb-text uppercase tracking-widest mb-0.5">
-                          Credential ID
+                          {t.credentialId}
                         </div>
                         <div className="text-sm font-bold font-mono tracking-widest">
                           {credCode.toUpperCase()}
                         </div>
                         <div className="text-[14px] font-mono text-cs-400 mt-0.5">
-                          Accredited {fmt(request.accredited_at)}
+                          {t.accredited} {fmt(request.accredited_at, locale)}
                         </div>
                       </div>
                       <Link
@@ -137,7 +141,7 @@ export default async function StartupDashboardPage() {
                         target="_blank"
                         className="btn-accent btn-sm"
                       >
-                        View Credential →
+                        {t.viewCredentialBtn} →
                       </Link>
                     </div>
                   )}
@@ -146,11 +150,10 @@ export default async function StartupDashboardPage() {
                   {status === "rejected" && (
                     <div className="border border-red-200 bg-red-50 px-4 py-3 mb-4">
                       <div className="text-[14px] font-mono text-red-600 uppercase tracking-widest mb-0.5">
-                        Application Not Approved
+                        {t.notApproved}
                       </div>
                       <p className="text-[13px] text-cs-600">
-                        Your application was not approved at this time.
-                        Contact support or apply again after addressing the feedback.
+                        {t.notApprovedMsg}
                       </p>
                     </div>
                   )}
@@ -159,7 +162,7 @@ export default async function StartupDashboardPage() {
                   {request.evaluator_notes && (
                     <div className="border border-cs-200 bg-cs-50 px-4 py-3 mb-4">
                       <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-1">
-                        Evaluator Notes
+                        {t.evaluatorNotes}
                       </div>
                       <p className="text-[13px] text-cs-700 leading-relaxed">
                         {request.evaluator_notes}
@@ -168,14 +171,14 @@ export default async function StartupDashboardPage() {
                   )}
 
                   {/* Request meta */}
-                  <div className="grid grid-cols-2 gap-4 text-[12px] font-mono">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-[12px] font-mono">
                     <div>
-                      <div className="text-cs-400 uppercase tracking-widest mb-0.5">Submitted</div>
-                      <div className="font-semibold">{fmt(request.created_at)}</div>
+                      <div className="text-cs-400 uppercase tracking-widest mb-0.5">{t.submitted}</div>
+                      <div className="font-semibold">{fmt(request.created_at, locale)}</div>
                     </div>
                     <div>
-                      <div className="text-cs-400 uppercase tracking-widest mb-0.5">Last Updated</div>
-                      <div className="font-semibold">{fmt(request.updated_at)}</div>
+                      <div className="text-cs-400 uppercase tracking-widest mb-0.5">{t.lastUpdate}</div>
+                      <div className="font-semibold">{fmt(request.updated_at, locale)}</div>
                     </div>
                   </div>
 
@@ -185,7 +188,7 @@ export default async function StartupDashboardPage() {
                       href="/app/startup/accreditation"
                       className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors"
                     >
-                      View Full Details →
+                      {t.viewFullDetails} →
                     </Link>
                   </div>
                 </>
@@ -199,7 +202,7 @@ export default async function StartupDashboardPage() {
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                Sponsorship Offers ({sponsorshipOffers!.length})
+                {t.sponsorshipOffers} ({sponsorshipOffers!.length})
               </span>
             </div>
             <div className="divide-y divide-cs-100">
@@ -213,7 +216,7 @@ export default async function StartupDashboardPage() {
                       <div>
                         <div className="text-[13px] font-semibold">{sponsorName}</div>
                         <div className="text-[14px] font-mono text-cs-400 mt-0.5 uppercase tracking-widest">
-                          {offer.sponsor_type} · wants to sponsor your accreditation
+                          {offer.sponsor_type} · {t.wantsToSponsor}
                         </div>
                         {offer.notes && (
                           <p className="text-[12px] text-cs-600 mt-1 leading-relaxed">{offer.notes}</p>
@@ -224,13 +227,13 @@ export default async function StartupDashboardPage() {
                       <form action={acceptSponsorship}>
                         <input type="hidden" name="sponsorship_id" value={offer.id} />
                         <button type="submit" className="btn-accent btn-sm">
-                          Accept
+                          {t.accept}
                         </button>
                       </form>
                       <form action={declineSponsorship}>
                         <input type="hidden" name="sponsorship_id" value={offer.id} />
                         <button type="submit" className="btn-danger btn-sm">
-                          Decline
+                          {t.decline}
                         </button>
                       </form>
                     </div>
@@ -246,14 +249,14 @@ export default async function StartupDashboardPage() {
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                Startup Info
+                {t.startupInfo}
               </span>
             </div>
             <div className="p-5 flex flex-col gap-3">
               {[
-                { label: "Industry", value: startup?.industry },
-                { label: "Country",  value: startup?.country  },
-                { label: "Website",  value: startup?.website  },
+                { label: t.industry, value: startup?.industry },
+                { label: t.country,  value: startup?.country  },
+                { label: t.website,  value: startup?.website  },
               ].map((f) => (
                 <div key={f.label}>
                   <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
@@ -266,7 +269,7 @@ export default async function StartupDashboardPage() {
                 href="/app/startup/profile"
                 className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-black transition-colors mt-2"
               >
-                Edit Profile →
+                {t.editProfile} →
               </Link>
             </div>
           </div>
@@ -275,15 +278,15 @@ export default async function StartupDashboardPage() {
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                Quick Links
+                {t.quickLinks}
               </span>
             </div>
             <div className="p-4 flex flex-col gap-2">
               <Link href="/app/startup/accreditation" className="btn-outline btn-sm w-full text-center">
-                Accreditation
+                {dict.nav.accreditation}
               </Link>
               <Link href="/app/startup/competitions" className="btn-outline btn-sm w-full text-center">
-                Competitions
+                {dict.nav.competitions}
               </Link>
             </div>
           </div>

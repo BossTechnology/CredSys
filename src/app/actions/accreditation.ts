@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache";
 import { generateUniqueCode } from "@/lib/utils";
 import { sendAccredited } from "@/lib/email/templates/e4-accredited";
 import { sendRejected } from "@/lib/email/templates/e5-rejected";
-import { sendEvaluatorAssigned, sendNewAssignment } from "@/lib/email/templates/e3-evaluator-assigned";
 import type { AccreditationStatus } from "@/lib/supabase/types";
 
 export async function advanceAccreditationStatus(formData: FormData) {
@@ -104,68 +103,3 @@ export async function advanceAccreditationStatus(formData: FormData) {
   revalidatePath("/app/startup/dashboard");
 }
 
-export async function assignEvaluator(formData: FormData) {
-  const supabase    = createServiceClient();
-  const requestId   = formData.get("request_id") as string;
-  const evaluatorId = formData.get("evaluator_id") as string;
-
-  const [{ data: request }, { data: evaluator }] = await Promise.all([
-    supabase
-      .from("accreditation_requests")
-      .select("startup_name, startup_email")
-      .eq("id", requestId)
-      .single(),
-    supabase
-      .from("evaluators")
-      .select("org_name, email")
-      .eq("id", evaluatorId)
-      .single(),
-  ]);
-
-  if (!request || !evaluator) return;
-
-  await supabase
-    .from("accreditation_requests")
-    .update({
-      evaluator_id: evaluatorId,
-      status:       "evaluator_assigned",
-    })
-    .eq("id", requestId);
-
-  await Promise.all([
-    sendEvaluatorAssigned(request.startup_email, request.startup_name, evaluator.org_name),
-    sendNewAssignment(evaluator.email, evaluator.org_name, request.startup_name, requestId),
-  ]).catch((e) => console.error("[assignEvaluator] email error", e));
-
-  // Notify investors watching this startup (evaluator assigned)
-  try {
-    const { data: req2 } = await supabase
-      .from("accreditation_requests")
-      .select("startup_id")
-      .eq("id", requestId)
-      .single();
-
-    if (req2?.startup_id) {
-      const { data: watchers } = await supabase
-        .from("investor_watchlist")
-        .select("investors(email)")
-        .eq("startup_id", req2.startup_id)
-        .eq("notify_on_evaluator_assigned", true);
-
-      if (watchers?.length) {
-        const { sendWatchlistEvaluatorAssigned } = await import("@/lib/email/templates/e15-watchlist-evaluator-assigned");
-        await Promise.allSettled(
-          watchers.map((w) => {
-            const inv = w.investors as unknown as { email: string };
-            return sendWatchlistEvaluatorAssigned(inv.email, request.startup_name);
-          })
-        );
-      }
-    }
-  } catch (e) {
-    console.error("[assignEvaluator] watchlist notification error", e);
-  }
-
-  revalidatePath("/admin/accreditations");
-  revalidatePath("/admin/overview");
-}

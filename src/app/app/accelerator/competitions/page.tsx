@@ -1,20 +1,7 @@
 import { createClient }        from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { redirect }            from "next/navigation";
-
-function fmt(iso: string | null | undefined) {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en", {
-    month: "short", day: "numeric", year: "numeric",
-  });
-}
-
-const STATUS_LABEL: Record<string, string> = {
-  draft:     "Draft",
-  active:    "Active",
-  scoring:   "Scoring",
-  closed:    "Closed",
-};
+import { getAppDictionary }    from "@/lib/i18n/loader";
 
 const STATUS_COLOR: Record<string, string> = {
   draft:   "bg-cs-100 text-cs-500",
@@ -24,6 +11,16 @@ const STATUS_COLOR: Record<string, string> = {
 };
 
 export default async function AcceleratorCompetitionsPage() {
+  const { locale, dict } = await getAppDictionary();
+  const t = dict.accelComps;
+  const statusDict = dict.status as Record<string, string>;
+
+  function fmt(iso: string | null | undefined) {
+    if (!iso) return "—";
+    return new Date(iso).toLocaleDateString(locale, {
+      month: "short", day: "numeric", year: "numeric",
+    });
+  }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/en/login");
@@ -47,19 +44,19 @@ export default async function AcceleratorCompetitionsPage() {
   const total = competitions?.length ?? 0;
 
   return (
-    <div className="max-w-[860px] mx-auto px-7 py-8">
+    <div className="max-w-[860px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
           <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-            Accelerator Portal
+            {t.portal}
           </span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight">Competitions</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{t.title}</h1>
         <p className="text-[13px] font-mono text-cs-400 mt-1">
-          {total} competition{total !== 1 ? "s" : ""} linked to your accelerator
+          {total} {t.linked}
         </p>
       </div>
 
@@ -67,20 +64,20 @@ export default async function AcceleratorCompetitionsPage() {
       <div className="bg-white border border-cs-200">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-            Your Competitions · {total}
+            {t.yourCompetitions} · {total}
           </span>
         </div>
 
         {total === 0 ? (
           <div className="px-5 py-12 text-center">
             <p className="text-[13px] font-mono text-cs-400">
-              No competitions yet. Ask an admin to create one linked to your accelerator.
+              {t.noCompetitions}
             </p>
           </div>
         ) : (
           <div className="divide-y divide-cs-100">
             {competitions!.map((comp) => {
-              const statusLabel = STATUS_LABEL[comp.status] ?? comp.status;
+              const statusLabel = statusDict[comp.status] ?? comp.status;
               const statusColor = STATUS_COLOR[comp.status] ?? "bg-cs-100 text-cs-400";
 
               return (
@@ -103,10 +100,10 @@ export default async function AcceleratorCompetitionsPage() {
                           <span className="uppercase tracking-widest">{comp.industry}</span>
                         )}
                         {comp.start_date && (
-                          <span>Start: {fmt(comp.start_date)}</span>
+                          <span>{t.start}: {fmt(comp.start_date)}</span>
                         )}
                         {comp.end_date && (
-                          <span>End: {fmt(comp.end_date)}</span>
+                          <span>{t.end}: {fmt(comp.end_date)}</span>
                         )}
                       </div>
                     </div>

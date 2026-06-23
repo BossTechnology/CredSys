@@ -51,7 +51,7 @@ export default async function CredListPage({ params }: CredListPageProps) {
         </span>
       </div>
 
-      <div className="max-w-[1280px] mx-auto px-7 py-12">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-7 py-12">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
@@ -75,9 +75,9 @@ export default async function CredListPage({ params }: CredListPageProps) {
             </p>
           </div>
         ) : (
-          <div className="border border-cs-200 bg-white">
+          <div className="border border-cs-200 bg-white overflow-x-auto">
             {/* Table header */}
-            <div className="grid grid-cols-[1fr_120px_140px_100px] gap-0 border-b border-cs-200 bg-cs-50 px-5 py-2">
+            <div className="grid min-w-[560px] grid-cols-[1fr_120px_140px_100px] gap-0 border-b border-cs-200 bg-cs-50 px-5 py-2">
               <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">Organization</span>
               <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">Industry</span>
               <span className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
@@ -92,7 +92,7 @@ export default async function CredListPage({ params }: CredListPageProps) {
             {creds.map((row) => (
               <div
                 key={row.unique_code}
-                className="grid grid-cols-[1fr_120px_140px_100px] gap-0 border-b border-cs-100 px-5 py-3 hover:bg-cs-50 transition-colors items-center"
+                className="grid min-w-[560px] grid-cols-[1fr_120px_140px_100px] gap-0 border-b border-cs-100 px-5 py-3 hover:bg-cs-50 transition-colors items-center"
               >
                 <div>
                   <span className="text-sm font-semibold tracking-tight">

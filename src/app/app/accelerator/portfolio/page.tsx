@@ -1,14 +1,17 @@
 import { createServiceClient } from "@/lib/supabase/service";
 import Link                    from "next/link";
-
-function fmt(iso: string | null | undefined) {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en", {
-    month: "short", day: "numeric", year: "numeric",
-  });
-}
+import { getAppDictionary }    from "@/lib/i18n/loader";
 
 export default async function AcceleratorPortfolioPage() {
+  const { locale, dict } = await getAppDictionary();
+  const t = dict.accelPortfolio;
+
+  function fmt(iso: string | null | undefined) {
+    if (!iso) return "—";
+    return new Date(iso).toLocaleDateString(locale, {
+      month: "short", day: "numeric", year: "numeric",
+    });
+  }
   const service = createServiceClient();
 
   const { data: creds } = await service
@@ -21,39 +24,39 @@ export default async function AcceleratorPortfolioPage() {
   const total     = creds?.length ?? 0;
 
   return (
-    <div className="max-w-[960px] mx-auto px-7 py-8">
+    <div className="max-w-[960px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
           <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-            Accelerator Portal
+            {t.portal}
           </span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight">Startup Portfolio</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{t.title}</h1>
         <p className="text-[13px] font-mono text-cs-400 mt-1">
-          {total} accredited startup{total !== 1 ? "s" : ""} in the ecosystem
+          {total} {t.inEcosystem}
         </p>
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-cs-200">
+      <div className="bg-white border border-cs-200 overflow-x-auto">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-            Verified Startups · {total}
+            {t.verifiedStartups} · {total}
           </span>
         </div>
 
         {total === 0 ? (
           <div className="px-5 py-12 text-center">
-            <p className="text-[13px] font-mono text-cs-400">No accredited startups yet.</p>
+            <p className="text-[13px] font-mono text-cs-400">{t.noStartups}</p>
           </div>
         ) : (
           <>
             {/* Column headers */}
-            <div className="grid grid-cols-[1fr_120px_100px_120px_100px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
-              {["Startup", "Industry", "Country", "Accredited", "Credential"].map((h) => (
+            <div className="grid min-w-[700px] grid-cols-[1fr_120px_100px_120px_100px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
+              {[t.colStartup, t.colIndustry, t.colCountry, t.colAccredited, t.colCredential].map((h) => (
                 <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
                   {h}
                 </div>
@@ -71,7 +74,7 @@ export default async function AcceleratorPortfolioPage() {
                 return (
                   <div
                     key={c.unique_code}
-                    className="grid grid-cols-[1fr_120px_100px_120px_100px] gap-4 px-5 py-3 items-center hover:bg-cs-50 transition-colors"
+                    className="grid min-w-[700px] grid-cols-[1fr_120px_100px_120px_100px] gap-4 px-5 py-3 items-center hover:bg-cs-50 transition-colors"
                   >
                     <div>
                       <div className="text-[13px] font-semibold">{startup?.org_name ?? "—"}</div>
@@ -108,7 +111,7 @@ export default async function AcceleratorPortfolioPage() {
                       </Link>
                       {isExpired && (
                         <div className="text-[14px] font-mono text-red-400 mt-0.5 uppercase tracking-widest">
-                          Expired
+                          {t.expired}
                         </div>
                       )}
                     </div>

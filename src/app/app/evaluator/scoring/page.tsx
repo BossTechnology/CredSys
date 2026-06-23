@@ -2,6 +2,8 @@ import { createClient }        from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { redirect }            from "next/navigation";
 import { revalidatePath }      from "next/cache";
+import { getAppDictionary }    from "@/lib/i18n/loader";
+import type { Dictionary }     from "@/lib/i18n/loader";
 
 // ─── Server Action ────────────────────────────────────────────────────────────
 
@@ -87,6 +89,8 @@ export default async function EvaluatorScoringPage() {
   if (!user) redirect("/en/login");
 
   const service = createServiceClient();
+  const { dict } = await getAppDictionary();
+  const t = dict.evalScoring;
 
   const { data: profile } = await service
     .from("user_profiles")
@@ -106,7 +110,7 @@ export default async function EvaluatorScoringPage() {
   const compIds = (evalComps ?? []).map((r) => r.competition_id);
 
   if (compIds.length === 0) {
-    return <EmptyState />;
+    return <EmptyState t={t} />;
   }
 
   // Get all startups in those competitions
@@ -138,19 +142,19 @@ export default async function EvaluatorScoringPage() {
   );
 
   return (
-    <div className="max-w-[900px] mx-auto px-7 py-8">
+    <div className="max-w-[900px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
           <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-            Evaluator Portal
+            {t.portal}
           </span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight">Competition Scoring</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{t.title}</h1>
         <p className="text-[13px] font-mono text-cs-400 mt-1">
-          {pending.length} pending · {scored.length} scored
+          {pending.length} {t.pending} · {scored.length} {t.scoredCount}
         </p>
       </div>
 
@@ -158,14 +162,14 @@ export default async function EvaluatorScoringPage() {
       <div className="border border-cs-200 bg-white mb-8">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-            Pending Scoring
+            {t.pendingSection}
           </span>
         </div>
 
         {pending.length === 0 ? (
           <div className="px-5 py-8 text-center">
             <p className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-              All entries have been scored ✓
+              {t.allScored} ✓
             </p>
           </div>
         ) : (
@@ -175,49 +179,51 @@ export default async function EvaluatorScoringPage() {
             return (
               <div
                 key={`${entry.competition_id}:${entry.startup_id}`}
-                className="px-5 py-4 border-b border-cs-100 flex items-start justify-between gap-6"
+                className="px-5 py-4 border-b border-cs-100 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4"
               >
-                <div>
+                <div className="min-w-0">
                   <div className="text-[13px] font-semibold mb-0.5">
                     {startup?.org_name ?? "Unknown Startup"}
                   </div>
-                  <div className="text-[14px] font-mono text-cs-400">
-                    {comp?.name ?? "—"} · Entered {fmt(entry.entered_at)}
+                  <div className="text-[12px] font-mono text-cs-400">
+                    {comp?.name ?? "—"} · {t.entered} {fmt(entry.entered_at)}
                   </div>
                 </div>
 
-                <form action={submitScore} className="flex items-end gap-3 shrink-0">
+                <form action={submitScore} className="flex flex-col sm:flex-row sm:items-end gap-3 shrink-0">
                   <input type="hidden" name="competition_id" value={entry.competition_id} />
                   <input type="hidden" name="startup_id"     value={entry.startup_id} />
                   <div>
-                    <label className="text-[14px] font-mono text-cs-400 uppercase tracking-widest block mb-1">
-                      Notes
+                    <label className="text-[12px] font-mono text-cs-400 uppercase tracking-widest block mb-1">
+                      {t.notesLabel}
                     </label>
                     <input
                       name="notes"
                       type="text"
-                      placeholder="Optional…"
-                      className="w-36 border border-cs-200 bg-cs-50 px-2 py-1.5 text-[12px] font-mono focus:outline-none focus:border-black"
+                      placeholder={t.notesPH}
+                      className="w-full sm:w-36 border border-cs-200 bg-cs-50 px-2 py-1.5 text-[12px] font-mono focus:outline-none focus:border-black"
                     />
                   </div>
-                  <div>
-                    <label className="text-[14px] font-mono text-cs-400 uppercase tracking-widest block mb-1">
-                      Score (0–100)
-                    </label>
-                    <input
-                      name="score"
-                      type="number"
-                      min={0}
-                      max={100}
-                      step={0.5}
-                      required
-                      placeholder="85"
-                      className="w-20 border border-cs-200 bg-cs-50 px-2 py-1.5 text-[13px] font-mono focus:outline-none focus:border-black"
-                    />
+                  <div className="flex items-end gap-3">
+                    <div>
+                      <label className="text-[12px] font-mono text-cs-400 uppercase tracking-widest block mb-1">
+                        {t.scoreLabel}
+                      </label>
+                      <input
+                        name="score"
+                        type="number"
+                        min={0}
+                        max={100}
+                        step={0.5}
+                        required
+                        placeholder="85"
+                        className="w-20 border border-cs-200 bg-cs-50 px-2 py-1.5 text-[13px] font-mono focus:outline-none focus:border-black"
+                      />
+                    </div>
+                    <button type="submit" className="btn-accent btn-sm">
+                      {t.submit}
+                    </button>
                   </div>
-                  <button type="submit" className="btn-accent btn-sm">
-                    Submit
-                  </button>
                 </form>
               </div>
             );
@@ -230,7 +236,7 @@ export default async function EvaluatorScoringPage() {
         <div className="border border-cs-200 bg-white">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
             <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-              Scored Entries
+              {t.scoredSection}
             </span>
           </div>
           {scored.map((entry) => {
@@ -240,23 +246,23 @@ export default async function EvaluatorScoringPage() {
             return (
               <div
                 key={`${entry.competition_id}:${entry.startup_id}`}
-                className="px-5 py-3 border-b border-cs-100 flex items-center justify-between"
+                className="px-5 py-3 border-b border-cs-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4"
               >
-                <div>
-                  <div className="text-[13px] font-semibold">{startup?.org_name ?? "—"}</div>
-                  <div className="text-[14px] font-mono text-cs-400">{comp?.name ?? "—"}</div>
+                <div className="min-w-0">
+                  <div className="text-[13px] font-semibold truncate">{startup?.org_name ?? "—"}</div>
+                  <div className="text-[12px] font-mono text-cs-400">{comp?.name ?? "—"}</div>
                 </div>
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-4 sm:gap-6 shrink-0">
                   {scoreRow.notes && (
-                    <span className="text-[14px] font-mono text-cs-400 max-w-[160px] truncate">
+                    <span className="text-[12px] font-mono text-cs-400 max-w-[160px] truncate hidden sm:inline">
                       {scoreRow.notes}
                     </span>
                   )}
                   <div className="text-right">
-                    <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">Score</div>
+                    <div className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">{t.scoreDisplay}</div>
                     <div className="text-[13px] font-bold text-sb-text">{scoreRow.score}/100</div>
                   </div>
-                  <div className="text-[14px] font-mono text-cs-400">
+                  <div className="text-[12px] font-mono text-cs-400">
                     {fmt(scoreRow.scored_at)}
                   </div>
                 </div>
@@ -272,15 +278,15 @@ export default async function EvaluatorScoringPage() {
 
 // ─── Empty state ──────────────────────────────────────────────────────────────
 
-function EmptyState() {
+function EmptyState({ t }: { t: Dictionary["evalScoring"] }) {
   return (
-    <div className="max-w-[900px] mx-auto px-7 py-8">
+    <div className="max-w-[900px] mx-auto px-4 sm:px-7 py-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight">Competition Scoring</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{t.title}</h1>
       </div>
       <div className="border border-cs-200 bg-white px-5 py-10 text-center">
         <p className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-          You have not been assigned to any active competitions yet.
+          {t.noAssignments}
         </p>
       </div>
     </div>

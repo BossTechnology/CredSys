@@ -3,6 +3,7 @@ import { createServiceClient } from "@/lib/supabase/service";
 import { redirect }            from "next/navigation";
 import { revalidatePath }      from "next/cache";
 import Link                    from "next/link";
+import { getAppDictionary }    from "@/lib/i18n/loader";
 
 // ─── Server Actions ───────────────────────────────────────────────────────────
 
@@ -105,9 +106,9 @@ async function updateWatchlistNotifications(formData: FormData) {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function fmt(iso: string | null | undefined) {
+function fmt(iso: string | null | undefined, locale = "en") {
   if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en", {
+  return new Date(iso).toLocaleDateString(locale, {
     month: "short", day: "numeric", year: "numeric",
   });
 }
@@ -120,6 +121,9 @@ export default async function InvestorWatchlistPage({
   searchParams: Promise<{ q?: string }>;
 }) {
   const { q } = await searchParams;
+
+  const { locale, dict } = await getAppDictionary();
+  const t = dict.investorWatchlist;
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -167,19 +171,19 @@ export default async function InvestorWatchlistPage({
   }
 
   return (
-    <div className="max-w-[960px] mx-auto px-7 py-8">
+    <div className="max-w-[960px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
           <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-            Investor Portal
+            {t.portal}
           </span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight">Watchlist</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{t.title}</h1>
         <p className="text-[13px] font-mono text-cs-400 mt-1">
-          {watchlistEntries?.length ?? 0} startups being watched
+          {watchlistEntries?.length ?? 0} {t.startupsWatched}
         </p>
       </div>
 
@@ -187,7 +191,7 @@ export default async function InvestorWatchlistPage({
       <div className="bg-white border border-cs-200 mb-6">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-            Add Startup to Watchlist
+            {t.addStartup}
           </span>
         </div>
         <div className="p-5">
@@ -196,17 +200,17 @@ export default async function InvestorWatchlistPage({
               name="q"
               type="text"
               defaultValue={q ?? ""}
-              placeholder="Search startups by name…"
+              placeholder={t.searchPH}
               className="cs-input flex-1"
             />
             <button type="submit" className="btn-primary btn-sm">
-              Search
+              {t.search}
             </button>
           </form>
 
           {q && searchResults.length === 0 && (
             <p className="text-[13px] font-mono text-cs-400">
-              No startups found for &quot;{q}&quot;.
+              {t.noResults} &quot;{q}&quot;.
             </p>
           )}
 
@@ -223,7 +227,7 @@ export default async function InvestorWatchlistPage({
                   <form action={addToWatchlist}>
                     <input type="hidden" name="startup_id" value={s.id} />
                     <button type="submit" className="btn-primary btn-sm">
-                      + Watch
+                      {t.watch}
                     </button>
                   </form>
                 </div>
@@ -234,23 +238,23 @@ export default async function InvestorWatchlistPage({
       </div>
 
       {/* Watchlist table */}
-      <div className="bg-white border border-cs-200">
+      <div className="bg-white border border-cs-200 overflow-x-auto">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-            Watching · {watchlistEntries?.length ?? 0}
+            {t.watching} · {watchlistEntries?.length ?? 0}
           </span>
         </div>
 
         {(watchlistEntries ?? []).length === 0 ? (
           <div className="px-5 py-10 text-center">
             <p className="text-[13px] font-mono text-cs-400">
-              No startups on watchlist. Use the search above to add some.
+              {t.noStartups}
             </p>
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-[1fr_90px_80px_110px_160px_90px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
-              {["Startup", "Industry", "Country", "Status", "Notifications", "Actions"].map((h) => (
+            <div className="grid min-w-[760px] grid-cols-[1fr_90px_80px_110px_160px_90px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
+              {[t.startup, t.industry, t.country, t.credStatus, t.notifications, t.actions].map((h) => (
                 <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
@@ -264,7 +268,7 @@ export default async function InvestorWatchlistPage({
                 const isAccredited = latestStatus === "accredited";
 
                 return (
-                  <div key={entry.id} className="grid grid-cols-[1fr_90px_80px_110px_160px_90px] gap-3 px-5 py-3 items-center">
+                  <div key={entry.id} className="grid min-w-[760px] grid-cols-[1fr_90px_80px_110px_160px_90px] gap-3 px-5 py-3 items-center">
                     <div>
                       <div className="text-[13px] font-semibold">
                         {isAccredited ? (
@@ -275,22 +279,22 @@ export default async function InvestorWatchlistPage({
                           startup?.org_name ?? "—"
                         )}
                       </div>
-                      <div className="text-[14px] font-mono text-cs-300 mt-0.5">Since {fmt(entry.added_at)}</div>
+                      <div className="text-[14px] font-mono text-cs-300 mt-0.5">{t.since} {fmt(entry.added_at, locale)}</div>
                     </div>
                     <div className="text-[12px] font-mono text-cs-500 capitalize">{startup?.industry ?? "—"}</div>
                     <div className="text-[12px] font-mono text-cs-500">{startup?.country ?? "—"}</div>
                     <div>
                       <span className={`text-[14px] font-mono font-bold uppercase tracking-widest ${isAccredited ? "text-green-600" : "text-cs-400"}`}>
-                        {latestStatus ? latestStatus.replace(/_/g, " ") : "No Request"}
+                        {latestStatus ? latestStatus.replace(/_/g, " ") : t.noRequest}
                       </span>
                     </div>
                     <div className="flex flex-col gap-1">
                       <form action={updateWatchlistNotifications} className="flex flex-col gap-1">
                         <input type="hidden" name="entry_id" value={entry.id} />
                         {[
-                          { key: "notify_on_accredited",         label: "Accredited",       checked: entry.notify_on_accredited         },
-                          { key: "notify_on_evaluator_assigned", label: "Evaluator Assigned", checked: entry.notify_on_evaluator_assigned },
-                          { key: "notify_on_status_change",      label: "Status Changes",   checked: entry.notify_on_status_change      },
+                          { key: "notify_on_accredited",         label: t.notifyAccredited,  checked: entry.notify_on_accredited         },
+                          { key: "notify_on_evaluator_assigned", label: t.notifyEvaluator,   checked: entry.notify_on_evaluator_assigned },
+                          { key: "notify_on_status_change",      label: t.notifyStatus,      checked: entry.notify_on_status_change      },
                         ].map((n) => (
                           <label key={n.key} className="flex items-center gap-1.5 text-[14px] font-mono text-cs-500">
                             <input
@@ -311,7 +315,7 @@ export default async function InvestorWatchlistPage({
                           </label>
                         ))}
                         <button type="submit" className="text-[14px] font-mono text-cs-400 hover:text-black uppercase tracking-widest mt-1">
-                          Save
+                          {t.save}
                         </button>
                       </form>
                     </div>
@@ -322,7 +326,7 @@ export default async function InvestorWatchlistPage({
                           type="submit"
                           className="text-[14px] font-mono text-red-500 hover:text-red-700 uppercase tracking-widest"
                         >
-                          Remove
+                          {t.remove}
                         </button>
                       </form>
                     </div>

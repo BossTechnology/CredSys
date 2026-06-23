@@ -256,6 +256,11 @@ export interface AccreditationRequest {
   // Notes
   evaluator_notes?:  string;
   rejection_reason?: string;
+
+  // Evaluator acceptance gate
+  acceptance_status?:        "pending" | "accepted";
+  evaluator_decline_reason?: string;
+
   notes?:            string;
   deadline?:         string;
 

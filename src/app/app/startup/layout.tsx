@@ -3,6 +3,7 @@ import { createServiceClient } from "@/lib/supabase/service";
 import { redirect }            from "next/navigation";
 import { StartupNav }          from "@/components/ui/Navigation";
 import { signOut }             from "@/app/actions/auth";
+import { getAppLocale }        from "@/lib/i18n/loader";
 
 export default async function StartupLayout({
   children,
@@ -25,14 +26,16 @@ export default async function StartupLayout({
     redirect("/en/login");
   }
 
+  const locale = await getAppLocale();
+
   async function handleSignOut() {
     "use server";
     await signOut();
   }
 
   return (
-    <div className="min-h-screen bg-cs-50 flex flex-col">
-      <StartupNav onSignOut={handleSignOut} />
+    <div className="min-h-screen bg-cs-50 flex flex-col overflow-x-hidden">
+      <StartupNav onSignOut={handleSignOut} locale={locale} />
       <main className="flex-1">{children}</main>
     </div>
   );

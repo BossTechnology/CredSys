@@ -6,11 +6,11 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       {/* Nav */}
-      <nav className="h-12 flex items-center px-7 border-b border-cs-800">
+      <nav className="h-12 flex items-center px-4 sm:px-7 border-b border-cs-800">
         <span className="text-sm font-bold tracking-tight">StartupBoss.org</span>
         <div className="flex-1" />
-        <div className="flex items-center gap-6">
-          <Link href="/login" className="text-[13px] font-mono text-cs-400 uppercase tracking-widest hover:text-white">
+        <div className="flex items-center gap-3 sm:gap-6">
+          <Link href="/login" className="text-[11px] sm:text-[13px] font-mono text-cs-400 uppercase tracking-widest hover:text-white">
             Sign In
           </Link>
           <Link href="/signup">
@@ -20,7 +20,7 @@ export default function HomePage() {
       </nav>
 
       {/* Hero */}
-      <main className="flex-1 flex flex-col items-center justify-center px-7 text-center">
+      <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-7 text-center">
         <div className="max-w-[640px]">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 mb-8">
@@ -30,7 +30,7 @@ export default function HomePage() {
             </span>
           </div>
 
-          <h1 className="text-[56px] font-bold leading-none tracking-tight mb-6">
+          <h1 className="text-[36px] sm:text-[56px] font-bold leading-none tracking-tight mb-6">
             C R E D{" "}
             <span className="text-sb-default">S Y S</span>
           </h1>
@@ -66,7 +66,7 @@ export default function HomePage() {
       </main>
 
       {/* Stats footer strip */}
-      <div className="border-t border-cs-800 px-7 py-4 flex items-center justify-center gap-12">
+      <div className="border-t border-cs-800 px-4 sm:px-7 py-4 grid grid-cols-2 sm:flex sm:items-center sm:justify-center gap-6 sm:gap-12">
         {[
           { value: "87+", label: "Startups Accredited" },
           { value: "14", label: "Active Evaluators" },

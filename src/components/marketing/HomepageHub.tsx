@@ -509,11 +509,11 @@ export function HomepageHub({ locale, credList, initialTab = "getcred" }: Props)
             </button>
             {langOpen && (
               <div style={{ position: "absolute", top: "calc(100% + 8px)", right: 0, background: C_WHITE, border: "1px solid #e8e8e8", minWidth: "72px", boxShadow: "0 4px 12px rgba(0,0,0,.08)", zIndex: 50 }}>
-                <Link href="/en" onClick={() => setLangOpen(false)}
+                <Link href="/en" onClick={() => { document.cookie = "preferred_locale=en;path=/;max-age=31536000"; setLangOpen(false); }}
                   style={{ display: "block", padding: "8px 14px", fontFamily: F_LIGHT, fontSize: "13px", color: !isEs ? C_TEXT : C_MUTED, background: !isEs ? "#f5f5f5" : "transparent", textDecoration: "none" }}>
                   EN
                 </Link>
-                <Link href="/es" onClick={() => setLangOpen(false)}
+                <Link href="/es" onClick={() => { document.cookie = "preferred_locale=es;path=/;max-age=31536000"; setLangOpen(false); }}
                   style={{ display: "block", padding: "8px 14px", fontFamily: F_LIGHT, fontSize: "13px", color: isEs ? C_TEXT : C_MUTED, background: isEs ? "#f5f5f5" : "transparent", textDecoration: "none" }}>
                   ES
                 </Link>

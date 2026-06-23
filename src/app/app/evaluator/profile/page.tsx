@@ -2,6 +2,7 @@ import { createClient }        from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { redirect }            from "next/navigation";
 import { revalidatePath }      from "next/cache";
+import { getAppDictionary }    from "@/lib/i18n/loader";
 
 // ─── Server Action ────────────────────────────────────────────────────────────
 
@@ -60,6 +61,8 @@ export default async function EvaluatorProfilePage() {
   if (!user) redirect("/en/login");
 
   const service = createServiceClient();
+  const { dict } = await getAppDictionary();
+  const t = dict.evalProfile;
 
   const { data: userProfile } = await service
     .from("user_profiles")
@@ -87,32 +90,32 @@ export default async function EvaluatorProfilePage() {
     ]);
 
   return (
-    <div className="max-w-[640px] mx-auto px-7 py-8">
+    <div className="max-w-[640px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
           <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-            Evaluator Portal
+            {t.portal}
           </span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight">Profile</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{t.title}</h1>
         <p className="text-[13px] font-mono text-cs-400 mt-1">{user.email}</p>
       </div>
 
       {/* Stats strip */}
-      <div className="border border-cs-200 bg-white flex divide-x divide-cs-200 mb-8">
+      <div className="border border-cs-200 bg-white grid grid-cols-2 sm:grid-cols-4 mb-8">
         {[
-          { label: "Status",          value: evaluator?.is_active ? "Active" : "Pending", accent: evaluator?.is_active },
-          { label: "Assignments",     value: String(assignmentCount ?? 0) },
-          { label: "Entries Scored",  value: String(scoredCount ?? 0) },
-          { label: "Member Since",    value: evaluator?.created_at
+          { label: t.statusLabel,     value: evaluator?.is_active ? t.statusActive : t.statusPending, accent: evaluator?.is_active },
+          { label: t.assignments,     value: String(assignmentCount ?? 0) },
+          { label: t.entriesScored,   value: String(scoredCount ?? 0) },
+          { label: t.memberSince,     value: evaluator?.created_at
               ? new Date(evaluator.created_at).toLocaleDateString("en", { month: "short", year: "numeric" })
               : "—" },
-        ].map((s) => (
-          <div key={s.label} className="flex-1 px-5 py-3">
-            <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+        ].map((s, i) => (
+          <div key={s.label} className={`px-5 py-3 ${i % 2 === 0 ? "border-r border-cs-200" : ""} ${i < 2 ? "border-b sm:border-b-0 sm:border-r sm:border-cs-200" : ""}`}>
+            <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
               {s.label}
             </div>
             <div className={`text-[13px] font-semibold ${s.accent ? "text-sb-text" : ""}`}>
@@ -127,59 +130,59 @@ export default async function EvaluatorProfilePage() {
         <div className="border border-cs-200 bg-white">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
             <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-              Organization Info
+              {t.orgInfo}
             </span>
           </div>
           <div className="p-5 flex flex-col gap-4">
             <div>
-              <label className="cs-label">Organization Name *</label>
+              <label className="cs-label">{t.orgName}</label>
               <input
                 name="org_name"
                 type="text"
                 required
                 defaultValue={evaluator?.org_name ?? ""}
-                placeholder="Acme Evaluators LLC"
+                placeholder={t.orgNamePH}
                 className="cs-input"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="cs-label">Specialization</label>
+                <label className="cs-label">{t.specialization}</label>
                 <select name="industry" defaultValue={evaluator?.industry ?? ""} className="cs-input">
-                  <option value="">Select industry…</option>
+                  <option value="">{t.selectIndustry}</option>
                   {INDUSTRIES.map((o) => (
                     <option key={o.value} value={o.value}>{o.label}</option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="cs-label">Country</label>
+                <label className="cs-label">{t.country}</label>
                 <input
                   name="country"
                   type="text"
                   defaultValue={evaluator?.country ?? ""}
-                  placeholder="Peru"
+                  placeholder={t.countryPH}
                   className="cs-input"
                 />
               </div>
             </div>
             <div>
-              <label className="cs-label">Website</label>
+              <label className="cs-label">{t.website}</label>
               <input
                 name="website"
                 type="text"
                 defaultValue={evaluator?.website ?? ""}
-                placeholder="yourstartup.com"
+                placeholder={t.websitePH}
                 className="cs-input"
               />
             </div>
             <div>
-              <label className="cs-label">Bio / Expertise</label>
+              <label className="cs-label">{t.description}</label>
               <textarea
                 name="description"
                 rows={3}
                 defaultValue={evaluator?.description ?? ""}
-                placeholder="Describe your evaluation expertise…"
+                placeholder={t.descriptionPH}
                 className="cs-input resize-none"
               />
             </div>
@@ -187,7 +190,7 @@ export default async function EvaluatorProfilePage() {
         </div>
 
         <button type="submit" className="btn-primary btn-lg self-start">
-          Save Changes
+          {t.save}
         </button>
       </form>
 

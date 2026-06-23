@@ -5,7 +5,6 @@ import { createServiceClient } from "@/lib/supabase/service";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { sendSubmissionConfirmed } from "@/lib/email/templates/e2-submission-confirmed";
-import { matchAndAssign } from "@/lib/accreditation/matching";
 
 export async function submitAccreditationRequest(formData: FormData) {
   const supabase = await createClient();
@@ -62,11 +61,6 @@ export async function submitAccreditationRequest(formData: FormData) {
   // Send confirmation email
   sendSubmissionConfirmed(startupEmail, startupName).catch(
     (e) => console.error("[apply] email error:", e)
-  );
-
-  // Auto-assign evaluator
-  matchAndAssign(inserted.id).catch(
-    (e) => console.error("[apply] matchAndAssign error:", e)
   );
 
   revalidatePath("/app/startup/dashboard");

@@ -2,15 +2,18 @@ import { createClient }        from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { redirect }            from "next/navigation";
 import Link                    from "next/link";
-
-function fmt(iso: string | null | undefined) {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en", {
-    month: "short", day: "numeric", year: "numeric",
-  });
-}
+import { getAppDictionary }    from "@/lib/i18n/loader";
 
 export default async function AcceleratorDashboardPage() {
+  const { locale, dict } = await getAppDictionary();
+  const t = dict.accelDash;
+
+  function fmt(iso: string | null | undefined) {
+    if (!iso) return "—";
+    return new Date(iso).toLocaleDateString(locale, {
+      month: "short", day: "numeric", year: "numeric",
+    });
+  }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/en/login");
@@ -63,18 +66,18 @@ export default async function AcceleratorDashboardPage() {
   const portalUrl = process.env.NEXT_PUBLIC_PORTAL_URL ?? "https://startupboss.org";
 
   return (
-    <div className="max-w-[860px] mx-auto px-7 py-8">
+    <div className="max-w-[860px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
           <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-            Accelerator Portal
+            {t.portal}
           </span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight">
-          {accelerator?.org_name ?? "Dashboard"}
+          {accelerator?.org_name ?? t.title}
         </h1>
         <p className="text-[13px] font-mono text-cs-400 mt-1">
           {accelerator?.industry ?? ""}{accelerator?.country ? ` · ${accelerator.country}` : ""}
@@ -82,11 +85,11 @@ export default async function AcceleratorDashboardPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-3 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
         {[
-          { value: credCount ?? 0,       label: "Accredited Startups" },
-          { value: competitionCount ?? 0, label: "Competitions"        },
-          { value: fmt(accelerator?.created_at), label: "Member Since" },
+          { value: credCount ?? 0,       label: t.accreditedStartups },
+          { value: competitionCount ?? 0, label: t.competitions        },
+          { value: fmt(accelerator?.created_at), label: t.memberSince },
         ].map((s) => (
           <div key={s.label} className="bg-white border border-cs-200 px-5 py-4">
             <div className="text-2xl font-bold tracking-tight">{s.value}</div>
@@ -101,18 +104,18 @@ export default async function AcceleratorDashboardPage() {
       <div className="bg-white border border-cs-200 mb-6">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50 flex items-center justify-between">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-            Recent Credentials
+            {t.recentCredentials}
           </span>
           <Link
             href="/app/accelerator/portfolio"
             className="text-[12px] font-mono text-sb-default hover:underline uppercase tracking-widest"
           >
-            View All →
+            {t.viewAll}
           </Link>
         </div>
         {(recentCreds ?? []).length === 0 ? (
           <div className="px-5 py-8 text-center">
-            <p className="text-[13px] font-mono text-cs-400">No credentials issued yet.</p>
+            <p className="text-[13px] font-mono text-cs-400">{t.noCredentials}</p>
           </div>
         ) : (
           <div className="divide-y divide-cs-100">
@@ -147,16 +150,16 @@ export default async function AcceleratorDashboardPage() {
       </div>
 
       {/* Quick actions */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <Link
           href="/app/accelerator/portfolio"
           className="bg-white border border-cs-200 px-5 py-4 hover:border-cs-400 transition-colors"
         >
           <div className="text-[13px] font-bold uppercase tracking-widest mb-1">
-            Startup Portfolio
+            {t.startupPortfolio}
           </div>
           <div className="text-[12px] font-mono text-cs-400">
-            Browse all accredited startups in the ecosystem
+            {t.browseStartups}
           </div>
         </Link>
         <Link
@@ -164,10 +167,10 @@ export default async function AcceleratorDashboardPage() {
           className="bg-white border border-cs-200 px-5 py-4 hover:border-cs-400 transition-colors"
         >
           <div className="text-[13px] font-bold uppercase tracking-widest mb-1">
-            Competitions
+            {t.competitions}
           </div>
           <div className="text-[12px] font-mono text-cs-400">
-            Manage your competitions and view entries
+            {t.manageCompetitions}
           </div>
         </Link>
       </div>

@@ -1,30 +1,48 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useRef, useState, useEffect, useCallback } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 interface LangDropdownProps {
   dark?: boolean;
 }
 
+function getCookieLocale(): "en" | "es" {
+  if (typeof document === "undefined") return "en";
+  const match = document.cookie.match(/preferred_locale=(en|es)/);
+  return (match?.[1] as "en" | "es") ?? "en";
+}
+
 export function LangDropdown({ dark = false }: LangDropdownProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  const locale = pathname.startsWith("/es") ? "es" : "en";
+  const hasLocalePrefix = /^\/(en|es)(\/|$)/.test(pathname);
+  const localeFromUrl = pathname.startsWith("/es") ? "es" : "en";
+  const [locale, setLocale] = useState<"en" | "es">(hasLocalePrefix ? localeFromUrl : "en");
 
-  function targetPath(target: string) {
-    if (pathname.startsWith("/en/") || pathname.startsWith("/es/")) {
-      return pathname.replace(/^\/(en|es)/, `/${target}`);
+  useEffect(() => {
+    if (!hasLocalePrefix) {
+      setLocale(getCookieLocale());
+    } else {
+      setLocale(localeFromUrl);
     }
-    if (pathname === "/en" || pathname === "/es") {
-      return `/${target}`;
+  }, [hasLocalePrefix, localeFromUrl]);
+
+  const handleLangChange = useCallback((lang: "en" | "es") => {
+    document.cookie = `preferred_locale=${lang};path=/;max-age=31536000`;
+    setLocale(lang);
+    setOpen(false);
+
+    if (hasLocalePrefix) {
+      const newPath = pathname.replace(/^\/(en|es)/, `/${lang}`);
+      router.push(newPath);
+    } else {
+      window.location.reload();
     }
-    document.cookie = `preferred_locale=${target};path=/;max-age=31536000`;
-    return pathname;
-  }
+  }, [pathname, hasLocalePrefix, router]);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -44,7 +62,7 @@ export function LangDropdown({ dark = false }: LangDropdownProps) {
       <button
         onClick={() => setOpen((o) => !o)}
         className="flex items-center gap-1 text-[12px] font-mono uppercase tracking-widest transition-colors"
-        style={{ color: textColor, background: "none", border: "none", cursor: "pointer", padding: "4px 8px" }}
+        style={{ color: textColor, background: "none", border: "none", padding: "4px 8px" }}
       >
         {locale.toUpperCase()}
         <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
@@ -65,26 +83,25 @@ export function LangDropdown({ dark = false }: LangDropdownProps) {
           }}
         >
           {(["en", "es"] as const).map((lang) => (
-            <Link
+            <button
               key={lang}
-              href={targetPath(lang)}
-              onClick={() => {
-                document.cookie = `preferred_locale=${lang};path=/;max-age=31536000`;
-                setOpen(false);
-              }}
+              onClick={() => handleLangChange(lang)}
               style={{
                 display: "block",
+                width: "100%",
+                textAlign: "left",
                 padding: "6px 14px",
                 fontSize: "12px",
                 fontFamily: "var(--font-mono, monospace)",
                 letterSpacing: ".08em",
                 color: locale === lang ? activeColor : dark ? "#aaa" : "#4A4A4A",
-                textDecoration: "none",
+                background: "none",
+                border: "none",
                 fontWeight: locale === lang ? 600 : 400,
               }}
             >
               {lang.toUpperCase()}
-            </Link>
+            </button>
           ))}
         </div>
       )}

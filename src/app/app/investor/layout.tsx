@@ -4,6 +4,7 @@ import { redirect }            from "next/navigation";
 import { InvestorNav }         from "@/components/ui/Navigation";
 import { PendingBanner }       from "@/components/ui/Navigation";
 import { signOut }             from "@/app/actions/auth";
+import { getAppLocale }        from "@/lib/i18n/loader";
 
 export default async function InvestorLayout({
   children,
@@ -32,18 +33,21 @@ export default async function InvestorLayout({
     .eq("id", profile.entity_id)
     .single();
 
+  const locale = await getAppLocale();
+
   async function handleSignOut() {
     "use server";
     await signOut();
   }
 
   return (
-    <div className="min-h-screen bg-cs-50 flex flex-col">
-      <InvestorNav onSignOut={handleSignOut} />
+    <div className="min-h-screen bg-cs-50 flex flex-col overflow-x-hidden">
+      <InvestorNav onSignOut={handleSignOut} locale={locale} />
 
       {investor && !investor.is_active && (
         <PendingBanner
           message="Your investor account is pending activation. Our team will notify you once you are activated."
+          locale={locale}
         />
       )}
 

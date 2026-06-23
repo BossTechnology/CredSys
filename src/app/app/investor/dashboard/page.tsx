@@ -2,10 +2,11 @@ import { createClient }        from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { redirect }            from "next/navigation";
 import Link                    from "next/link";
+import { getAppDictionary }    from "@/lib/i18n/loader";
 
-function fmt(iso: string | null | undefined) {
+function fmt(iso: string | null | undefined, locale = "en") {
   if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en", {
+  return new Date(iso).toLocaleDateString(locale, {
     month: "short", day: "numeric", year: "numeric",
   });
 }
@@ -19,6 +20,9 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default async function InvestorDashboardPage() {
+  const { locale, dict } = await getAppDictionary();
+  const t = dict.investorDash;
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/en/login");
@@ -80,29 +84,29 @@ export default async function InvestorDashboardPage() {
   const sponsorshipsCount = recentSponsorships?.length ?? 0;
 
   return (
-    <div className="max-w-[1060px] mx-auto px-7 py-8">
+    <div className="max-w-[1060px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
           <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-            Investor Portal
+            {t.portal}
           </span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight">
-          {investor?.org_name ?? "Dashboard"}
+          {investor?.org_name ?? t.title}
         </h1>
         <p className="text-[13px] font-mono text-cs-400 mt-1">{user.email}</p>
       </div>
 
       {/* Stats strip */}
-      <div className="grid grid-cols-4 gap-3 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
         {[
-          { value: totalWatching,    label: "Startups Watching"  },
-          { value: accreditedCount,  label: "Accredited"         },
-          { value: pendingCount,     label: "Pending"            },
-          { value: sponsorshipsCount, label: "Sponsorships"      },
+          { value: totalWatching,    label: t.startupsWatching  },
+          { value: accreditedCount,  label: t.accredited        },
+          { value: pendingCount,     label: t.pending           },
+          { value: sponsorshipsCount, label: t.sponsorships     },
         ].map((s) => (
           <div key={s.label} className="bg-white border border-cs-200 px-5 py-4">
             <div className="text-2xl font-bold tracking-tight">{s.value}</div>
@@ -117,32 +121,32 @@ export default async function InvestorDashboardPage() {
         <div className="lg:col-span-2 flex flex-col gap-6">
 
           {/* Watchlist card */}
-          <div className="bg-white border border-cs-200">
+          <div className="bg-white border border-cs-200 overflow-x-auto">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50 flex items-center justify-between">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                Watchlist
+                {t.watchlist}
               </span>
               <Link
                 href="/app/investor/watchlist"
                 className="text-[12px] font-mono text-sb-default hover:underline uppercase tracking-widest"
               >
-                Manage →
+                {t.manage} →
               </Link>
             </div>
 
             {totalWatching === 0 ? (
               <div className="px-5 py-8 text-center">
                 <p className="text-[13px] font-mono text-cs-400 mb-3">
-                  No startups on watchlist.
+                  {t.noWatchlist}
                 </p>
                 <Link href="/en/cred-list" className="btn-outline btn-sm">
-                  Browse the CRED List →
+                  {t.browseCredList}
                 </Link>
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-[1fr_100px_80px_100px_80px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
-                  {["Startup", "Industry", "Country", "CRED Status", ""].map((h) => (
+                <div className="grid min-w-[560px] grid-cols-[1fr_100px_80px_100px_80px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
+                  {[t.startup, t.industry, t.country, t.credStatus, ""].map((h) => (
                     <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
                   ))}
                 </div>
@@ -156,7 +160,7 @@ export default async function InvestorDashboardPage() {
                     const isAccredited = latestStatus === "accredited";
 
                     return (
-                      <div key={entry.id} className="grid grid-cols-[1fr_100px_80px_100px_80px] gap-3 px-5 py-3 items-center">
+                      <div key={entry.id} className="grid min-w-[560px] grid-cols-[1fr_100px_80px_100px_80px] gap-3 px-5 py-3 items-center">
                         <div className="text-[13px] font-semibold">
                           {isAccredited ? (
                             <Link href={`/startup/${entry.startup_id}`} className="underline underline-offset-2 hover:opacity-70">
@@ -170,7 +174,7 @@ export default async function InvestorDashboardPage() {
                         <div className="text-[12px] font-mono text-cs-500">{startup?.country ?? "—"}</div>
                         <div>
                           <span className={`text-[14px] font-mono font-bold uppercase tracking-widest ${isAccredited ? "text-green-600" : "text-cs-400"}`}>
-                            {latestStatus ? latestStatus.replace(/_/g, " ") : "No Request"}
+                            {latestStatus ? latestStatus.replace(/_/g, " ") : t.noRequest}
                           </span>
                         </div>
                         <div>
@@ -178,7 +182,7 @@ export default async function InvestorDashboardPage() {
                             href="/app/investor/watchlist"
                             className="text-[14px] font-mono text-cs-400 hover:text-black uppercase tracking-widest"
                           >
-                            Manage
+                            {t.manage}
                           </Link>
                         </div>
                       </div>
@@ -190,40 +194,40 @@ export default async function InvestorDashboardPage() {
           </div>
 
           {/* Recent Sponsorships card */}
-          <div className="bg-white border border-cs-200">
+          <div className="bg-white border border-cs-200 overflow-x-auto">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50 flex items-center justify-between">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                Recent Sponsorships
+                {t.recentSponsorships}
               </span>
               <Link
                 href="/app/investor/sponsor"
                 className="text-[12px] font-mono text-sb-default hover:underline uppercase tracking-widest"
               >
-                + New →
+                {t.newSponsorship}
               </Link>
             </div>
 
             {sponsorshipsCount === 0 ? (
               <div className="px-5 py-8 text-center">
                 <p className="text-[13px] font-mono text-cs-400 mb-3">
-                  No sponsorships yet.
+                  {t.noSponsorships}
                 </p>
                 <Link href="/app/investor/sponsor" className="btn-outline btn-sm">
-                  Sponsor an Accreditation →
+                  {t.sponsorAccreditation}
                 </Link>
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-[1fr_80px_100px_60px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
-                  {["Startup", "Date", "Status", ""].map((h) => (
+                <div className="grid min-w-[480px] grid-cols-[1fr_80px_100px_60px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
+                  {[t.startup, t.date, t.status, ""].map((h) => (
                     <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
                   ))}
                 </div>
                 <div className="divide-y divide-cs-100">
                   {(recentSponsorships ?? []).map((s) => (
-                    <div key={s.id} className="grid grid-cols-[1fr_80px_100px_60px] gap-3 px-5 py-3 items-center">
+                    <div key={s.id} className="grid min-w-[480px] grid-cols-[1fr_80px_100px_60px] gap-3 px-5 py-3 items-center">
                       <div className="text-[13px] font-semibold">{s.startup_name_input}</div>
-                      <div className="text-[12px] font-mono text-cs-400">{fmt(s.created_at)}</div>
+                      <div className="text-[12px] font-mono text-cs-400">{fmt(s.created_at, locale)}</div>
                       <div>
                         <span className={`text-[14px] font-mono font-bold uppercase tracking-widest ${STATUS_COLORS[s.status] ?? "text-cs-400"}`}>
                           {s.status.replace(/_/g, " ")}
@@ -233,7 +237,7 @@ export default async function InvestorDashboardPage() {
                         href="/app/investor/sponsor"
                         className="text-[14px] font-mono text-cs-400 hover:text-black uppercase tracking-widest"
                       >
-                        View
+                        {t.view}
                       </Link>
                     </div>
                   ))}
@@ -249,18 +253,18 @@ export default async function InvestorDashboardPage() {
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                Quick Links
+                {t.quickLinks}
               </span>
             </div>
             <div className="p-4 flex flex-col gap-2">
               <Link href="/app/investor/sponsor" className="btn-outline btn-sm w-full text-center">
-                Sponsor an Accreditation
+                {t.sponsorAnAccreditation}
               </Link>
               <Link href="/en/cred-list" className="btn-outline btn-sm w-full text-center">
-                Browse CRED List
+                {t.browseCREDList}
               </Link>
               <Link href="/app/investor/profile" className="btn-outline btn-sm w-full text-center">
-                Edit Profile
+                {t.editProfile}
               </Link>
             </div>
           </div>
@@ -268,14 +272,14 @@ export default async function InvestorDashboardPage() {
           <div className="border border-cs-200 bg-white">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                Investor Info
+                {t.investorInfo}
               </span>
             </div>
             <div className="p-5 flex flex-col gap-3">
               {[
-                { label: "Focus",   value: investor?.investment_focus },
-                { label: "Country", value: investor?.country          },
-                { label: "Since",   value: fmt(investor?.created_at)  },
+                { label: t.focus,   value: investor?.investment_focus },
+                { label: t.country, value: investor?.country          },
+                { label: t.since,   value: fmt(investor?.created_at, locale)  },
               ].map((f) => (
                 <div key={f.label}>
                   <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">

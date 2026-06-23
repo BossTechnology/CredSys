@@ -2,6 +2,7 @@ import { createClient }        from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { redirect }            from "next/navigation";
 import { revalidatePath }      from "next/cache";
+import { getAppDictionary }    from "@/lib/i18n/loader";
 
 // ─── Server Action ────────────────────────────────────────────────────────────
 
@@ -44,6 +45,9 @@ async function updateInvestorProfile(formData: FormData) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function InvestorProfilePage() {
+  const { dict } = await getAppDictionary();
+  const t = dict.investorProfile;
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/en/login");
@@ -65,34 +69,34 @@ export default async function InvestorProfilePage() {
     .single();
 
   return (
-    <div className="max-w-[640px] mx-auto px-7 py-8">
+    <div className="max-w-[640px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
           <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-            Investor Portal
+            {t.portal}
           </span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight">Profile</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{t.title}</h1>
         <p className="text-[13px] font-mono text-cs-400 mt-1">{user.email}</p>
       </div>
 
       {/* Status card */}
       <div className="bg-white border border-cs-200 px-5 py-3 flex gap-8 mb-6 text-[12px] font-mono">
         <div>
-          <div className="text-cs-400 uppercase tracking-widest mb-0.5">Role</div>
-          <div className="font-bold uppercase">Investor</div>
+          <div className="text-cs-400 uppercase tracking-widest mb-0.5">{t.role}</div>
+          <div className="font-bold uppercase">{t.roleInvestor}</div>
         </div>
         <div>
-          <div className="text-cs-400 uppercase tracking-widest mb-0.5">Status</div>
+          <div className="text-cs-400 uppercase tracking-widest mb-0.5">{t.statusLabel}</div>
           <div className={investor?.is_active ? "font-bold text-green-600" : "font-bold text-cs-400"}>
-            {investor?.is_active ? "Active" : "Pending Activation"}
+            {investor?.is_active ? t.active : t.pendingActivation}
           </div>
         </div>
         <div>
-          <div className="text-cs-400 uppercase tracking-widest mb-0.5">Email</div>
+          <div className="text-cs-400 uppercase tracking-widest mb-0.5">{t.email}</div>
           <div>{investor?.email ?? user.email}</div>
         </div>
       </div>
@@ -102,12 +106,12 @@ export default async function InvestorProfilePage() {
         <div className="bg-white border border-cs-200">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
             <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-              Organization Info
+              {t.orgInfo}
             </span>
           </div>
           <div className="p-5 flex flex-col gap-4">
             <div>
-              <label className="cs-label">Organization Name *</label>
+              <label className="cs-label">{t.orgName}</label>
               <input
                 name="org_name"
                 type="text"
@@ -116,9 +120,9 @@ export default async function InvestorProfilePage() {
                 className="cs-input"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="cs-label">Contact Person</label>
+                <label className="cs-label">{t.contactPerson}</label>
                 <input
                   name="contact_person"
                   type="text"
@@ -127,55 +131,55 @@ export default async function InvestorProfilePage() {
                 />
               </div>
               <div>
-                <label className="cs-label">Phone / WhatsApp</label>
+                <label className="cs-label">{t.phoneWhatsapp}</label>
                 <input
                   name="phone_whatsapp"
                   type="text"
                   defaultValue={investor?.phone_whatsapp ?? ""}
-                  placeholder="+1 555 000 0000"
+                  placeholder={t.phoneWhatsappPH}
                   className="cs-input"
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="cs-label">Investment Focus</label>
+                <label className="cs-label">{t.investmentFocus}</label>
                 <input
                   name="investment_focus"
                   type="text"
                   defaultValue={investor?.investment_focus ?? ""}
-                  placeholder="e.g. Fintech, SaaS, Seed"
+                  placeholder={t.investmentFocusPH}
                   className="cs-input"
                 />
               </div>
               <div>
-                <label className="cs-label">Country</label>
+                <label className="cs-label">{t.country}</label>
                 <input
                   name="country"
                   type="text"
                   defaultValue={investor?.country ?? ""}
-                  placeholder="Peru"
+                  placeholder={t.countryPH}
                   className="cs-input"
                 />
               </div>
             </div>
             <div>
-              <label className="cs-label">Website</label>
+              <label className="cs-label">{t.website}</label>
               <input
                 name="website"
                 type="text"
                 defaultValue={investor?.website ?? ""}
-                placeholder="yourstartup.com"
+                placeholder={t.websitePH}
                 className="cs-input"
               />
             </div>
             <div>
-              <label className="cs-label">About your Fund / Organization</label>
+              <label className="cs-label">{t.description}</label>
               <textarea
                 name="description"
                 rows={3}
                 defaultValue={investor?.description ?? ""}
-                placeholder="Describe your investment thesis…"
+                placeholder={t.descriptionPH}
                 className="cs-input resize-none"
               />
             </div>
@@ -183,7 +187,7 @@ export default async function InvestorProfilePage() {
         </div>
 
         <button type="submit" className="btn-primary btn-lg self-start">
-          Save Changes
+          {t.save}
         </button>
       </form>
 

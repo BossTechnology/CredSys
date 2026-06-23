@@ -2,6 +2,7 @@ import { createClient }        from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { redirect }            from "next/navigation";
 import { enterCompetition }    from "@/app/actions/competitions";
+import { getAppDictionary }    from "@/lib/i18n/loader";
 
 function fmt(iso: string | null | undefined) {
   if (!iso) return "—";
@@ -9,13 +10,6 @@ function fmt(iso: string | null | undefined) {
     month: "short", day: "numeric", year: "numeric",
   });
 }
-
-const STATUS_LABEL: Record<string, string> = {
-  active:    "Open",
-  scoring:   "Scoring in progress",
-  closed:    "Closed",
-  completed: "Completed",
-};
 
 const STATUS_COLOR: Record<string, string> = {
   active:    "text-green-600 bg-green-50",
@@ -30,6 +24,15 @@ export default async function StartupCompetitionsPage() {
   if (!user) redirect("/en/login");
 
   const service = createServiceClient();
+  const { dict } = await getAppDictionary();
+  const t = dict.startupComps;
+
+  const STATUS_LABEL: Record<string, string> = {
+    active:    t.open,
+    scoring:   t.scoringInProgress,
+    closed:    t.closed,
+    completed: t.completed,
+  };
 
   const { data: userProfile } = await service
     .from("user_profiles")
@@ -89,19 +92,19 @@ export default async function StartupCompetitionsPage() {
   const total = competitions?.length ?? 0;
 
   return (
-    <div className="max-w-[860px] mx-auto px-7 py-8">
+    <div className="max-w-[860px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-2 h-2 bg-sb-default" />
           <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-            Startup Portal
+            {t.portal}
           </span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight">Competitions</h1>
+        <h1 className="text-2xl font-bold tracking-tight">{t.title}</h1>
         <p className="text-[13px] font-mono text-cs-400 mt-1">
-          {total} competition{total !== 1 ? "s" : ""} available
+          {total} {t.title.toLowerCase()} {t.available}
         </p>
       </div>
 
@@ -111,11 +114,10 @@ export default async function StartupCompetitionsPage() {
           <div className="w-1 h-full bg-yellow-500 shrink-0 self-stretch" />
           <div>
             <div className="text-[12px] font-mono font-bold text-yellow-400 uppercase tracking-widest mb-1">
-              Accreditation Required
+              {t.accreditationRequired}
             </div>
             <p className="text-[12px] font-mono text-cs-400">
-              Only accredited startups can enter competitions.
-              Complete your accreditation to unlock this feature.
+              {t.accreditationRequiredDesc}
             </p>
           </div>
         </div>
@@ -124,7 +126,7 @@ export default async function StartupCompetitionsPage() {
       {/* Competition list */}
       {total === 0 ? (
         <div className="bg-white border border-cs-200 px-5 py-12 text-center">
-          <p className="text-[13px] font-mono text-cs-400">No competitions available right now.</p>
+          <p className="text-[13px] font-mono text-cs-400">{t.noCompetitions}</p>
         </div>
       ) : (
         <div className="flex flex-col gap-3">
@@ -149,7 +151,7 @@ export default async function StartupCompetitionsPage() {
                       </span>
                       {entered && (
                         <span className="text-[14px] font-mono font-bold text-sb-default uppercase tracking-widest">
-                          ✓ Entered
+                          ✓ {t.entered}
                         </span>
                       )}
                     </div>
@@ -164,10 +166,10 @@ export default async function StartupCompetitionsPage() {
                       {comp.industry && (
                         <span className="uppercase tracking-widest">{comp.industry}</span>
                       )}
-                      {comp.start_date && <span>Opens: {fmt(comp.start_date)}</span>}
-                      {comp.end_date   && <span>Closes: {fmt(comp.end_date)}</span>}
+                      {comp.start_date && <span>{t.opens}: {fmt(comp.start_date)}</span>}
+                      {comp.end_date   && <span>{t.closes}: {fmt(comp.end_date)}</span>}
                       {entry?.entered_at && (
-                        <span>Entered: {fmt(entry.entered_at)}</span>
+                        <span>{t.enteredOn}: {fmt(entry.entered_at)}</span>
                       )}
                     </div>
 
@@ -176,7 +178,7 @@ export default async function StartupCompetitionsPage() {
                       <div className="mt-3 flex items-center gap-5 bg-cs-50 border border-cs-200 px-3 py-2 w-fit">
                         <div>
                           <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
-                            Score
+                            {t.score}
                           </div>
                           <div className="text-[13px] font-bold text-sb-default">
                             {scoreRow.score}/100
@@ -185,7 +187,7 @@ export default async function StartupCompetitionsPage() {
                         {scoreRow.notes && (
                           <div>
                             <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
-                              Evaluator notes
+                              {t.evaluatorNotes}
                             </div>
                             <div className="text-[12px] font-mono text-cs-500 max-w-[240px] truncate">
                               {scoreRow.notes}
@@ -194,7 +196,7 @@ export default async function StartupCompetitionsPage() {
                         )}
                         <div>
                           <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
-                            Scored on
+                            {t.scoredOn}
                           </div>
                           <div className="text-[12px] font-mono text-cs-500">
                             {fmt(scoreRow.scored_at)}
@@ -210,24 +212,24 @@ export default async function StartupCompetitionsPage() {
                       <form action={enterCompetition}>
                         <input type="hidden" name="competition_id" value={comp.id} />
                         <button type="submit" className="btn-primary btn-sm">
-                          Enter Competition
+                          {t.enterCompetition}
                         </button>
                       </form>
                     ) : entered && !scoreRow ? (
                       <span className="text-[12px] font-mono text-cs-400 border border-cs-200 bg-cs-50 px-3 py-1.5">
-                        Pending scoring
+                        {t.pendingScoring}
                       </span>
                     ) : entered && scoreRow ? (
                       <span className="text-[12px] font-mono text-sb-default border border-sb-default px-3 py-1.5 font-bold">
-                        Scored
+                        {t.scored}
                       </span>
                     ) : comp.status === "active" && !isAccredited ? (
                       <span className="text-[12px] font-mono text-cs-400 border border-cs-200 px-3 py-1.5 opacity-50">
-                        Accreditation required
+                        {t.accreditationRequiredShort}
                       </span>
                     ) : (
                       <span className="text-[12px] font-mono text-cs-400">
-                        {comp.status === "completed" || comp.status === "closed" ? "Closed" : "Not open"}
+                        {comp.status === "completed" || comp.status === "closed" ? t.closed : t.notOpen}
                       </span>
                     )}
                   </div>

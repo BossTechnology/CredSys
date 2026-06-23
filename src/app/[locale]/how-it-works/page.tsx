@@ -69,7 +69,7 @@ export default async function HowItWorksPage({ params }: HowItWorksPageProps) {
             </span>
           </div>
 
-          <div className="max-w-[1280px] mx-auto px-7 py-16">
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-7 py-16">
             <div className="max-w-[620px]">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-3 h-3 bg-sb-default" />
@@ -104,7 +104,7 @@ export default async function HowItWorksPage({ params }: HowItWorksPageProps) {
 
         {/* CHASS1S Framework */}
         <section className="border-b border-cs-200 bg-white">
-          <div className="max-w-[1280px] mx-auto px-7 py-16">
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-7 py-16">
             <div className="flex items-center gap-3 mb-10">
               <div className="h-px flex-1 bg-cs-200 max-w-[40px]" />
               <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
@@ -147,7 +147,7 @@ export default async function HowItWorksPage({ params }: HowItWorksPageProps) {
 
         {/* CTA */}
         <section className="bg-black">
-          <div className="max-w-[1280px] mx-auto px-7 py-14 flex items-center justify-between gap-8 flex-wrap">
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-7 py-14 flex items-center justify-between gap-8 flex-wrap">
             <div>
               <h2 className="text-white text-2xl font-bold tracking-tight mb-2">
                 Ready to get accredited?

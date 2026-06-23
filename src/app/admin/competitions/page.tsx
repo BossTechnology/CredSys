@@ -1,5 +1,6 @@
 import { createServiceClient } from "@/lib/supabase/service";
 import { createCompetition }    from "@/app/actions/competitions";
+import { getAppDictionary }     from "@/lib/i18n/loader";
 import Link                     from "next/link";
 
 function fmt(iso: string | null | undefined) {
@@ -23,6 +24,8 @@ const INDUSTRIES = [
 ];
 
 export default async function AdminCompetitionsPage() {
+  const { dict } = await getAppDictionary();
+  const t = dict.admin;
   const service = createServiceClient();
 
   const [
@@ -45,20 +48,20 @@ export default async function AdminCompetitionsPage() {
   const accelMap = new Map((accelerators ?? []).map((a) => [a.id, a.org_name]));
 
   return (
-    <div className="max-w-[1000px] mx-auto px-7 py-8">
+    <div className="max-w-[1000px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
-      <div className="flex items-start justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-2 h-2 bg-sb-default" />
             <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
-              Admin
+              {t.label}
             </span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">Competitions</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t.competitions}</h1>
           <p className="text-[13px] font-mono text-cs-400 mt-1">
-            {total} total · {active} active
+            {total} {t.total} · {active} {t.active.toLowerCase()}
           </p>
         </div>
       </div>
@@ -67,17 +70,17 @@ export default async function AdminCompetitionsPage() {
       <div className="bg-white border border-cs-200 mb-8">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-            Create Competition
+            {t.createCompetition}
           </span>
         </div>
-        <form action={createCompetition} className="p-5 grid grid-cols-2 gap-4">
+        <form action={createCompetition} className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="col-span-2">
-            <label className="cs-label">Name *</label>
+            <label className="cs-label">{t.name} *</label>
             <input name="name" type="text" required className="cs-input" placeholder="Demo Day 2026" />
           </div>
           <div className="col-span-2">
-            <label className="cs-label">Description</label>
-            <textarea name="description" rows={2} className="cs-input resize-none" placeholder="Brief description…" />
+            <label className="cs-label">{t.description}</label>
+            <textarea name="description" rows={2} className="cs-input resize-none" placeholder={t.descriptionPH} />
           </div>
           <div>
             <label className="cs-label">Industry</label>
@@ -107,7 +110,7 @@ export default async function AdminCompetitionsPage() {
           </div>
           <div className="col-span-2">
             <button type="submit" className="btn-primary btn-sm">
-              Create Competition
+              {t.createCompetition}
             </button>
           </div>
         </form>
@@ -117,25 +120,25 @@ export default async function AdminCompetitionsPage() {
       <div className="bg-white border border-cs-200">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-            All Competitions · {total}
+            {t.competitions} · {total}
           </span>
         </div>
         {total === 0 ? (
           <div className="px-5 py-10 text-center">
-            <p className="text-[13px] font-mono text-cs-400">No competitions yet.</p>
+            <p className="text-[13px] font-mono text-cs-400">{t.noCompetitionsFound}</p>
           </div>
         ) : (
           <div className="divide-y divide-cs-100">
             {(competitions ?? []).map((comp) => (
-              <div key={comp.id} className="px-5 py-4 flex items-start justify-between gap-4">
+              <div key={comp.id} className="px-5 py-4 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-[13px] font-bold">{comp.name}</span>
-                    <span className={`text-[14px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 ${STATUS_COLOR[comp.status] ?? "text-cs-400 bg-cs-100"}`}>
-                      {comp.status}
+                    <span className={`text-[11px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 ${STATUS_COLOR[comp.status] ?? "text-cs-400 bg-cs-100"}`}>
+                      {comp.status === "active" ? t.active : comp.status}
                     </span>
                   </div>
-                  <div className="flex gap-5 text-[14px] font-mono text-cs-400">
+                  <div className="flex flex-wrap gap-3 sm:gap-5 text-[12px] font-mono text-cs-400">
                     {comp.industry && <span className="uppercase">{comp.industry}</span>}
                     {comp.accelerator_id && <span>{accelMap.get(comp.accelerator_id) ?? "—"}</span>}
                     {comp.start_date && <span>Opens: {fmt(comp.start_date)}</span>}
@@ -146,7 +149,7 @@ export default async function AdminCompetitionsPage() {
                   href={`/admin/competitions/${comp.id}`}
                   className="text-[12px] font-mono text-sb-default hover:underline uppercase tracking-widest shrink-0"
                 >
-                  Manage →
+                  {t.manage}
                 </Link>
               </div>
             ))}
