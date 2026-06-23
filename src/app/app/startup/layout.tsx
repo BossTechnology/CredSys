@@ -34,7 +34,7 @@ export default async function StartupLayout({
   }
 
   return (
-    <div className="min-h-screen bg-cs-50 flex flex-col">
+    <div className="min-h-screen bg-cs-50 flex flex-col overflow-x-hidden">
       <StartupNav onSignOut={handleSignOut} locale={locale} />
       <main className="flex-1">{children}</main>
     </div>

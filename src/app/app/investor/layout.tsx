@@ -41,7 +41,7 @@ export default async function InvestorLayout({
   }
 
   return (
-    <div className="min-h-screen bg-cs-50 flex flex-col">
+    <div className="min-h-screen bg-cs-50 flex flex-col overflow-x-hidden">
       <InvestorNav onSignOut={handleSignOut} locale={locale} />
 
       {investor && !investor.is_active && (

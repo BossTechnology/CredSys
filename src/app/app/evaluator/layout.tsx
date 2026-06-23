@@ -42,7 +42,7 @@ export default async function EvaluatorLayout({
   }
 
   return (
-    <div className="min-h-screen bg-cs-50 flex flex-col">
+    <div className="min-h-screen bg-cs-50 flex flex-col overflow-x-hidden">
       <EvaluatorNav onSignOut={handleSignOut} locale={locale} />
 
       {evaluator && !evaluator.is_active && (

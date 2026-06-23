@@ -41,7 +41,7 @@ export default async function AcceleratorLayout({
   }
 
   return (
-    <div className="min-h-screen bg-cs-50 flex flex-col">
+    <div className="min-h-screen bg-cs-50 flex flex-col overflow-x-hidden">
       <AcceleratorNav onSignOut={handleSignOut} locale={locale} />
 
       {accelerator && !accelerator.is_active && (

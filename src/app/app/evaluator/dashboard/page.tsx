@@ -75,7 +75,7 @@ export default async function EvaluatorDashboardPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-0 border border-cs-200 bg-white mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-0 border border-cs-200 bg-white mb-8">
         {[
           { label: t.totalAssignments, value: total, accent: false },
           { label: t.activeLabel,      value: active, accent: false },

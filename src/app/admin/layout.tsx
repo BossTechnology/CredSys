@@ -38,7 +38,7 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-cs-50 flex flex-col">
+    <div className="min-h-screen bg-cs-50 flex flex-col overflow-x-hidden">
       <AdminNav locale={locale} onSignOut={handleSignOut} />
       <main className="flex-1">{children}</main>
     </div>
