@@ -211,7 +211,8 @@
     "colIndustry": "Industria",
     "colStatus": "Estado",
     "colUpdated": "Actualizado",
-    "view": "Ver →"
+    "view": "Ver →",
+    "pendingAcceptance": "Pendiente de tu aceptación"
   },
   "evalAssignments": {
     "title": "Asignaciones",
@@ -350,7 +351,10 @@
     "score": "Puntaje",
     "results": "Resultados",
     "rank": "Posición",
-    "avgScore": "Puntaje Promedio"
+    "avgScore": "Puntaje Promedio",
+    "acceptancePending": "Pendiente de aceptación",
+    "acceptanceAccepted": "Aceptada",
+    "declinedReasonLabel": "Último rechazo"
   },
   "evalProfile": {
     "title": "Perfil",
@@ -436,7 +440,14 @@
     "billingContact": "Contacto de Facturación",
     "billingEmail": "Email de Facturación",
     "phone": "Teléfono",
-    "address": "Dirección"
+    "address": "Dirección",
+    "contactEmail": "Email de contacto",
+    "acceptTitle": "Aceptar o Declinar Asignación",
+    "acceptDesc": "Revisa el perfil de la startup abajo. Acepta para iniciar la evaluación, o declina para devolverla al admin.",
+    "acceptBtn": "Aceptar Asignación",
+    "declineReason": "Motivo para declinar (obligatorio)",
+    "declineReasonPH": "Explica por qué declinas esta asignación…",
+    "declineBtn": "Declinar"
   },
   "startupComps": {
     "title": "Competencias",

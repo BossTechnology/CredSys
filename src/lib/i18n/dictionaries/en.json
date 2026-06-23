@@ -211,7 +211,8 @@
     "colIndustry": "Industry",
     "colStatus": "Status",
     "colUpdated": "Updated",
-    "view": "View →"
+    "view": "View →",
+    "pendingAcceptance": "Pending your acceptance"
   },
   "evalAssignments": {
     "title": "Assignments",
@@ -350,7 +351,10 @@
     "score": "Score",
     "results": "Results",
     "rank": "Rank",
-    "avgScore": "Avg Score"
+    "avgScore": "Avg Score",
+    "acceptancePending": "Pending acceptance",
+    "acceptanceAccepted": "Accepted",
+    "declinedReasonLabel": "Last declined"
   },
   "evalProfile": {
     "title": "Profile",
@@ -436,7 +440,14 @@
     "billingContact": "Billing Contact",
     "billingEmail": "Billing Email",
     "phone": "Phone",
-    "address": "Address"
+    "address": "Address",
+    "contactEmail": "Contact email",
+    "acceptTitle": "Accept or Decline Assignment",
+    "acceptDesc": "Review the startup profile below. Accept to begin the evaluation, or decline to return it to the admin.",
+    "acceptBtn": "Accept Assignment",
+    "declineReason": "Reason for declining (required)",
+    "declineReasonPH": "Explain why you are declining this assignment…",
+    "declineBtn": "Decline"
   },
   "startupComps": {
     "title": "Competitions",
