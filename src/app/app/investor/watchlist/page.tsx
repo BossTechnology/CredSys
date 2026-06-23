@@ -171,7 +171,7 @@ export default async function InvestorWatchlistPage({
   }
 
   return (
-    <div className="max-w-[960px] mx-auto px-7 py-8">
+    <div className="max-w-[960px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
@@ -238,7 +238,7 @@ export default async function InvestorWatchlistPage({
       </div>
 
       {/* Watchlist table */}
-      <div className="bg-white border border-cs-200">
+      <div className="bg-white border border-cs-200 overflow-x-auto">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
             {t.watching} · {watchlistEntries?.length ?? 0}
@@ -253,7 +253,7 @@ export default async function InvestorWatchlistPage({
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-[1fr_90px_80px_110px_160px_90px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
+            <div className="grid min-w-[760px] grid-cols-[1fr_90px_80px_110px_160px_90px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
               {[t.startup, t.industry, t.country, t.credStatus, t.notifications, t.actions].map((h) => (
                 <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
@@ -268,7 +268,7 @@ export default async function InvestorWatchlistPage({
                 const isAccredited = latestStatus === "accredited";
 
                 return (
-                  <div key={entry.id} className="grid grid-cols-[1fr_90px_80px_110px_160px_90px] gap-3 px-5 py-3 items-center">
+                  <div key={entry.id} className="grid min-w-[760px] grid-cols-[1fr_90px_80px_110px_160px_90px] gap-3 px-5 py-3 items-center">
                     <div>
                       <div className="text-[13px] font-semibold">
                         {isAccredited ? (

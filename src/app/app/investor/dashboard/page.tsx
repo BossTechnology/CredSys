@@ -84,7 +84,7 @@ export default async function InvestorDashboardPage() {
   const sponsorshipsCount = recentSponsorships?.length ?? 0;
 
   return (
-    <div className="max-w-[1060px] mx-auto px-7 py-8">
+    <div className="max-w-[1060px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
@@ -101,7 +101,7 @@ export default async function InvestorDashboardPage() {
       </div>
 
       {/* Stats strip */}
-      <div className="grid grid-cols-4 gap-3 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
         {[
           { value: totalWatching,    label: t.startupsWatching  },
           { value: accreditedCount,  label: t.accredited        },
@@ -121,7 +121,7 @@ export default async function InvestorDashboardPage() {
         <div className="lg:col-span-2 flex flex-col gap-6">
 
           {/* Watchlist card */}
-          <div className="bg-white border border-cs-200">
+          <div className="bg-white border border-cs-200 overflow-x-auto">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50 flex items-center justify-between">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 {t.watchlist}
@@ -145,7 +145,7 @@ export default async function InvestorDashboardPage() {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-[1fr_100px_80px_100px_80px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
+                <div className="grid min-w-[560px] grid-cols-[1fr_100px_80px_100px_80px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
                   {[t.startup, t.industry, t.country, t.credStatus, ""].map((h) => (
                     <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
                   ))}
@@ -160,7 +160,7 @@ export default async function InvestorDashboardPage() {
                     const isAccredited = latestStatus === "accredited";
 
                     return (
-                      <div key={entry.id} className="grid grid-cols-[1fr_100px_80px_100px_80px] gap-3 px-5 py-3 items-center">
+                      <div key={entry.id} className="grid min-w-[560px] grid-cols-[1fr_100px_80px_100px_80px] gap-3 px-5 py-3 items-center">
                         <div className="text-[13px] font-semibold">
                           {isAccredited ? (
                             <Link href={`/startup/${entry.startup_id}`} className="underline underline-offset-2 hover:opacity-70">
@@ -194,7 +194,7 @@ export default async function InvestorDashboardPage() {
           </div>
 
           {/* Recent Sponsorships card */}
-          <div className="bg-white border border-cs-200">
+          <div className="bg-white border border-cs-200 overflow-x-auto">
             <div className="px-5 py-3 border-b border-cs-200 bg-cs-50 flex items-center justify-between">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 {t.recentSponsorships}
@@ -218,14 +218,14 @@ export default async function InvestorDashboardPage() {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-[1fr_80px_100px_60px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
+                <div className="grid min-w-[480px] grid-cols-[1fr_80px_100px_60px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
                   {[t.startup, t.date, t.status, ""].map((h) => (
                     <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
                   ))}
                 </div>
                 <div className="divide-y divide-cs-100">
                   {(recentSponsorships ?? []).map((s) => (
-                    <div key={s.id} className="grid grid-cols-[1fr_80px_100px_60px] gap-3 px-5 py-3 items-center">
+                    <div key={s.id} className="grid min-w-[480px] grid-cols-[1fr_80px_100px_60px] gap-3 px-5 py-3 items-center">
                       <div className="text-[13px] font-semibold">{s.startup_name_input}</div>
                       <div className="text-[12px] font-mono text-cs-400">{fmt(s.created_at, locale)}</div>
                       <div>

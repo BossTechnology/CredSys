@@ -90,7 +90,7 @@ export default async function EvaluatorProfilePage() {
     ]);
 
   return (
-    <div className="max-w-[640px] mx-auto px-7 py-8">
+    <div className="max-w-[640px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
@@ -145,7 +145,7 @@ export default async function EvaluatorProfilePage() {
                 className="cs-input"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="cs-label">{t.specialization}</label>
                 <select name="industry" defaultValue={evaluator?.industry ?? ""} className="cs-input">

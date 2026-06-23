@@ -48,10 +48,10 @@ export default async function AdminCompetitionsPage() {
   const accelMap = new Map((accelerators ?? []).map((a) => [a.id, a.org_name]));
 
   return (
-    <div className="max-w-[1000px] mx-auto px-7 py-8">
+    <div className="max-w-[1000px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
-      <div className="flex items-start justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-2 h-2 bg-sb-default" />
@@ -73,7 +73,7 @@ export default async function AdminCompetitionsPage() {
             {t.createCompetition}
           </span>
         </div>
-        <form action={createCompetition} className="p-5 grid grid-cols-2 gap-4">
+        <form action={createCompetition} className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="col-span-2">
             <label className="cs-label">{t.name} *</label>
             <input name="name" type="text" required className="cs-input" placeholder="Demo Day 2026" />

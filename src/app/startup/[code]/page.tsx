@@ -200,7 +200,7 @@ export default async function CredentialPage({
               Credential Details
             </span>
           </div>
-          <div className="grid grid-cols-2 gap-x-10 gap-y-5 p-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5 p-6">
             {[
               { label: "Organization",  value: startup?.org_name,  mono: false },
               { label: "Industry",      value: startup?.industry,  mono: false },
@@ -254,7 +254,7 @@ export default async function CredentialPage({
               Evaluation Summary
             </span>
           </div>
-          <div className="grid grid-cols-2 divide-x divide-cs-200">
+          <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-cs-200">
             {/* BLIPS */}
             <div className="px-6 py-5">
               <div className="flex items-center justify-between mb-4">

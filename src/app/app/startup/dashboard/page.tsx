@@ -73,7 +73,7 @@ export default async function StartupDashboardPage() {
   }
 
   return (
-    <div className="max-w-[1280px] mx-auto px-7 py-8">
+    <div className="max-w-[1280px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
@@ -171,7 +171,7 @@ export default async function StartupDashboardPage() {
                   )}
 
                   {/* Request meta */}
-                  <div className="grid grid-cols-2 gap-4 text-[12px] font-mono">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-[12px] font-mono">
                     <div>
                       <div className="text-cs-400 uppercase tracking-widest mb-0.5">{t.submitted}</div>
                       <div className="font-semibold">{fmt(request.created_at, locale)}</div>

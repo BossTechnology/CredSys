@@ -82,7 +82,7 @@ export default async function StartupAccreditationPage() {
   // ── No request yet — show application form ────────────────────────────────
   if (!request) {
     return (
-      <div className="max-w-[720px] mx-auto px-7 py-8">
+      <div className="max-w-[720px] mx-auto px-4 sm:px-7 py-8">
         <div className="mb-8">
           <Link
             href="/app/startup/dashboard"
@@ -121,7 +121,7 @@ export default async function StartupAccreditationPage() {
                   className="cs-input"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="cs-label">{t.industryReq}</label>
                   <select name="industry" defaultValue={startup?.industry ?? ""} className="cs-input" required>
@@ -141,7 +141,7 @@ export default async function StartupAccreditationPage() {
                   </select>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="cs-label">{t.website}</label>
                   <input name="website" type="text" defaultValue={startup?.website ?? ""} placeholder={t.websitePH} className="cs-input" />
@@ -230,7 +230,7 @@ export default async function StartupAccreditationPage() {
   }
 
   return (
-    <div className="max-w-[860px] mx-auto px-7 py-8">
+    <div className="max-w-[860px] mx-auto px-4 sm:px-7 py-8">
 
       <Link
         href="/app/startup/dashboard"
@@ -314,7 +314,7 @@ export default async function StartupAccreditationPage() {
             {t.submissionSnapshot}
           </span>
         </div>
-        <div className="p-5 grid grid-cols-2 gap-x-8 gap-y-3">
+        <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
           {[
             { label: t.industry,       value: request.industry  },
             { label: t.stageLabel,     value: request.stage     },

@@ -17,14 +17,14 @@ export function MarketingNav({
   const isEs = locale === "es";
 
   return (
-    <nav className="h-14 bg-white border-b border-cs-200 flex items-center px-7 gap-6 relative z-50">
+    <nav className="h-14 bg-white border-b border-cs-200 flex items-center px-4 sm:px-7 gap-3 sm:gap-6 relative z-50">
       <Link href={`/${locale}`} className="shrink-0">
         <Image
           src="/logo.png"
           alt="StartupBoss.org"
           width={220}
           height={40}
-          className="object-contain"
+          className="object-contain w-[160px] sm:w-[220px] h-auto"
           priority
         />
       </Link>
@@ -36,7 +36,7 @@ export function MarketingNav({
       {showSignIn && (
         <Link
           href={`/${locale}/login`}
-          className="text-[13px] font-mono text-cs-500 tracking-[.03em] hover:text-black transition-colors"
+          className="text-[12px] sm:text-[13px] font-mono text-cs-500 tracking-[.03em] hover:text-black transition-colors whitespace-nowrap"
         >
           {isEs ? "Iniciar Sesión" : "Sign In"}
         </Link>

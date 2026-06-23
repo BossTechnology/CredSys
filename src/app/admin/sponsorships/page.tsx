@@ -65,10 +65,10 @@ export default async function AdminSponsorshipsPage({
   const total = sponsorships?.length ?? 0;
 
   return (
-    <div className="max-w-[1100px] mx-auto px-7 py-8">
+    <div className="max-w-[1100px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
-      <div className="flex items-start justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-2 h-2 bg-white" />
@@ -107,7 +107,7 @@ export default async function AdminSponsorshipsPage({
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-cs-200">
+      <div className="bg-white border border-cs-200 overflow-x-auto">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
             {t.sponsorships} · {total}
@@ -120,7 +120,7 @@ export default async function AdminSponsorshipsPage({
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-[60px_1fr_1fr_1fr_80px_80px_100px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
+            <div className="grid min-w-[760px] grid-cols-[60px_1fr_1fr_1fr_80px_80px_100px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
               {[t.type, t.sponsor, t.startup, t.billingContact, t.date, t.status, t.action].map((h) => (
                 <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
@@ -132,7 +132,7 @@ export default async function AdminSponsorshipsPage({
                 const sponsorName = inv?.org_name ?? acc?.org_name ?? "—";
 
                 return (
-                  <div key={s.id} className="grid grid-cols-[60px_1fr_1fr_1fr_80px_80px_100px] gap-3 px-5 py-3 items-start">
+                  <div key={s.id} className="grid min-w-[760px] grid-cols-[60px_1fr_1fr_1fr_80px_80px_100px] gap-3 px-5 py-3 items-start">
                     <div>
                       <span className="text-[14px] font-mono uppercase tracking-widest text-cs-400">
                         {s.sponsor_type}

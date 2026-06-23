@@ -142,7 +142,7 @@ export default async function EvaluatorScoringPage() {
   );
 
   return (
-    <div className="max-w-[900px] mx-auto px-7 py-8">
+    <div className="max-w-[900px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
@@ -278,7 +278,7 @@ export default async function EvaluatorScoringPage() {
 
 function EmptyState({ t }: { t: Dictionary["evalScoring"] }) {
   return (
-    <div className="max-w-[900px] mx-auto px-7 py-8">
+    <div className="max-w-[900px] mx-auto px-4 sm:px-7 py-8">
       <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight">{t.title}</h1>
       </div>

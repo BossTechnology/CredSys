@@ -113,7 +113,7 @@ export default async function AdminCompetitionDetailPage({
   const canPublish   = comp.status === "scoring" || comp.status === "closed";
 
   return (
-    <div className="max-w-[960px] mx-auto px-7 py-8">
+    <div className="max-w-[960px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
@@ -140,13 +140,13 @@ export default async function AdminCompetitionDetailPage({
         )}
       </div>
 
-      <div className="grid grid-cols-[1fr_280px] gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
 
         {/* ── Left column: roster + scores ── */}
         <div className="flex flex-col gap-6">
 
           {/* Roster */}
-          <div className="bg-white border border-cs-200">
+          <div className="bg-white border border-cs-200 overflow-x-auto">
             <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 {t.entries} · {entries?.length ?? 0}
@@ -159,7 +159,7 @@ export default async function AdminCompetitionDetailPage({
             ) : (
               <>
                 {/* Column headers */}
-                <div className="grid grid-cols-[1fr_80px_80px_100px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
+                <div className="grid min-w-[480px] grid-cols-[1fr_80px_80px_100px] gap-3 px-5 py-2 border-b border-cs-100 bg-cs-50">
                   {[t.startup, t.scores, t.avgScore, t.submitted].map((h) => (
                     <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
                   ))}
@@ -170,7 +170,7 @@ export default async function AdminCompetitionDetailPage({
                     const avg     = avgScore(entry.startup_id);
                     const count   = (scoreMap.get(entry.startup_id) ?? []).length;
                     return (
-                      <div key={entry.startup_id} className="grid grid-cols-[1fr_80px_80px_100px] gap-3 px-5 py-3 items-center">
+                      <div key={entry.startup_id} className="grid min-w-[480px] grid-cols-[1fr_80px_80px_100px] gap-3 px-5 py-3 items-center">
                         <div>
                           <div className="flex items-center gap-2">
                             {avg != null && (
@@ -199,7 +199,7 @@ export default async function AdminCompetitionDetailPage({
 
           {/* Score detail (per evaluator) */}
           {(scores ?? []).length > 0 && (
-            <div className="bg-white border border-cs-200">
+            <div className="bg-white border border-cs-200 overflow-x-auto">
               <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
                 <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                   {t.scores} · {scores?.length}
@@ -238,7 +238,7 @@ export default async function AdminCompetitionDetailPage({
 
           {/* Status controls */}
           {nextStatuses.length > 0 && (
-            <div className="bg-white border border-cs-200">
+            <div className="bg-white border border-cs-200 overflow-x-auto">
               <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
                 <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                   {t.updateStatus}
@@ -265,7 +265,7 @@ export default async function AdminCompetitionDetailPage({
 
           {/* Publish results */}
           {canPublish && (
-            <div className="bg-white border border-cs-200">
+            <div className="bg-white border border-cs-200 overflow-x-auto">
               <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
                 <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                   {t.publishResults}
@@ -286,7 +286,7 @@ export default async function AdminCompetitionDetailPage({
           )}
 
           {/* Evaluators */}
-          <div className="bg-white border border-cs-200">
+          <div className="bg-white border border-cs-200 overflow-x-auto">
             <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 {t.evaluators} · {compEvaluators?.length ?? 0}

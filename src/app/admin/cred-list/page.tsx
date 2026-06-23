@@ -26,7 +26,7 @@ export default async function AdminCredListPage() {
   const portalUrl = process.env.NEXT_PUBLIC_PORTAL_URL ?? "https://startupboss.org";
 
   return (
-    <div className="max-w-[1060px] mx-auto px-7 py-8">
+    <div className="max-w-[1060px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
@@ -41,7 +41,7 @@ export default async function AdminCredListPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-cs-200">
+      <div className="bg-white border border-cs-200 overflow-x-auto">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
             {t.credList} · {total}
@@ -54,7 +54,7 @@ export default async function AdminCredListPage() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-[1fr_100px_100px_110px_110px_80px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
+            <div className="grid min-w-[760px] grid-cols-[1fr_100px_100px_110px_110px_80px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
               {[t.organization, t.industry, t.country, t.issued, t.expires, t.credential].map((h) => (
                 <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
@@ -70,7 +70,7 @@ export default async function AdminCredListPage() {
                 return (
                   <div
                     key={c.unique_code}
-                    className={`grid grid-cols-[1fr_100px_100px_110px_110px_80px] gap-4 px-5 py-3 items-center ${
+                    className={`grid min-w-[760px] grid-cols-[1fr_100px_100px_110px_110px_80px] gap-4 px-5 py-3 items-center ${
                       isExpired ? "bg-red-50" : ""
                     }`}
                   >

@@ -107,7 +107,7 @@ export default async function AssignmentDetailPage({
   }
 
   return (
-    <div className="max-w-[860px] mx-auto px-7 py-8">
+    <div className="max-w-[860px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Back */}
       <Link
@@ -187,7 +187,7 @@ export default async function AssignmentDetailPage({
             <div className="text-[14px] font-mono text-blue-600 uppercase tracking-widest mb-2 font-bold">
               {t.sponsoredAccreditation} · {sponsorship.sponsor_type}
             </div>
-            <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-[12px] font-mono">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-[12px] font-mono">
               <div>
                 <span className="text-cs-400 uppercase tracking-widest text-[14px]">{t.sponsor}</span>
                 <div className="font-semibold">{sponsorName}</div>
@@ -224,7 +224,7 @@ export default async function AssignmentDetailPage({
             {t.startupProfile}
           </span>
         </div>
-        <div className="p-5 grid grid-cols-2 gap-x-8 gap-y-4">
+        <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
           {[
             { label: t.industry,   value: req.industry  },
             { label: t.stage,      value: req.stage     },

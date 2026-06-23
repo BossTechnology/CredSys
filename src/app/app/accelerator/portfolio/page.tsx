@@ -24,7 +24,7 @@ export default async function AcceleratorPortfolioPage() {
   const total     = creds?.length ?? 0;
 
   return (
-    <div className="max-w-[960px] mx-auto px-7 py-8">
+    <div className="max-w-[960px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
@@ -41,7 +41,7 @@ export default async function AcceleratorPortfolioPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-cs-200">
+      <div className="bg-white border border-cs-200 overflow-x-auto">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
             {t.verifiedStartups} · {total}
@@ -55,7 +55,7 @@ export default async function AcceleratorPortfolioPage() {
         ) : (
           <>
             {/* Column headers */}
-            <div className="grid grid-cols-[1fr_120px_100px_120px_100px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
+            <div className="grid min-w-[700px] grid-cols-[1fr_120px_100px_120px_100px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
               {[t.colStartup, t.colIndustry, t.colCountry, t.colAccredited, t.colCredential].map((h) => (
                 <div key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
                   {h}
@@ -74,7 +74,7 @@ export default async function AcceleratorPortfolioPage() {
                 return (
                   <div
                     key={c.unique_code}
-                    className="grid grid-cols-[1fr_120px_100px_120px_100px] gap-4 px-5 py-3 items-center hover:bg-cs-50 transition-colors"
+                    className="grid min-w-[700px] grid-cols-[1fr_120px_100px_120px_100px] gap-4 px-5 py-3 items-center hover:bg-cs-50 transition-colors"
                   >
                     <div>
                       <div className="text-[13px] font-semibold">{startup?.org_name ?? "—"}</div>

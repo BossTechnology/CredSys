@@ -66,7 +66,7 @@ export default async function AcceleratorDashboardPage() {
   const portalUrl = process.env.NEXT_PUBLIC_PORTAL_URL ?? "https://startupboss.org";
 
   return (
-    <div className="max-w-[860px] mx-auto px-7 py-8">
+    <div className="max-w-[860px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
@@ -85,7 +85,7 @@ export default async function AcceleratorDashboardPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-3 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
         {[
           { value: credCount ?? 0,       label: t.accreditedStartups },
           { value: competitionCount ?? 0, label: t.competitions        },
@@ -150,7 +150,7 @@ export default async function AcceleratorDashboardPage() {
       </div>
 
       {/* Quick actions */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <Link
           href="/app/accelerator/portfolio"
           className="bg-white border border-cs-200 px-5 py-4 hover:border-cs-400 transition-colors"

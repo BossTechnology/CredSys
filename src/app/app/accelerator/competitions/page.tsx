@@ -44,7 +44,7 @@ export default async function AcceleratorCompetitionsPage() {
   const total = competitions?.length ?? 0;
 
   return (
-    <div className="max-w-[860px] mx-auto px-7 py-8">
+    <div className="max-w-[860px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">

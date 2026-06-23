@@ -117,7 +117,7 @@ export default async function StartupProfilePage() {
     .single();
 
   return (
-    <div className="max-w-[640px] mx-auto px-7 py-8">
+    <div className="max-w-[640px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
@@ -149,7 +149,7 @@ export default async function StartupProfilePage() {
                 className="cs-input"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="cs-label">{t.industry}</label>
                 <select name="industry" defaultValue={startup?.industry ?? ""} className="cs-input">
@@ -169,7 +169,7 @@ export default async function StartupProfilePage() {
                 </select>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="cs-label">{t.website}</label>
                 <input name="website" type="text" defaultValue={startup?.website ?? ""} placeholder={t.websitePH} className="cs-input" />

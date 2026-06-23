@@ -165,7 +165,7 @@ export default function GetCredPage() {
     <>
       <MarketingNav locale={locale} showSignIn={false} />
 
-      <div className="max-w-[600px] mx-auto px-7 py-10">
+      <div className="max-w-[600px] mx-auto px-4 sm:px-7 py-10">
 
         {/* Title */}
         <div className="mb-8">
@@ -194,7 +194,7 @@ export default function GetCredPage() {
           </div>
 
           {/* Contact person + Role */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="cs-label">{t.contactPerson}</label>
               <input name="contact_person" type="text"
@@ -208,7 +208,7 @@ export default function GetCredPage() {
           </div>
 
           {/* Email + WhatsApp */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="cs-label">{t.email} *</label>
               <input name="email" type="email" required autoComplete="email"

@@ -57,7 +57,7 @@ export default async function AdminOverviewPage() {
   };
 
   return (
-    <div className="max-w-[960px] mx-auto px-7 py-8">
+    <div className="max-w-[960px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
@@ -98,7 +98,7 @@ export default async function AdminOverviewPage() {
       )}
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-3 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
         {stats.map((s) => (
           <Link
             key={s.label}
@@ -158,7 +158,7 @@ export default async function AdminOverviewPage() {
       </div>
 
       {/* Quick actions */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {[
           { label: t.activateEvaluators,  desc: t.activateEvalDesc,  href: "/admin/evaluators"     },
           { label: t.assignEvaluators,    desc: t.assignEvalDesc,    href: "/admin/accreditations" },

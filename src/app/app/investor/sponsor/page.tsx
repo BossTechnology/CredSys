@@ -137,7 +137,7 @@ export default async function InvestorSponsorPage() {
   ]);
 
   return (
-    <div className="max-w-[640px] mx-auto px-7 py-8">
+    <div className="max-w-[640px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
@@ -164,7 +164,7 @@ export default async function InvestorSponsorPage() {
             </span>
           </div>
           <div className="p-5 flex flex-col gap-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="cs-label">{t.contactName}</label>
                 <input
@@ -186,7 +186,7 @@ export default async function InvestorSponsorPage() {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="cs-label">{t.billingPhone}</label>
                 <input

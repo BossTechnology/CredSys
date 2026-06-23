@@ -61,7 +61,7 @@ export default async function EvaluatorDashboardPage() {
   }
 
   return (
-    <div className="max-w-[1280px] mx-auto px-7 py-8">
+    <div className="max-w-[1280px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
       <div className="mb-8">
@@ -75,7 +75,7 @@ export default async function EvaluatorDashboardPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-0 border border-cs-200 bg-white mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-0 border border-cs-200 bg-white mb-8">
         {[
           { label: t.totalAssignments, value: total, accent: false },
           { label: t.activeLabel,      value: active, accent: false },
@@ -102,7 +102,7 @@ export default async function EvaluatorDashboardPage() {
       </div>
 
       {/* Assignments table */}
-      <div className="border border-cs-200 bg-white">
+      <div className="border border-cs-200 bg-white overflow-x-auto">
         <div className="px-5 py-3 border-b border-cs-200 bg-cs-50 flex items-center justify-between">
           <div>
             <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">
@@ -121,7 +121,7 @@ export default async function EvaluatorDashboardPage() {
         ) : (
           <>
             {/* Column headers */}
-            <div className="grid grid-cols-[1fr_120px_160px_120px_80px] px-5 py-2 border-b border-cs-100 bg-cs-50">
+            <div className="grid min-w-[660px] grid-cols-[1fr_120px_160px_120px_80px] px-5 py-2 border-b border-cs-100 bg-cs-50">
               {[t.colStartup, t.colIndustry, t.colStatus, t.colUpdated, ""].map((h) => (
                 <span key={h} className="text-[14px] font-mono text-cs-400 uppercase tracking-widest">
                   {h}
@@ -132,7 +132,7 @@ export default async function EvaluatorDashboardPage() {
             {assignments.map((a) => (
               <div
                 key={a.id}
-                className={`grid grid-cols-[1fr_120px_160px_120px_80px] px-5 py-3 border-b border-cs-100 items-center hover:bg-cs-50 transition-colors ${
+                className={`grid min-w-[660px] grid-cols-[1fr_120px_160px_120px_80px] px-5 py-3 border-b border-cs-100 items-center hover:bg-cs-50 transition-colors ${
                   a.status === "evaluator_assigned" ? "bg-sb-light/30" : ""
                 }`}
               >

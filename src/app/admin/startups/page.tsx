@@ -107,10 +107,10 @@ export default async function AdminStartupsPage({
   const total = filtered.length;
 
   return (
-    <div className="max-w-[1120px] mx-auto px-7 py-8">
+    <div className="max-w-[1120px] mx-auto px-4 sm:px-7 py-8">
 
       {/* Header */}
-      <div className="flex items-start justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-2 h-2 bg-white" />
@@ -121,7 +121,7 @@ export default async function AdminStartupsPage({
             {total} {t.registered}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {FILTERS.map((tab) => (
             <a
               key={tab.label}
@@ -139,7 +139,7 @@ export default async function AdminStartupsPage({
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-cs-200">
+      <div className="bg-white border border-cs-200 overflow-x-auto">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
             {t.startups} · {total}
@@ -152,7 +152,7 @@ export default async function AdminStartupsPage({
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-[1fr_90px_110px_140px_110px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
+            <div className="grid min-w-[680px] grid-cols-[1fr_90px_110px_140px_110px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
               {[t.startup, t.joined, t.account, t.accreditation, t.actions].map((h) => (
                 <div key={h} className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
@@ -164,7 +164,7 @@ export default async function AdminStartupsPage({
                 return (
                   <div
                     key={s.id}
-                    className="grid grid-cols-[1fr_90px_110px_140px_110px] gap-4 px-5 py-3 items-center"
+                    className="grid min-w-[680px] grid-cols-[1fr_90px_110px_140px_110px] gap-4 px-5 py-3 items-center"
                   >
                     {/* Startup name + email */}
                     <div className="min-w-0">
