@@ -6,7 +6,7 @@ import { Badge }               from "@/components/ui/Badge";
 import { WorkflowStatusBar }   from "@/components/ui/WorkflowStatusBar";
 import { VerificationPanel }   from "@/components/accreditation/VerificationPanel";
 import { advanceAccreditationStatus } from "@/app/actions/accreditation";
-import { rejectWithReason }           from "@/app/actions/verification";
+import { rejectWithReason, acceptAssignment, declineAssignment } from "@/app/actions/verification";
 import { getAppDictionary }    from "@/lib/i18n/loader";
 import type { AccreditationStatus, BLIPSData, ADDISData } from "@/lib/supabase/types";
 
@@ -36,6 +36,16 @@ const TERMINAL: AccreditationStatus[] = ["accredited", "rejected", "expired"];
 async function rejectAction(fd: FormData) {
   "use server";
   await rejectWithReason(fd);
+}
+
+async function acceptAction(fd: FormData) {
+  "use server";
+  await acceptAssignment(fd);
+}
+
+async function declineAction(fd: FormData) {
+  "use server";
+  await declineAssignment(fd);
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -87,6 +97,9 @@ export default async function AssignmentDetailPage({
   const nextStatus = NEXT_STATUS[status];
   const actionLabel= ACTION_LABELS[status];
   const isTerminal = TERMINAL.includes(status);
+  const acceptancePending =
+    status === "evaluator_assigned" &&
+    (req as unknown as { acceptance_status?: string }).acceptance_status === "pending";
 
   // Fetch related sponsorship
   const { data: sponsorship } = await service
@@ -225,6 +238,17 @@ export default async function AssignmentDetailPage({
           </span>
         </div>
         <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
+          <div className="col-span-2">
+            <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+              {t.contactEmail}
+            </div>
+            <a
+              href={`mailto:${req.startup_email}`}
+              className="text-[13px] font-semibold cs-link underline-offset-2 break-all"
+            >
+              {req.startup_email}
+            </a>
+          </div>
           {[
             { label: t.industry,   value: req.industry  },
             { label: t.stage,      value: req.stage     },
@@ -292,8 +316,43 @@ export default async function AssignmentDetailPage({
         </div>
       </div>
 
-      {/* Evaluator actions */}
-      {!isTerminal && nextStatus && (
+      {/* Acceptance gate — evaluator must accept before working the request */}
+      {acceptancePending ? (
+        <div className="border border-cs-200 bg-white">
+          <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
+            <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
+              {t.acceptTitle}
+            </span>
+          </div>
+          <div className="p-5 flex flex-col gap-4">
+            <p className="text-[13px] text-cs-700 leading-relaxed">{t.acceptDesc}</p>
+
+            <form action={acceptAction}>
+              <input type="hidden" name="request_id" value={req.id} />
+              <button type="submit" className="btn-primary btn-lg">{t.acceptBtn}</button>
+            </form>
+
+            <form action={declineAction} className="border-t border-cs-100 pt-4 flex flex-col gap-2">
+              <input type="hidden" name="request_id" value={req.id} />
+              <label className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
+                {t.declineReason}
+              </label>
+              <div className="flex items-start gap-3">
+                <textarea
+                  name="decline_reason"
+                  rows={2}
+                  required
+                  placeholder={t.declineReasonPH}
+                  className="cs-input resize-none flex-1 text-[12px]"
+                />
+                <button type="submit" className="btn-danger btn-sm shrink-0 mt-0.5">
+                  {t.declineBtn}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      ) : !isTerminal && nextStatus ? (
         <div className="border border-cs-200 bg-white">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
             <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
@@ -342,7 +401,7 @@ export default async function AssignmentDetailPage({
 
           </div>
         </div>
-      )}
+      ) : null}
 
     </div>
   );
