@@ -129,12 +129,22 @@ interface PortalNavShellProps {
   dark?:     boolean;
   onSignOut?: () => void;
   signOutLabel: string;
+  /** Width at which the horizontal desktop nav replaces the hamburger.
+   *  Use "xl" for navs with many/long links (admin) so they never overflow. */
+  navBreak?: "lg" | "xl";
 }
 
+// Literal class strings (kept whole so Tailwind JIT detects them)
+const NAV_BREAK = {
+  lg: { desktop: "hidden lg:flex", mobile: "flex lg:hidden", panel: "lg:hidden" },
+  xl: { desktop: "hidden xl:flex", mobile: "flex xl:hidden", panel: "xl:hidden" },
+} as const;
+
 function PortalNavShell({
-  homeHref, roleLabel, navItems, dark = false, onSignOut, signOutLabel,
+  homeHref, roleLabel, navItems, dark = false, onSignOut, signOutLabel, navBreak = "lg",
 }: PortalNavShellProps) {
   const [open, setOpen] = useState(false);
+  const bp = NAV_BREAK[navBreak];
 
   const navBase = dark
     ? "bg-black"
@@ -165,14 +175,14 @@ function PortalNavShell({
         </span>
 
         {/* Desktop links */}
-        <div className="hidden md:flex flex-1 items-center gap-5 ml-2">
+        <div className={cn(bp.desktop, "flex-1 items-center gap-5 ml-2 min-w-0")}>
           {navItems.map((item) => (
             <NavLink key={item.href} href={item.href} label={item.label} dark={dark} />
           ))}
         </div>
 
         {/* Desktop right cluster */}
-        <div className="hidden md:flex items-center gap-5">
+        <div className={cn(bp.desktop, "items-center gap-5 shrink-0")}>
           <LangDropdown dark={dark} />
           {onSignOut && (
             <button
@@ -185,7 +195,7 @@ function PortalNavShell({
         </div>
 
         {/* Mobile: spacer + lang + hamburger */}
-        <div className="flex md:hidden items-center gap-1 ml-auto">
+        <div className={cn(bp.mobile, "items-center gap-1 ml-auto")}>
           <LangDropdown dark={dark} />
           <button
             onClick={() => setOpen((o) => !o)}
@@ -201,7 +211,8 @@ function PortalNavShell({
       {/* Mobile dropdown panel */}
       {open && (
         <div className={cn(
-          "md:hidden absolute top-12 inset-x-0 border-b px-4 pb-3 pt-1 flex flex-col",
+          bp.panel,
+          "absolute top-12 inset-x-0 border-b px-4 pb-3 pt-1 flex flex-col",
           dark ? "bg-black border-cs-700" : "bg-white border-cs-200 shadow-lg",
         )}>
           {navItems.map((item) => (
@@ -254,6 +265,7 @@ export function AdminNav({ onSignOut, locale = "en" }: AdminNavProps) {
       roleLabel={t.admin}
       navItems={ADMIN_NAV}
       dark
+      navBreak="xl"
       onSignOut={onSignOut}
       signOutLabel={t.signOut}
     />
