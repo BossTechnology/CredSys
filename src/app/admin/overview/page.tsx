@@ -1,11 +1,20 @@
 import { createServiceClient } from "@/lib/supabase/service";
 import { getAppDictionary }    from "@/lib/i18n/loader";
+import { getTestMode }         from "@/lib/admin/test-mode";
+import { TestModeControl }     from "@/components/admin/TestModeControl";
 import Link                    from "next/link";
 
 export default async function AdminOverviewPage() {
   const { locale, dict } = await getAppDictionary();
   const t = dict.admin;
   const service = createServiceClient();
+  const testMode = await getTestMode();
+
+  const { data: testStartupRows } = await service.from("startups").select("id").eq("is_test", true);
+  const testStartupIds = (testStartupRows ?? []).map((s) => s.id as string);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const notTestReq = (q: any) =>
+    testStartupIds.length ? q.not("startup_id", "in", `(${testStartupIds.join(",")})`) : q;
 
   const [
     { count: activeEvaluators  },
@@ -17,15 +26,15 @@ export default async function AdminOverviewPage() {
     { count: totalStartups     },
     { data:  recentRequests    },
   ] = await Promise.all([
-    service.from("evaluators").select("*", { count: "exact", head: true }).eq("is_active", true),
-    service.from("evaluators").select("*", { count: "exact", head: true }).eq("is_active", false),
-    service.from("accreditation_requests").select("*", { count: "exact", head: true }).eq("status", "accredited"),
-    service.from("accreditation_requests").select("*", { count: "exact", head: true }).eq("status", "pending_evaluator_assignment"),
-    service.from("accreditation_requests").select("*", { count: "exact", head: true })
+    service.from("evaluators").select("*", { count: "exact", head: true }).eq("is_active", true).eq("is_test", false),
+    service.from("evaluators").select("*", { count: "exact", head: true }).eq("is_active", false).eq("is_test", false),
+    notTestReq(service.from("accreditation_requests").select("startup_id", { count: "exact", head: true }).eq("status", "accredited")),
+    notTestReq(service.from("accreditation_requests").select("startup_id", { count: "exact", head: true }).eq("status", "pending_evaluator_assignment")),
+    notTestReq(service.from("accreditation_requests").select("startup_id", { count: "exact", head: true })
       .in("status", ["evaluator_assigned", "meeting_scheduled", "chass1s_shared",
-                     "implementation_in_progress", "ready_for_verification", "verification_in_progress"]),
-    service.from("competitions").select("*", { count: "exact", head: true }).eq("status", "active"),
-    service.from("startups").select("*", { count: "exact", head: true }),
+                     "implementation_in_progress", "ready_for_verification", "verification_in_progress"])),
+    service.from("competitions").select("*", { count: "exact", head: true }).eq("status", "active").eq("is_test", false),
+    service.from("startups").select("*", { count: "exact", head: true }).eq("is_test", false),
     service
       .from("accreditation_requests")
       .select("id, startup_name, startup_email, status, updated_at")
@@ -68,6 +77,17 @@ export default async function AdminOverviewPage() {
         <h1 className="text-2xl font-bold tracking-tight">{t.overview}</h1>
         <p className="text-[13px] font-mono text-cs-400 mt-1">{t.systemDashboard}</p>
       </div>
+
+      <TestModeControl
+        testMode={testMode}
+        onLabel={t.testModeOn}
+        offLabel={t.testModeOff}
+        turnOnLabel={t.testModeTurnOn}
+        turnOffLabel={t.testModeTurnOff}
+        purgeLabel={t.purgeTest}
+        purgeHint={t.purgeHint}
+        purgeConfirm={t.purgeConfirm}
+      />
 
       {/* Alert banners */}
       {((pendingEvaluators ?? 0) > 0 || (pendingAssignment ?? 0) > 0) && (

@@ -1,10 +1,11 @@
 import { createServiceClient }  from "@/lib/supabase/service";
-import { activateAccelerator, deleteAccelerator }  from "@/app/actions/admin";
-import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
-import { TestToggle }          from "@/components/admin/TestToggle";
+import { activateInvestor, deleteInvestor } from "@/app/actions/admin";
+import { DeleteEntityButton }   from "@/components/admin/DeleteEntityButton";
+import { EditEmailField }       from "@/components/admin/EditEmailField";
+import { TestToggle } from "@/components/admin/TestToggle";
 import { getAppDictionary }     from "@/lib/i18n/loader";
 
-export default async function AdminAcceleratorsPage({
+export default async function AdminInvestorsPage({
   searchParams,
 }: {
   searchParams: Promise<{ filter?: string }>;
@@ -20,22 +21,21 @@ export default async function AdminAcceleratorsPage({
   }
 
   let query = service
-    .from("accelerators")
-    .select("id, org_name, email, industry, country, is_active, created_at, is_test")
+    .from("investors")
+    .select("id, org_name, email, investment_focus, country, is_active, created_at, is_test")
     .order("created_at", { ascending: false });
 
   if (filter === "pending") {
     query = query.eq("is_active", false) as typeof query;
   }
-
   if (filter === "test") {
     query = query.eq("is_test", true) as typeof query;
   }
 
-  const { data: accelerators } = await query;
+  const { data: investors } = await query;
 
-  const total   = accelerators?.length ?? 0;
-  const pending = accelerators?.filter((a) => !a.is_active).length ?? 0;
+  const total   = investors?.length ?? 0;
+  const pending = investors?.filter((i) => !i.is_active).length ?? 0;
 
   return (
     <div className="max-w-[960px] mx-auto px-4 sm:px-7 py-8">
@@ -47,16 +47,16 @@ export default async function AdminAcceleratorsPage({
             <div className="w-2 h-2 bg-white" />
             <span className="text-[13px] font-mono text-cs-400 uppercase tracking-widest">{t.label}</span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">{t.accelerators}</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t.investors}</h1>
           <p className="text-[13px] font-mono text-cs-400 mt-1">
-            {total} {t.total} · {pending} {t.pendingActivationAlert}
+            {total} {t.total} · {pending} {t.pending}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
           {[
-            { label: t.all,     href: "/admin/accelerators",               value: ""        },
-            { label: t.pending, href: "/admin/accelerators?filter=pending", value: "pending" },
-            { label: t.filterTestOnly, href: "/admin/accelerators?filter=test", value: "test" },
+            { label: t.all,            href: "/admin/investors",                value: ""        },
+            { label: t.pending,        href: "/admin/investors?filter=pending", value: "pending" },
+            { label: t.filterTestOnly, href: "/admin/investors?filter=test",    value: "test"    },
           ].map((tab) => (
             <a
               key={tab.value}
@@ -73,87 +73,84 @@ export default async function AdminAcceleratorsPage({
         </div>
       </div>
 
-      {/* Pending alert */}
-      {pending > 0 && (
-        <div className="bg-yellow-50 border border-yellow-200 px-4 py-2.5 mb-6">
-          <span className="text-[12px] font-mono font-bold text-yellow-700 uppercase tracking-widest">
-            ⚠ {pending} {t.pendingActivationAlert}
-          </span>
-        </div>
-      )}
-
       {/* Table */}
       <div className="bg-white border border-cs-200 overflow-x-auto">
         <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
           <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-            {t.accelerators} · {total}
+            {t.investors} · {total}
           </span>
         </div>
 
         {total === 0 ? (
           <div className="px-5 py-10 text-center">
-            <p className="text-[13px] font-mono text-cs-400">{t.noAcceleratorsFound}</p>
+            <p className="text-[13px] font-mono text-cs-400">{t.noInvestorsFound}</p>
           </div>
         ) : (
           <>
-            <div className="grid min-w-[640px] grid-cols-[1fr_120px_100px_90px_100px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
-              {[t.organization, t.industry, t.country, t.status, t.actions].map((h) => (
+            <div className="grid min-w-[680px] grid-cols-[1fr_140px_100px_90px_110px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
+              {[t.organization, t.investmentFocus, t.country, t.status, t.actions].map((h) => (
                 <div key={h} className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
-
             <div className="divide-y divide-cs-100">
-              {(accelerators ?? []).map((acc) => (
+              {(investors ?? []).map((inv) => (
                 <div
-                  key={acc.id}
-                  className={`grid min-w-[640px] grid-cols-[1fr_120px_100px_90px_100px] gap-4 px-5 py-3 items-center ${
-                    !acc.is_active ? "bg-yellow-50" : ""
+                  key={inv.id}
+                  className={`grid min-w-[680px] grid-cols-[1fr_140px_100px_90px_110px] gap-4 px-5 py-3 items-center ${
+                    !inv.is_active ? "bg-yellow-50" : ""
                   }`}
                 >
-                  <div>
+                  <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <div className="text-[13px] font-semibold">{acc.org_name}</div>
-                      {acc.is_test && (
+                      <div className="text-[13px] font-semibold truncate">{inv.org_name}</div>
+                      {inv.is_test && (
                         <span className="text-[9px] font-mono font-bold uppercase tracking-widest px-1 py-0.5 bg-red-600 text-white shrink-0">TEST</span>
                       )}
                     </div>
-                    <div className="text-[12px] font-mono text-cs-400">{acc.email}</div>
-                    <div className="text-[12px] font-mono text-cs-300 mt-0.5">{t.since} {fmt(acc.created_at)}</div>
+                    <EditEmailField
+                      table="investors"
+                      entityId={inv.id}
+                      email={inv.email}
+                      editLabel={t.editEmail}
+                      saveLabel={t.saveEmail}
+                      cancelLabel={t.cancelEdit}
+                    />
+                    <div className="text-[12px] font-mono text-cs-300 mt-0.5">{t.since} {fmt(inv.created_at)}</div>
                   </div>
-                  <div className="text-[12px] font-mono text-cs-500 capitalize">{acc.industry ?? "—"}</div>
-                  <div className="text-[12px] font-mono text-cs-500">{acc.country ?? "—"}</div>
+                  <div className="text-[12px] font-mono text-cs-500 capitalize truncate">{inv.investment_focus ?? "—"}</div>
+                  <div className="text-[12px] font-mono text-cs-500">{inv.country ?? "—"}</div>
                   <div>
                     <span className={`text-[11px] font-mono font-bold uppercase tracking-widest ${
-                      acc.is_active ? "text-green-600" : "text-yellow-600"
+                      inv.is_active ? "text-green-600" : "text-yellow-600"
                     }`}>
-                      {acc.is_active ? t.active : t.pending}
+                      {inv.is_active ? t.active : t.pending}
                     </span>
                   </div>
                   <div className="flex flex-col items-start gap-1.5">
-                    <form action={activateAccelerator}>
-                      <input type="hidden" name="accelerator_id" value={acc.id} />
-                      <input type="hidden" name="deactivate" value={acc.is_active ? "true" : "false"} />
+                    <form action={activateInvestor}>
+                      <input type="hidden" name="investor_id" value={inv.id} />
+                      <input type="hidden" name="deactivate" value={inv.is_active ? "true" : "false"} />
                       <button
                         type="submit"
                         className={`text-[11px] font-mono uppercase tracking-widest px-2 py-1 border transition-colors ${
-                          acc.is_active
+                          inv.is_active
                             ? "border-red-200 text-red-500 hover:bg-red-50"
                             : "btn-primary btn-sm"
                         }`}
                       >
-                        {acc.is_active ? t.deactivate : t.activate}
+                        {inv.is_active ? t.deactivate : t.activate}
                       </button>
                     </form>
                     <TestToggle
-                      table="accelerators"
-                      entityId={acc.id}
-                      isTest={acc.is_test}
+                      table="investors"
+                      entityId={inv.id}
+                      isTest={inv.is_test}
                       markLabel={t.markTest}
                       unmarkLabel={t.unmarkTest}
                     />
                     <DeleteEntityButton
-                      action={deleteAccelerator}
-                      entityId={acc.id}
+                      action={deleteInvestor}
+                      entityId={inv.id}
                       label={t.deleteBtn}
                       confirmLabel={t.confirmDelete}
                     />

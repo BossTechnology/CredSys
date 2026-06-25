@@ -1,6 +1,8 @@
 import { createServiceClient } from "@/lib/supabase/service";
 import { getAppDictionary }    from "@/lib/i18n/loader";
-import { activateEvaluator }   from "@/app/actions/admin";
+import { activateEvaluator, deleteEvaluator }   from "@/app/actions/admin";
+import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
+import { TestToggle } from "@/components/admin/TestToggle";
 
 export default async function AdminEvaluatorsPage({
   searchParams,
@@ -20,11 +22,14 @@ export default async function AdminEvaluatorsPage({
 
   let query = service
     .from("evaluators")
-    .select("id, org_name, email, industry, country, is_active, created_at")
+    .select("id, org_name, email, industry, country, is_active, created_at, is_test")
     .order("created_at", { ascending: false });
 
   if (filter === "pending") {
     query = query.eq("is_active", false) as typeof query;
+  }
+  if (filter === "test") {
+    query = query.eq("is_test", true) as typeof query;
   }
 
   const { data: evaluators } = await query;
@@ -49,14 +54,15 @@ export default async function AdminEvaluatorsPage({
         </div>
         <div className="flex flex-wrap gap-2">
           {[
-            { label: t.all,     href: "/admin/evaluators",                isPending: false },
-            { label: t.pending, href: "/admin/evaluators?filter=pending", isPending: true  },
+            { label: t.all,            href: "/admin/evaluators",                value: ""        },
+            { label: t.pending,        href: "/admin/evaluators?filter=pending", value: "pending" },
+            { label: t.filterTestOnly, href: "/admin/evaluators?filter=test",    value: "test"    },
           ].map((tab) => (
             <a
               key={tab.label}
               href={tab.href}
               className={`text-[12px] font-mono uppercase tracking-widest px-3 py-1.5 border transition-colors ${
-                (filter === "pending") === tab.isPending
+                (filter ?? "") === tab.value
                   ? "bg-black text-white border-black"
                   : "bg-white text-cs-500 border-cs-200 hover:border-black"
               }`}
@@ -104,7 +110,12 @@ export default async function AdminEvaluatorsPage({
                   }`}
                 >
                   <div>
-                    <div className="text-[13px] font-semibold">{ev.org_name}</div>
+                    <div className="flex items-center gap-2">
+                      <div className="text-[13px] font-semibold">{ev.org_name}</div>
+                      {ev.is_test && (
+                        <span className="text-[9px] font-mono font-bold uppercase tracking-widest px-1 py-0.5 bg-red-600 text-white shrink-0">TEST</span>
+                      )}
+                    </div>
                     <div className="text-[12px] font-mono text-cs-400">{ev.email}</div>
                     <div className="text-[12px] font-mono text-cs-300 mt-0.5">{t.since} {fmt(ev.created_at)}</div>
                   </div>
@@ -117,7 +128,7 @@ export default async function AdminEvaluatorsPage({
                       {ev.is_active ? t.active : t.pending}
                     </span>
                   </div>
-                  <div>
+                  <div className="flex flex-col items-start gap-1.5">
                     <form action={activateEvaluator}>
                       <input type="hidden" name="evaluator_id" value={ev.id} />
                       {!ev.is_active && (
@@ -137,6 +148,19 @@ export default async function AdminEvaluatorsPage({
                         {ev.is_active ? t.deactivate : t.activate}
                       </button>
                     </form>
+                    <TestToggle
+                      table="evaluators"
+                      entityId={ev.id}
+                      isTest={ev.is_test}
+                      markLabel={t.markTest}
+                      unmarkLabel={t.unmarkTest}
+                    />
+                    <DeleteEntityButton
+                      action={deleteEvaluator}
+                      entityId={ev.id}
+                      label={t.deleteBtn}
+                      confirmLabel={t.confirmDelete}
+                    />
                   </div>
                 </div>
               ))}

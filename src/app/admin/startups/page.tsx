@@ -1,6 +1,9 @@
 import { createServiceClient } from "@/lib/supabase/service";
 import { getAppDictionary }    from "@/lib/i18n/loader";
-import { resendSetupLink }     from "@/app/actions/admin";
+import { resendSetupLink, deleteStartup } from "@/app/actions/admin";
+import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
+import { EditEmailField }     from "@/components/admin/EditEmailField";
+import { TestToggle }         from "@/components/admin/TestToggle";
 import Link                    from "next/link";
 
 const STATUS_COLOR: Record<string, string> = {
@@ -42,13 +45,14 @@ export default async function AdminStartupsPage({
     { label: t.withRequest,  value: "with_request"  },
     { label: t.noRequest,    value: "no_request"    },
     { label: t.accredited,   value: "accredited"    },
+    { label: t.filterTestOnly, value: "test" },
   ];
 
   const service = createServiceClient();
 
   const { data: startups } = await service
     .from("startups")
-    .select("id, org_name, email, industry, country, website, stage, team_size, logo_url, created_at")
+    .select("id, org_name, email, industry, country, website, stage, team_size, logo_url, created_at, is_test")
     .order("created_at", { ascending: false });
 
   const startupIds = (startups ?? []).map((s) => s.id);
@@ -102,6 +106,10 @@ export default async function AdminStartupsPage({
     filtered = filtered.filter((s) => s.request === null);
   } else if (filter === "accredited") {
     filtered = filtered.filter((s) => s.request?.status === "accredited");
+  }
+
+  if (filter === "test") {
+    filtered = filtered.filter((s) => s.is_test);
   }
 
   const total = filtered.length;
@@ -178,8 +186,18 @@ export default async function AdminStartupsPage({
                           />
                         )}
                         <div className="text-[12px] font-semibold truncate">{s.org_name}</div>
+                        {s.is_test && (
+                          <span className="text-[9px] font-mono font-bold uppercase tracking-widest px-1 py-0.5 bg-red-600 text-white shrink-0">TEST</span>
+                        )}
                       </div>
-                      <div className="text-[12px] font-mono text-cs-400 truncate">{s.email}</div>
+                      <EditEmailField
+                        table="startups"
+                        entityId={s.id}
+                        email={s.email}
+                        editLabel={t.editEmail}
+                        saveLabel={t.saveEmail}
+                        cancelLabel={t.cancelEdit}
+                      />
                       <div className="text-[12px] font-mono text-cs-400">
                         {s.country ?? ""}{s.country && s.industry ? " · " : ""}{s.industry ?? ""}
                       </div>
@@ -218,7 +236,7 @@ export default async function AdminStartupsPage({
                     </div>
 
                     {/* Actions */}
-                    <div>
+                    <div className="flex flex-col items-start gap-1.5">
                       {canResend && (
                         <form action={resendSetupLink}>
                           <input type="hidden" name="entity_id" value={s.id} />
@@ -235,6 +253,19 @@ export default async function AdminStartupsPage({
                           Active
                         </span>
                       )}
+                      <TestToggle
+                        table="startups"
+                        entityId={s.id}
+                        isTest={s.is_test}
+                        markLabel={t.markTest}
+                        unmarkLabel={t.unmarkTest}
+                      />
+                      <DeleteEntityButton
+                        action={deleteStartup}
+                        entityId={s.id}
+                        label={t.deleteBtn}
+                        confirmLabel={t.confirmDelete}
+                      />
                     </div>
                   </div>
                 );

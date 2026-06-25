@@ -2,6 +2,7 @@ import { NextResponse }        from "next/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { sendAccountSetup }    from "@/lib/email/templates/e1-account-setup";
 import { normalizeUrl }        from "@/lib/utils";
+import { getTestMode }         from "@/lib/admin/test-mode";
 
 export async function POST(request: Request) {
   let body: Record<string, unknown>;
@@ -40,6 +41,7 @@ export async function POST(request: Request) {
   }
 
   // Create evaluator entity (starts inactive — admin activates)
+  const isTest = await getTestMode();
   const { data: evaluator, error: evalError } = await service
     .from("evaluators")
     .insert({
@@ -53,6 +55,7 @@ export async function POST(request: Request) {
       description:    description    || null,
       org_type:       org_type       || null,
       is_active:      false,
+      is_test:        isTest,
     })
     .select("id")
     .single();

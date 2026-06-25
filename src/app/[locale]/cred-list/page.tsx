@@ -16,6 +16,7 @@ interface CredRow {
     org_name: string;
     industry: string | null;
     country:  string | null;
+    is_test:  boolean;
   } | null;
 }
 
@@ -33,12 +34,12 @@ export default async function CredListPage({ params }: CredListPageProps) {
   const service = createServiceClient();
   const { data: rows } = await service
     .from("cred_pages")
-    .select("unique_code, accredited_at, startups(org_name, industry, country)")
+    .select("unique_code, accredited_at, startups(org_name, industry, country, is_test)")
     .eq("is_active", true)
     .order("accredited_at", { ascending: false })
     .limit(200) as { data: CredRow[] | null };
 
-  const creds = rows ?? [];
+  const creds = (rows ?? []).filter((r) => !r.startups?.is_test);
 
   return (
     <>

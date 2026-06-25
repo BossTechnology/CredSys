@@ -2,6 +2,7 @@ import { NextResponse }        from "next/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { sendAccountSetup }    from "@/lib/email/templates/e1-account-setup";
 import { normalizeUrl }        from "@/lib/utils";
+import { getTestMode }         from "@/lib/admin/test-mode";
 
 export async function POST(request: Request) {
   let body: Record<string, unknown>;
@@ -40,6 +41,7 @@ export async function POST(request: Request) {
   }
 
   // Create investor entity (starts inactive — admin activates)
+  const isTest = await getTestMode();
   const { data: investor, error: investorError } = await service
     .from("investors")
     .insert({
@@ -52,6 +54,7 @@ export async function POST(request: Request) {
       country:          country          || null,
       description:      description      || null,
       is_active:        false,
+      is_test:          isTest,
     })
     .select("id")
     .single();
