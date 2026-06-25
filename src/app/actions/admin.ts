@@ -287,3 +287,44 @@ export async function activateInvestor(formData: FormData) {
   revalidatePath("/admin/investors");
   revalidatePath("/admin/overview");
 }
+
+// ─── Test Mode ───────────────────────────────────────────────────────────────
+
+export async function setTestMode(formData: FormData) {
+  if (!(await requireAdmin())) return;
+  const on = formData.get("test_mode") === "on";
+  const service = createServiceClient();
+  await service
+    .from("app_settings")
+    .update({ test_mode: on, updated_at: new Date().toISOString() })
+    .eq("id", 1);
+  revalidatePath("/admin", "layout");
+  revalidatePath("/admin/overview");
+}
+
+/**
+ * Hard-delete every entity flagged is_test across all five tables,
+ * reusing deleteEntityCascade. Guarded by a typed "PURGE" confirmation.
+ */
+export async function purgeTestData(formData: FormData) {
+  if (!(await requireAdmin())) return;
+  const confirm = ((formData.get("confirm") as string) || "").trim().toUpperCase();
+  if (confirm !== "PURGE") return;
+
+  const service = createServiceClient();
+  const tables: EntityTable[] = ["startups", "accelerators", "evaluators", "investors", "competitions"];
+
+  for (const table of tables) {
+    const { data: rows } = await service.from(table).select("id").eq("is_test", true);
+    for (const r of rows ?? []) {
+      await deleteEntityCascade(table, r.id as string);
+    }
+  }
+
+  revalidatePath("/admin/overview");
+  revalidatePath("/admin/startups");
+  revalidatePath("/admin/accelerators");
+  revalidatePath("/admin/evaluators");
+  revalidatePath("/admin/investors");
+  revalidatePath("/admin/competitions");
+}
