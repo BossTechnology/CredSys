@@ -1,5 +1,6 @@
 import { createServiceClient }  from "@/lib/supabase/service";
-import { activateAccelerator }  from "@/app/actions/admin";
+import { activateAccelerator, deleteAccelerator }  from "@/app/actions/admin";
+import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
 import { getAppDictionary }     from "@/lib/i18n/loader";
 
 export default async function AdminAcceleratorsPage({
@@ -117,7 +118,7 @@ export default async function AdminAcceleratorsPage({
                       {acc.is_active ? t.active : t.pending}
                     </span>
                   </div>
-                  <div>
+                  <div className="flex flex-col items-start gap-1.5">
                     <form action={activateAccelerator}>
                       <input type="hidden" name="accelerator_id" value={acc.id} />
                       <input type="hidden" name="deactivate" value={acc.is_active ? "true" : "false"} />
@@ -132,6 +133,12 @@ export default async function AdminAcceleratorsPage({
                         {acc.is_active ? t.deactivate : t.activate}
                       </button>
                     </form>
+                    <DeleteEntityButton
+                      action={deleteAccelerator}
+                      entityId={acc.id}
+                      label={t.deleteBtn}
+                      confirmLabel={t.confirmDelete}
+                    />
                   </div>
                 </div>
               ))}
