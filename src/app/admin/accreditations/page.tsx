@@ -1,18 +1,19 @@
 import { createServiceClient }     from "@/lib/supabase/service";
 import { assignEvaluatorToRequest } from "@/app/actions/admin";
+import { reactivateRequest }       from "@/app/actions/accreditation";
 import { getAppDictionary }         from "@/lib/i18n/loader";
 
 const STATUS_COLOR: Record<string, string> = {
-  pending_evaluator_assignment: "text-yellow-600 bg-yellow-50",
-  evaluator_assigned:           "text-blue-600 bg-blue-50",
-  meeting_scheduled:            "text-blue-600 bg-blue-50",
-  chass1s_shared:               "text-blue-600 bg-blue-50",
-  implementation_in_progress:   "text-blue-600 bg-blue-50",
-  ready_for_verification:       "text-purple-600 bg-purple-50",
-  verification_in_progress:     "text-purple-600 bg-purple-50",
-  accredited:                   "text-sb-default bg-[#1a1030]",
-  rejected:                     "text-red-600 bg-red-50",
-  expired:                      "text-cs-400 bg-cs-100",
+  pending_evaluator_assignment: "text-amber-600",
+  evaluator_assigned:           "text-blue-600",
+  meeting_scheduled:            "text-blue-600",
+  chass1s_shared:               "text-blue-600",
+  implementation_in_progress:   "text-blue-600",
+  ready_for_verification:       "text-violet-600",
+  verification_in_progress:     "text-violet-600",
+  accredited:                   "text-sb-default",
+  rejected:                     "text-red-500",
+  expired:                      "text-cs-400",
 };
 
 export default async function AdminAccreditationsPage({
@@ -35,6 +36,7 @@ export default async function AdminAccreditationsPage({
     { label: t.unassigned, value: "unassigned" },
     { label: t.active,     value: "active"     },
     { label: t.accredited, value: "accredited" },
+    { label: t.rejected,   value: "rejected"   },
   ];
 
   let query = service
@@ -51,6 +53,8 @@ export default async function AdminAccreditationsPage({
     ]) as typeof query;
   } else if (filter === "accredited") {
     query = query.eq("status", "accredited") as typeof query;
+  } else if (filter === "rejected") {
+    query = query.eq("status", "rejected") as typeof query;
   }
 
   const [{ data: requests }, { data: evaluators }] = await Promise.all([
@@ -105,8 +109,8 @@ export default async function AdminAccreditationsPage({
           </div>
         ) : (
           <>
-            <div className="grid min-w-[760px] grid-cols-[1fr_100px_140px_200px_80px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
-              {[t.startup, t.industry, t.status, t.evaluator, t.submitted].map((h) => (
+            <div className="grid min-w-[840px] grid-cols-[1fr_100px_140px_200px_80px_80px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
+              {[t.startup, t.industry, t.status, t.evaluator, t.submitted, t.actions].map((h) => (
                 <div key={h} className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
@@ -118,7 +122,7 @@ export default async function AdminAccreditationsPage({
                 return (
                   <div
                     key={req.id}
-                    className={`grid min-w-[760px] grid-cols-[1fr_100px_140px_200px_80px] gap-4 px-5 py-3 items-start ${
+                    className={`grid min-w-[840px] grid-cols-[1fr_100px_140px_200px_80px_80px] gap-4 px-5 py-3 items-start ${
                       needsAssign ? "bg-yellow-50" : ""
                     }`}
                   >
@@ -132,7 +136,7 @@ export default async function AdminAccreditationsPage({
                     </div>
 
                     <div className="pt-0.5">
-                      <span className={`text-[11px] font-mono font-bold uppercase tracking-widest px-1.5 py-0.5 ${STATUS_COLOR[req.status] ?? "text-cs-400 bg-cs-100"}`}>
+                      <span className={`text-[10px] font-mono font-semibold uppercase tracking-widest ${STATUS_COLOR[req.status] ?? "text-cs-400"}`}>
                         {dict.status[req.status as keyof typeof dict.status] ?? req.status.replace(/_/g, " ")}
                       </span>
                     </div>
@@ -179,6 +183,17 @@ export default async function AdminAccreditationsPage({
                     </div>
 
                     <div className="text-[12px] font-mono text-cs-400 pt-0.5">{fmt(req.created_at)}</div>
+
+                    <div>
+                      {req.status === "rejected" && (
+                        <form action={reactivateRequest}>
+                          <input type="hidden" name="request_id" value={req.id} />
+                          <button type="submit" className="text-[10px] font-mono uppercase tracking-widest text-blue-500 hover:text-blue-700 transition-colors">
+                            {t.reactivate}
+                          </button>
+                        </form>
+                      )}
+                    </div>
                   </div>
                 );
               })}

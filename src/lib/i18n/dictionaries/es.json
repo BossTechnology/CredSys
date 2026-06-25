@@ -373,7 +373,8 @@
     "markTest": "Marcar prueba",
     "unmarkTest": "Quitar prueba",
     "filterTestOnly": "Prueba",
-    "reactivate": "Reactivar"
+    "reactivate": "Reactivar",
+    "rejected": "Rechazados"
   },
   "evalProfile": {
     "title": "Perfil",
