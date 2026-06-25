@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 import { sendCompetitionEntered } from "@/lib/email/templates/e7-competition-entry";
 import { sendEntryScored }        from "@/lib/email/templates/e8-entry-scored";
 import { sendCompetitionResults } from "@/lib/email/templates/e9-competition-results";
+import { getTestMode }           from "@/lib/admin/test-mode";
 
 // -------------------------------------------------------
 // Startup enters a competition (must be accredited)
@@ -149,6 +150,7 @@ export async function createCompetition(formData: FormData) {
 
   const service = createServiceClient();
 
+  const isTest = await getTestMode();
   const { error } = await service.from("competitions").insert({
     name:           formData.get("name") as string,
     description:    (formData.get("description")    as string) || null,
@@ -158,6 +160,7 @@ export async function createCompetition(formData: FormData) {
     start_date:     (formData.get("start_date") as string) || null,
     end_date:       (formData.get("end_date")   as string) || null,
     created_by:     user.id,
+    is_test:        isTest,
   });
 
   if (error) {
