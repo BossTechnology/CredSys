@@ -1,5 +1,7 @@
 import { createServiceClient } from "@/lib/supabase/service";
 import { createCompetition }    from "@/app/actions/competitions";
+import { deleteCompetition } from "@/app/actions/admin";
+import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
 import { getAppDictionary }     from "@/lib/i18n/loader";
 import Link                     from "next/link";
 
@@ -145,12 +147,20 @@ export default async function AdminCompetitionsPage() {
                     {comp.end_date   && <span>Closes: {fmt(comp.end_date)}</span>}
                   </div>
                 </div>
-                <Link
-                  href={`/admin/competitions/${comp.id}`}
-                  className="text-[12px] font-mono text-sb-default hover:underline uppercase tracking-widest shrink-0"
-                >
-                  {t.manage}
-                </Link>
+                <div className="flex items-center gap-3 shrink-0">
+                  <Link
+                    href={`/admin/competitions/${comp.id}`}
+                    className="text-[12px] font-mono text-sb-default hover:underline uppercase tracking-widest"
+                  >
+                    {t.manage}
+                  </Link>
+                  <DeleteEntityButton
+                    action={deleteCompetition}
+                    entityId={comp.id}
+                    label={t.deleteBtn}
+                    confirmLabel={t.confirmDelete}
+                  />
+                </div>
               </div>
             ))}
           </div>
