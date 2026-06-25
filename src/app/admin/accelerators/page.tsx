@@ -20,7 +20,7 @@ export default async function AdminAcceleratorsPage({
 
   let query = service
     .from("accelerators")
-    .select("id, org_name, email, industry, country, is_active, created_at")
+    .select("id, org_name, email, industry, country, is_active, created_at, is_test")
     .order("created_at", { ascending: false });
 
   if (filter === "pending") {
@@ -105,7 +105,12 @@ export default async function AdminAcceleratorsPage({
                   }`}
                 >
                   <div>
-                    <div className="text-[13px] font-semibold">{acc.org_name}</div>
+                    <div className="flex items-center gap-2">
+                      <div className="text-[13px] font-semibold">{acc.org_name}</div>
+                      {acc.is_test && (
+                        <span className="text-[9px] font-mono font-bold uppercase tracking-widest px-1 py-0.5 bg-red-600 text-white shrink-0">TEST</span>
+                      )}
+                    </div>
                     <div className="text-[12px] font-mono text-cs-400">{acc.email}</div>
                     <div className="text-[12px] font-mono text-cs-300 mt-0.5">{t.since} {fmt(acc.created_at)}</div>
                   </div>

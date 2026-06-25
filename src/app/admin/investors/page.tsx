@@ -21,7 +21,7 @@ export default async function AdminInvestorsPage({
 
   let query = service
     .from("investors")
-    .select("id, org_name, email, investment_focus, country, is_active, created_at")
+    .select("id, org_name, email, investment_focus, country, is_active, created_at, is_test")
     .order("created_at", { ascending: false });
 
   if (filter === "pending") {
@@ -96,7 +96,12 @@ export default async function AdminInvestorsPage({
                   }`}
                 >
                   <div className="min-w-0">
-                    <div className="text-[13px] font-semibold truncate">{inv.org_name}</div>
+                    <div className="flex items-center gap-2">
+                      <div className="text-[13px] font-semibold truncate">{inv.org_name}</div>
+                      {inv.is_test && (
+                        <span className="text-[9px] font-mono font-bold uppercase tracking-widest px-1 py-0.5 bg-red-600 text-white shrink-0">TEST</span>
+                      )}
+                    </div>
                     <EditEmailField
                       table="investors"
                       entityId={inv.id}

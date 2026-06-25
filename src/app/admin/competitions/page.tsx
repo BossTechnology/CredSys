@@ -36,7 +36,7 @@ export default async function AdminCompetitionsPage() {
   ] = await Promise.all([
     service
       .from("competitions")
-      .select("id, name, description, industry, status, start_date, end_date, accelerator_id, created_at")
+      .select("id, name, description, industry, status, start_date, end_date, accelerator_id, created_at, is_test")
       .order("created_at", { ascending: false }),
     service
       .from("accelerators")
@@ -139,6 +139,9 @@ export default async function AdminCompetitionsPage() {
                     <span className={`text-[11px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 ${STATUS_COLOR[comp.status] ?? "text-cs-400 bg-cs-100"}`}>
                       {comp.status === "active" ? t.active : comp.status}
                     </span>
+                    {comp.is_test && (
+                      <span className="text-[9px] font-mono font-bold uppercase tracking-widest px-1 py-0.5 bg-red-600 text-white shrink-0">TEST</span>
+                    )}
                   </div>
                   <div className="flex flex-wrap gap-3 sm:gap-5 text-[12px] font-mono text-cs-400">
                     {comp.industry && <span className="uppercase">{comp.industry}</span>}

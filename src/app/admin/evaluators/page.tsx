@@ -21,7 +21,7 @@ export default async function AdminEvaluatorsPage({
 
   let query = service
     .from("evaluators")
-    .select("id, org_name, email, industry, country, is_active, created_at")
+    .select("id, org_name, email, industry, country, is_active, created_at, is_test")
     .order("created_at", { ascending: false });
 
   if (filter === "pending") {
@@ -105,7 +105,12 @@ export default async function AdminEvaluatorsPage({
                   }`}
                 >
                   <div>
-                    <div className="text-[13px] font-semibold">{ev.org_name}</div>
+                    <div className="flex items-center gap-2">
+                      <div className="text-[13px] font-semibold">{ev.org_name}</div>
+                      {ev.is_test && (
+                        <span className="text-[9px] font-mono font-bold uppercase tracking-widest px-1 py-0.5 bg-red-600 text-white shrink-0">TEST</span>
+                      )}
+                    </div>
                     <div className="text-[12px] font-mono text-cs-400">{ev.email}</div>
                     <div className="text-[12px] font-mono text-cs-300 mt-0.5">{t.since} {fmt(ev.created_at)}</div>
                   </div>

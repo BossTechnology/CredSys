@@ -50,7 +50,7 @@ export default async function AdminStartupsPage({
 
   const { data: startups } = await service
     .from("startups")
-    .select("id, org_name, email, industry, country, website, stage, team_size, logo_url, created_at")
+    .select("id, org_name, email, industry, country, website, stage, team_size, logo_url, created_at, is_test")
     .order("created_at", { ascending: false });
 
   const startupIds = (startups ?? []).map((s) => s.id);
@@ -180,6 +180,9 @@ export default async function AdminStartupsPage({
                           />
                         )}
                         <div className="text-[12px] font-semibold truncate">{s.org_name}</div>
+                        {s.is_test && (
+                          <span className="text-[9px] font-mono font-bold uppercase tracking-widest px-1 py-0.5 bg-red-600 text-white shrink-0">TEST</span>
+                        )}
                       </div>
                       <EditEmailField
                         table="startups"
