@@ -3,6 +3,7 @@ import { getAppDictionary }    from "@/lib/i18n/loader";
 import { resendSetupLink, deleteStartup } from "@/app/actions/admin";
 import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
 import { EditEmailField }     from "@/components/admin/EditEmailField";
+import { TestToggle }         from "@/components/admin/TestToggle";
 import Link                    from "next/link";
 
 const STATUS_COLOR: Record<string, string> = {
@@ -44,6 +45,7 @@ export default async function AdminStartupsPage({
     { label: t.withRequest,  value: "with_request"  },
     { label: t.noRequest,    value: "no_request"    },
     { label: t.accredited,   value: "accredited"    },
+    { label: t.filterTestOnly, value: "test" },
   ];
 
   const service = createServiceClient();
@@ -104,6 +106,10 @@ export default async function AdminStartupsPage({
     filtered = filtered.filter((s) => s.request === null);
   } else if (filter === "accredited") {
     filtered = filtered.filter((s) => s.request?.status === "accredited");
+  }
+
+  if (filter === "test") {
+    filtered = filtered.filter((s) => s.is_test);
   }
 
   const total = filtered.length;
@@ -247,6 +253,13 @@ export default async function AdminStartupsPage({
                           Active
                         </span>
                       )}
+                      <TestToggle
+                        table="startups"
+                        entityId={s.id}
+                        isTest={s.is_test}
+                        markLabel={t.markTest}
+                        unmarkLabel={t.unmarkTest}
+                      />
                       <DeleteEntityButton
                         action={deleteStartup}
                         entityId={s.id}
