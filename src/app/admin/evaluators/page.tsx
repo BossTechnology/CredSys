@@ -1,6 +1,7 @@
 import { createServiceClient } from "@/lib/supabase/service";
 import { getAppDictionary }    from "@/lib/i18n/loader";
-import { activateEvaluator }   from "@/app/actions/admin";
+import { activateEvaluator, deleteEvaluator }   from "@/app/actions/admin";
+import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
 
 export default async function AdminEvaluatorsPage({
   searchParams,
@@ -117,7 +118,7 @@ export default async function AdminEvaluatorsPage({
                       {ev.is_active ? t.active : t.pending}
                     </span>
                   </div>
-                  <div>
+                  <div className="flex flex-col items-start gap-1.5">
                     <form action={activateEvaluator}>
                       <input type="hidden" name="evaluator_id" value={ev.id} />
                       {!ev.is_active && (
@@ -137,6 +138,12 @@ export default async function AdminEvaluatorsPage({
                         {ev.is_active ? t.deactivate : t.activate}
                       </button>
                     </form>
+                    <DeleteEntityButton
+                      action={deleteEvaluator}
+                      entityId={ev.id}
+                      label={t.deleteBtn}
+                      confirmLabel={t.confirmDelete}
+                    />
                   </div>
                 </div>
               ))}
