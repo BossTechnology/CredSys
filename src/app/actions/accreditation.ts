@@ -103,3 +103,24 @@ export async function advanceAccreditationStatus(formData: FormData) {
   revalidatePath("/app/startup/dashboard");
 }
 
+export async function reactivateRequest(formData: FormData) {
+  const supabase  = createServiceClient();
+  const requestId = formData.get("request_id") as string;
+  if (!requestId) return;
+
+  await supabase
+    .from("accreditation_requests")
+    .update({
+      status:           "pending_evaluator_assignment" as AccreditationStatus,
+      evaluator_id:     null,
+      rejection_reason: null,
+    })
+    .eq("id", requestId)
+    .eq("status", "rejected");
+
+  revalidatePath("/admin/startups");
+  revalidatePath("/admin/accreditations");
+  revalidatePath("/admin/overview");
+  revalidatePath("/app/startup/dashboard");
+}
+

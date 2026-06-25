@@ -372,7 +372,8 @@
     "purgeConfirm": "Purge now",
     "markTest": "Mark test",
     "unmarkTest": "Unmark test",
-    "filterTestOnly": "Test"
+    "filterTestOnly": "Test",
+    "reactivate": "Reactivate"
   },
   "evalProfile": {
     "title": "Profile",

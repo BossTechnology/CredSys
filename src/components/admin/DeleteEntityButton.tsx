@@ -24,7 +24,7 @@ export function DeleteEntityButton({ action, entityId, label, confirmLabel }: De
       {armed ? (
         <button
           type="submit"
-          className="text-[11px] font-mono uppercase tracking-widest px-2 py-1 border border-red-300 bg-red-600 text-white hover:bg-red-700 transition-colors"
+          className="text-[10px] font-mono uppercase tracking-widest text-red-600 hover:text-red-800 transition-colors"
         >
           {confirmLabel}
         </button>
@@ -32,7 +32,7 @@ export function DeleteEntityButton({ action, entityId, label, confirmLabel }: De
         <button
           type="button"
           onClick={() => setArmed(true)}
-          className="text-[11px] font-mono uppercase tracking-widest px-2 py-1 border border-red-200 text-red-500 hover:bg-red-50 transition-colors"
+          className="text-[10px] font-mono uppercase tracking-widest text-cs-400 hover:text-red-500 transition-colors"
         >
           {label}
         </button>

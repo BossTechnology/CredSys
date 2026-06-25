@@ -1,22 +1,23 @@
 import { createServiceClient } from "@/lib/supabase/service";
 import { getAppDictionary }    from "@/lib/i18n/loader";
 import { resendSetupLink, deleteStartup } from "@/app/actions/admin";
+import { reactivateRequest }  from "@/app/actions/accreditation";
 import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
 import { EditEmailField }     from "@/components/admin/EditEmailField";
 import { TestToggle }         from "@/components/admin/TestToggle";
 import Link                    from "next/link";
 
 const STATUS_COLOR: Record<string, string> = {
-  pending_evaluator_assignment: "text-amber-700 bg-amber-50 border border-amber-200",
-  evaluator_assigned:           "text-blue-700 bg-blue-50 border border-blue-200",
-  meeting_scheduled:            "text-blue-700 bg-blue-50 border border-blue-200",
-  chass1s_shared:               "text-blue-700 bg-blue-50 border border-blue-200",
-  implementation_in_progress:   "text-blue-700 bg-blue-50 border border-blue-200",
-  ready_for_verification:       "text-violet-700 bg-violet-50 border border-violet-200",
-  verification_in_progress:     "text-violet-700 bg-violet-50 border border-violet-200",
-  accredited:                   "text-white bg-black border border-black",
-  rejected:                     "text-red-700 bg-red-50 border border-red-200",
-  expired:                      "text-cs-500 bg-cs-100 border border-cs-200",
+  pending_evaluator_assignment: "text-amber-600",
+  evaluator_assigned:           "text-blue-600",
+  meeting_scheduled:            "text-blue-600",
+  chass1s_shared:               "text-blue-600",
+  implementation_in_progress:   "text-blue-600",
+  ready_for_verification:       "text-violet-600",
+  verification_in_progress:     "text-violet-600",
+  accredited:                   "text-sb-default",
+  rejected:                     "text-red-500",
+  expired:                      "text-cs-400",
 };
 
 const ACCOUNT_BADGE: Record<string, string> = {
@@ -218,18 +219,18 @@ export default async function AdminStartupsPage({
                     </div>
 
                     {/* Accreditation status */}
-                    <div>
+                    <div className="text-center">
                       {s.request ? (
                         <Link
                           href="/admin/accreditations"
-                          className={`text-[11px] font-mono font-semibold uppercase tracking-widest px-2 py-0.5 rounded-sm ${
-                            STATUS_COLOR[s.request.status] ?? "text-cs-500 bg-cs-100 border border-cs-200"
-                          }`}
+                          className={`text-[10px] font-mono font-semibold uppercase tracking-widest ${
+                            STATUS_COLOR[s.request.status] ?? "text-cs-400"
+                          } hover:underline`}
                         >
                           {dict.status[s.request.status as keyof typeof dict.status] ?? s.request.status.replace(/_/g, " ")}
                         </Link>
                       ) : (
-                        <span className="text-[11px] font-mono text-cs-300 uppercase tracking-widest px-2 py-0.5">
+                        <span className="text-[10px] font-mono text-cs-300 uppercase tracking-widest">
                           —
                         </span>
                       )}
@@ -252,6 +253,14 @@ export default async function AdminStartupsPage({
                         <span className="text-[11px] font-mono text-emerald-600 font-semibold uppercase tracking-widest">
                           Active
                         </span>
+                      )}
+                      {s.request?.status === "rejected" && (
+                        <form action={reactivateRequest}>
+                          <input type="hidden" name="request_id" value={s.request.id} />
+                          <button type="submit" className="text-[10px] font-mono uppercase tracking-widest text-blue-500 hover:text-blue-700 transition-colors">
+                            {t.reactivate}
+                          </button>
+                        </form>
                       )}
                       <TestToggle
                         table="startups"

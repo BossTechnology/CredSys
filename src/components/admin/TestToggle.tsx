@@ -19,10 +19,10 @@ export function TestToggle({ table, entityId, isTest, markLabel, unmarkLabel }: 
       <input type="hidden" name="make_test" value={isTest ? "false" : "true"} />
       <button
         type="submit"
-        className={`text-[10px] font-mono uppercase tracking-widest px-2 py-1 border transition-colors ${
+        className={`text-[10px] font-mono uppercase tracking-widest transition-colors ${
           isTest
-            ? "border-red-300 text-red-600 hover:bg-red-50"
-            : "border-cs-200 text-cs-400 hover:border-black hover:text-black"
+            ? "text-red-500 hover:text-red-700"
+            : "text-cs-400 hover:text-black"
         }`}
       >
         {isTest ? unmarkLabel : markLabel}
