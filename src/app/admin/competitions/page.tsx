@@ -2,6 +2,7 @@ import { createServiceClient } from "@/lib/supabase/service";
 import { createCompetition }    from "@/app/actions/competitions";
 import { deleteCompetition } from "@/app/actions/admin";
 import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
+import { TestToggle }          from "@/components/admin/TestToggle";
 import { getAppDictionary }     from "@/lib/i18n/loader";
 import Link                     from "next/link";
 
@@ -25,7 +26,12 @@ const INDUSTRIES = [
   "ecommerce", "saas", "cleantech", "logistics", "other",
 ];
 
-export default async function AdminCompetitionsPage() {
+export default async function AdminCompetitionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ filter?: string }>;
+}) {
+  const { filter } = await searchParams;
   const { dict } = await getAppDictionary();
   const t = dict.admin;
   const service = createServiceClient();
@@ -34,10 +40,10 @@ export default async function AdminCompetitionsPage() {
     { data: competitions },
     { data: accelerators },
   ] = await Promise.all([
-    service
-      .from("competitions")
-      .select("id, name, description, industry, status, start_date, end_date, accelerator_id, created_at, is_test")
-      .order("created_at", { ascending: false }),
+    (filter === "test"
+      ? service.from("competitions").select("id, name, description, industry, status, start_date, end_date, accelerator_id, created_at, is_test").eq("is_test", true)
+      : service.from("competitions").select("id, name, description, industry, status, start_date, end_date, accelerator_id, created_at, is_test")
+    ).order("created_at", { ascending: false }),
     service
       .from("accelerators")
       .select("id, org_name")
@@ -65,6 +71,24 @@ export default async function AdminCompetitionsPage() {
           <p className="text-[13px] font-mono text-cs-400 mt-1">
             {total} {t.total} · {active} {t.active.toLowerCase()}
           </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {[
+            { label: t.all,            href: "/admin/competitions",             value: ""     },
+            { label: t.filterTestOnly, href: "/admin/competitions?filter=test", value: "test" },
+          ].map((tab) => (
+            <a
+              key={tab.label}
+              href={tab.href}
+              className={`text-[12px] font-mono uppercase tracking-widest px-3 py-1.5 border transition-colors ${
+                (filter ?? "") === tab.value
+                  ? "bg-black text-white border-black"
+                  : "bg-white text-cs-500 border-cs-200 hover:border-black"
+              }`}
+            >
+              {tab.label}
+            </a>
+          ))}
         </div>
       </div>
 
@@ -157,6 +181,13 @@ export default async function AdminCompetitionsPage() {
                   >
                     {t.manage}
                   </Link>
+                  <TestToggle
+                    table="competitions"
+                    entityId={comp.id}
+                    isTest={comp.is_test}
+                    markLabel={t.markTest}
+                    unmarkLabel={t.unmarkTest}
+                  />
                   <DeleteEntityButton
                     action={deleteCompetition}
                     entityId={comp.id}
