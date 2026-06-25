@@ -252,6 +252,7 @@ const ADMIN_NAV = [
   { label: "Accreditations",href: "/admin/accreditations"},
   { label: "Competitions",  href: "/admin/competitions"  },
   { label: "Startups",      href: "/admin/startups"      },
+  { label: "Investors",     href: "/admin/investors"     },
   { label: "Cred List",     href: "/admin/cred-list"     },
 ];
 
