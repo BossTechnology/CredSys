@@ -1,6 +1,7 @@
 import { createServiceClient }  from "@/lib/supabase/service";
 import { activateAccelerator, deleteAccelerator }  from "@/app/actions/admin";
 import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
+import { TestToggle }          from "@/components/admin/TestToggle";
 import { getAppDictionary }     from "@/lib/i18n/loader";
 
 export default async function AdminAcceleratorsPage({
@@ -27,6 +28,10 @@ export default async function AdminAcceleratorsPage({
     query = query.eq("is_active", false) as typeof query;
   }
 
+  if (filter === "test") {
+    query = query.eq("is_test", true) as typeof query;
+  }
+
   const { data: accelerators } = await query;
 
   const total   = accelerators?.length ?? 0;
@@ -51,6 +56,7 @@ export default async function AdminAcceleratorsPage({
           {[
             { label: t.all,     href: "/admin/accelerators",               value: ""        },
             { label: t.pending, href: "/admin/accelerators?filter=pending", value: "pending" },
+            { label: t.filterTestOnly, href: "/admin/accelerators?filter=test", value: "test" },
           ].map((tab) => (
             <a
               key={tab.value}
@@ -138,6 +144,13 @@ export default async function AdminAcceleratorsPage({
                         {acc.is_active ? t.deactivate : t.activate}
                       </button>
                     </form>
+                    <TestToggle
+                      table="accelerators"
+                      entityId={acc.id}
+                      isTest={acc.is_test}
+                      markLabel={t.markTest}
+                      unmarkLabel={t.unmarkTest}
+                    />
                     <DeleteEntityButton
                       action={deleteAccelerator}
                       entityId={acc.id}
