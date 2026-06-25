@@ -328,3 +328,18 @@ export async function purgeTestData(formData: FormData) {
   revalidatePath("/admin/investors");
   revalidatePath("/admin/competitions");
 }
+
+export async function toggleEntityTest(formData: FormData) {
+  if (!(await requireAdmin())) return;
+  const table = formData.get("table") as EntityTable;
+  const id    = formData.get("entity_id") as string;
+  const makeTest = formData.get("make_test") === "true";
+  const valid: EntityTable[] = ["startups", "accelerators", "evaluators", "investors", "competitions"];
+  if (!id || !valid.includes(table)) return;
+
+  const service = createServiceClient();
+  await service.from(table).update({ is_test: makeTest }).eq("id", id);
+
+  revalidatePath(`/admin/${table}`);
+  revalidatePath("/admin/overview");
+}

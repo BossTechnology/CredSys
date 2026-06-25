@@ -369,7 +369,10 @@
     "testModeTurnOff": "Desactivar",
     "purgeTest": "Purgar datos de prueba",
     "purgeHint": "Escribe PURGE para confirmar",
-    "purgeConfirm": "Purgar ahora"
+    "purgeConfirm": "Purgar ahora",
+    "markTest": "Marcar prueba",
+    "unmarkTest": "Quitar prueba",
+    "filterTestOnly": "Prueba"
   },
   "evalProfile": {
     "title": "Perfil",

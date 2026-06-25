@@ -369,7 +369,10 @@
     "testModeTurnOff": "Turn Off",
     "purgeTest": "Purge test data",
     "purgeHint": "Type PURGE to confirm",
-    "purgeConfirm": "Purge now"
+    "purgeConfirm": "Purge now",
+    "markTest": "Mark test",
+    "unmarkTest": "Unmark test",
+    "filterTestOnly": "Test"
   },
   "evalProfile": {
     "title": "Profile",
