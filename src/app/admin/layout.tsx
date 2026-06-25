@@ -1,6 +1,7 @@
 import { createClient }        from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { getAppLocale }        from "@/lib/i18n/loader";
+import { getTestMode }         from "@/lib/admin/test-mode";
 import { redirect }            from "next/navigation";
 import { AdminNav }            from "@/components/navigation/AdminNav";
 import { signOut }             from "@/app/actions/auth";
@@ -31,6 +32,7 @@ export default async function AdminLayout({
   }
 
   const locale = await getAppLocale();
+  const testMode = await getTestMode();
 
   async function handleSignOut() {
     "use server";
@@ -40,6 +42,11 @@ export default async function AdminLayout({
   return (
     <div className="min-h-screen bg-cs-50 flex flex-col overflow-x-hidden">
       <AdminNav locale={locale} onSignOut={handleSignOut} />
+      {testMode && (
+        <div className="bg-red-600 text-white px-4 py-2 text-center text-[12px] font-mono uppercase tracking-widest font-bold">
+          ⚠ Test Mode ON — new records are flagged as test
+        </div>
+      )}
       <main className="flex-1">{children}</main>
     </div>
   );

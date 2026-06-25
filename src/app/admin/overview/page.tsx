@@ -1,11 +1,14 @@
 import { createServiceClient } from "@/lib/supabase/service";
 import { getAppDictionary }    from "@/lib/i18n/loader";
+import { getTestMode }         from "@/lib/admin/test-mode";
+import { TestModeControl }     from "@/components/admin/TestModeControl";
 import Link                    from "next/link";
 
 export default async function AdminOverviewPage() {
   const { locale, dict } = await getAppDictionary();
   const t = dict.admin;
   const service = createServiceClient();
+  const testMode = await getTestMode();
 
   const [
     { count: activeEvaluators  },
@@ -68,6 +71,17 @@ export default async function AdminOverviewPage() {
         <h1 className="text-2xl font-bold tracking-tight">{t.overview}</h1>
         <p className="text-[13px] font-mono text-cs-400 mt-1">{t.systemDashboard}</p>
       </div>
+
+      <TestModeControl
+        testMode={testMode}
+        onLabel={t.testModeOn}
+        offLabel={t.testModeOff}
+        turnOnLabel={t.testModeTurnOn}
+        turnOffLabel={t.testModeTurnOff}
+        purgeLabel={t.purgeTest}
+        purgeHint={t.purgeHint}
+        purgeConfirm={t.purgeConfirm}
+      />
 
       {/* Alert banners */}
       {((pendingEvaluators ?? 0) > 0 || (pendingAssignment ?? 0) > 0) && (
