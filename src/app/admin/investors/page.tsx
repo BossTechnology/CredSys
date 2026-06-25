@@ -2,6 +2,7 @@ import { createServiceClient }  from "@/lib/supabase/service";
 import { activateInvestor, deleteInvestor } from "@/app/actions/admin";
 import { DeleteEntityButton }   from "@/components/admin/DeleteEntityButton";
 import { EditEmailField }       from "@/components/admin/EditEmailField";
+import { TestToggle } from "@/components/admin/TestToggle";
 import { getAppDictionary }     from "@/lib/i18n/loader";
 
 export default async function AdminInvestorsPage({
@@ -27,6 +28,9 @@ export default async function AdminInvestorsPage({
   if (filter === "pending") {
     query = query.eq("is_active", false) as typeof query;
   }
+  if (filter === "test") {
+    query = query.eq("is_test", true) as typeof query;
+  }
 
   const { data: investors } = await query;
 
@@ -50,8 +54,9 @@ export default async function AdminInvestorsPage({
         </div>
         <div className="flex flex-wrap gap-2">
           {[
-            { label: t.all,     href: "/admin/investors",                value: ""        },
-            { label: t.pending, href: "/admin/investors?filter=pending", value: "pending" },
+            { label: t.all,            href: "/admin/investors",                value: ""        },
+            { label: t.pending,        href: "/admin/investors?filter=pending", value: "pending" },
+            { label: t.filterTestOnly, href: "/admin/investors?filter=test",    value: "test"    },
           ].map((tab) => (
             <a
               key={tab.value}
@@ -136,6 +141,13 @@ export default async function AdminInvestorsPage({
                         {inv.is_active ? t.deactivate : t.activate}
                       </button>
                     </form>
+                    <TestToggle
+                      table="investors"
+                      entityId={inv.id}
+                      isTest={inv.is_test}
+                      markLabel={t.markTest}
+                      unmarkLabel={t.unmarkTest}
+                    />
                     <DeleteEntityButton
                       action={deleteInvestor}
                       entityId={inv.id}
