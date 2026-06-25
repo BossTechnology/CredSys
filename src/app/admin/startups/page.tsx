@@ -1,6 +1,8 @@
 import { createServiceClient } from "@/lib/supabase/service";
 import { getAppDictionary }    from "@/lib/i18n/loader";
-import { resendSetupLink }     from "@/app/actions/admin";
+import { resendSetupLink, deleteStartup } from "@/app/actions/admin";
+import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
+import { EditEmailField }     from "@/components/admin/EditEmailField";
 import Link                    from "next/link";
 
 const STATUS_COLOR: Record<string, string> = {
@@ -179,7 +181,14 @@ export default async function AdminStartupsPage({
                         )}
                         <div className="text-[12px] font-semibold truncate">{s.org_name}</div>
                       </div>
-                      <div className="text-[12px] font-mono text-cs-400 truncate">{s.email}</div>
+                      <EditEmailField
+                        table="startups"
+                        entityId={s.id}
+                        email={s.email}
+                        editLabel={t.editEmail}
+                        saveLabel={t.saveEmail}
+                        cancelLabel={t.cancelEdit}
+                      />
                       <div className="text-[12px] font-mono text-cs-400">
                         {s.country ?? ""}{s.country && s.industry ? " · " : ""}{s.industry ?? ""}
                       </div>
@@ -218,7 +227,7 @@ export default async function AdminStartupsPage({
                     </div>
 
                     {/* Actions */}
-                    <div>
+                    <div className="flex flex-col items-start gap-1.5">
                       {canResend && (
                         <form action={resendSetupLink}>
                           <input type="hidden" name="entity_id" value={s.id} />
@@ -235,6 +244,12 @@ export default async function AdminStartupsPage({
                           Active
                         </span>
                       )}
+                      <DeleteEntityButton
+                        action={deleteStartup}
+                        entityId={s.id}
+                        label={t.deleteBtn}
+                        confirmLabel={t.confirmDelete}
+                      />
                     </div>
                   </div>
                 );
