@@ -10,6 +10,12 @@ export default async function AdminOverviewPage() {
   const service = createServiceClient();
   const testMode = await getTestMode();
 
+  const { data: testStartupRows } = await service.from("startups").select("id").eq("is_test", true);
+  const testStartupIds = (testStartupRows ?? []).map((s) => s.id as string);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const notTestReq = (q: any) =>
+    testStartupIds.length ? q.not("startup_id", "in", `(${testStartupIds.join(",")})`) : q;
+
   const [
     { count: activeEvaluators  },
     { count: pendingEvaluators },
@@ -20,15 +26,15 @@ export default async function AdminOverviewPage() {
     { count: totalStartups     },
     { data:  recentRequests    },
   ] = await Promise.all([
-    service.from("evaluators").select("*", { count: "exact", head: true }).eq("is_active", true),
-    service.from("evaluators").select("*", { count: "exact", head: true }).eq("is_active", false),
-    service.from("accreditation_requests").select("*", { count: "exact", head: true }).eq("status", "accredited"),
-    service.from("accreditation_requests").select("*", { count: "exact", head: true }).eq("status", "pending_evaluator_assignment"),
-    service.from("accreditation_requests").select("*", { count: "exact", head: true })
+    service.from("evaluators").select("*", { count: "exact", head: true }).eq("is_active", true).eq("is_test", false),
+    service.from("evaluators").select("*", { count: "exact", head: true }).eq("is_active", false).eq("is_test", false),
+    notTestReq(service.from("accreditation_requests").select("startup_id", { count: "exact", head: true }).eq("status", "accredited")),
+    notTestReq(service.from("accreditation_requests").select("startup_id", { count: "exact", head: true }).eq("status", "pending_evaluator_assignment")),
+    notTestReq(service.from("accreditation_requests").select("startup_id", { count: "exact", head: true })
       .in("status", ["evaluator_assigned", "meeting_scheduled", "chass1s_shared",
-                     "implementation_in_progress", "ready_for_verification", "verification_in_progress"]),
-    service.from("competitions").select("*", { count: "exact", head: true }).eq("status", "active"),
-    service.from("startups").select("*", { count: "exact", head: true }),
+                     "implementation_in_progress", "ready_for_verification", "verification_in_progress"])),
+    service.from("competitions").select("*", { count: "exact", head: true }).eq("status", "active").eq("is_test", false),
+    service.from("startups").select("*", { count: "exact", head: true }).eq("is_test", false),
     service
       .from("accreditation_requests")
       .select("id, startup_name, startup_email, status, updated_at")
