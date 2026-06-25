@@ -4,6 +4,7 @@ import { createServiceClient } from "@/lib/supabase/service";
 import { revalidatePath }      from "next/cache";
 import { sendAccountSetup }    from "@/lib/email/templates/e1-account-setup";
 import { sendEvaluatorAssigned, sendNewAssignment } from "@/lib/email/templates/e3-evaluator-assigned";
+import { requireAdmin } from "@/lib/admin/require-admin";
 
 export async function activateEvaluator(formData: FormData) {
   const supabase   = createServiceClient();
@@ -131,4 +132,158 @@ export async function resendSetupLink(formData: FormData) {
   }
 
   revalidatePath("/admin/startups");
+}
+
+// ─── Entity deletion ─────────────────────────────────────────────────────────
+
+type EntityTable = "startups" | "accelerators" | "evaluators" | "investors" | "competitions";
+
+/**
+ * Hard-delete an entity and everything the DB foreign keys don't clean up.
+ * DB cascades handle accreditation_requests/cred_pages/competition_* etc.;
+ * here we remove the login account, setup tokens, and (for evaluators) the
+ * competition_scores rows blocked by a NO ACTION FK.
+ */
+async function deleteEntityCascade(table: EntityTable, entityId: string): Promise<void> {
+  const service = createServiceClient();
+
+  // Evaluators: competition_scores.evaluator_id is NO ACTION → must clear first.
+  if (table === "evaluators") {
+    await service.from("competition_scores").delete().eq("evaluator_id", entityId);
+  }
+
+  // Competitions have no login/token/profile; everything else does.
+  if (table !== "competitions") {
+    await service.from("account_setup_tokens").delete().eq("entity_id", entityId);
+
+    const { data: profiles } = await service
+      .from("user_profiles")
+      .select("user_id")
+      .eq("entity_id", entityId);
+
+    await service.from("user_profiles").delete().eq("entity_id", entityId);
+
+    for (const p of profiles ?? []) {
+      if (p.user_id) {
+        const { error } = await service.auth.admin.deleteUser(p.user_id);
+        if (error) console.error("[deleteEntityCascade] auth delete error", error);
+      }
+    }
+  }
+
+  const { error } = await service.from(table).delete().eq("id", entityId);
+  if (error) console.error(`[deleteEntityCascade] ${table} delete error`, error);
+}
+
+export async function deleteStartup(formData: FormData) {
+  if (!(await requireAdmin())) return;
+  const id = formData.get("entity_id") as string;
+  if (!id) return;
+  await deleteEntityCascade("startups", id);
+  revalidatePath("/admin/startups");
+  revalidatePath("/admin/overview");
+  revalidatePath("/admin/accreditations");
+}
+
+export async function deleteAccelerator(formData: FormData) {
+  if (!(await requireAdmin())) return;
+  const id = formData.get("entity_id") as string;
+  if (!id) return;
+  await deleteEntityCascade("accelerators", id);
+  revalidatePath("/admin/accelerators");
+  revalidatePath("/admin/overview");
+}
+
+export async function deleteEvaluator(formData: FormData) {
+  if (!(await requireAdmin())) return;
+  const id = formData.get("entity_id") as string;
+  if (!id) return;
+  await deleteEntityCascade("evaluators", id);
+  revalidatePath("/admin/evaluators");
+  revalidatePath("/admin/overview");
+}
+
+export async function deleteInvestor(formData: FormData) {
+  if (!(await requireAdmin())) return;
+  const id = formData.get("entity_id") as string;
+  if (!id) return;
+  await deleteEntityCascade("investors", id);
+  revalidatePath("/admin/investors");
+  revalidatePath("/admin/overview");
+}
+
+export async function deleteCompetition(formData: FormData) {
+  if (!(await requireAdmin())) return;
+  const id = formData.get("entity_id") as string;
+  if (!id) return;
+  await deleteEntityCascade("competitions", id);
+  revalidatePath("/admin/competitions");
+  revalidatePath("/admin/overview");
+}
+
+// ─── Edit entity email (synced to login + pending token) ─────────────────────
+
+type EmailState = { error?: string; ok?: boolean };
+
+export async function updateEntityEmail(
+  _prev: EmailState,
+  formData: FormData
+): Promise<EmailState> {
+  if (!(await requireAdmin())) return { error: "Unauthorized" };
+
+  const table    = formData.get("table") as "startups" | "investors";
+  const entityId = formData.get("entity_id") as string;
+  const newEmail = ((formData.get("new_email") as string) || "").trim().toLowerCase();
+
+  if (!table || !entityId || !newEmail) return { error: "Missing fields" };
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) return { error: "Invalid email" };
+
+  const service = createServiceClient();
+
+  // Uniqueness within the same entity table
+  const { data: dupe } = await service
+    .from(table)
+    .select("id")
+    .eq("email", newEmail)
+    .neq("id", entityId)
+    .maybeSingle();
+  if (dupe) return { error: "Email already in use" };
+
+  await service.from(table).update({ email: newEmail }).eq("id", entityId);
+
+  // Sync the login account if one exists
+  const { data: profile } = await service
+    .from("user_profiles")
+    .select("user_id")
+    .eq("entity_id", entityId)
+    .maybeSingle();
+  if (profile?.user_id) {
+    const { error } = await service.auth.admin.updateUserById(profile.user_id, {
+      email: newEmail,
+      email_confirm: true,
+    });
+    if (error) console.error("[updateEntityEmail] auth update error", error);
+  }
+
+  // Sync any unused setup token
+  await service
+    .from("account_setup_tokens")
+    .update({ email: newEmail })
+    .eq("entity_id", entityId)
+    .is("used_at", null);
+
+  revalidatePath(`/admin/${table}`);
+  return { ok: true };
+}
+
+export async function activateInvestor(formData: FormData) {
+  if (!(await requireAdmin())) return;
+  const supabase   = createServiceClient();
+  const investorId = formData.get("investor_id") as string;
+  const deactivate = formData.get("deactivate") === "true";
+
+  await supabase.from("investors").update({ is_active: !deactivate }).eq("id", investorId);
+
+  revalidatePath("/admin/investors");
+  revalidatePath("/admin/overview");
 }
