@@ -362,7 +362,14 @@
     "cancelEdit": "Cancelar",
     "investors": "Inversionistas",
     "noInvestorsFound": "No se encontraron inversionistas.",
-    "investmentFocus": "Enfoque de Inversión"
+    "investmentFocus": "Enfoque de Inversión",
+    "testModeOn": "Modo Prueba ACTIVADO",
+    "testModeOff": "Modo Prueba DESACTIVADO",
+    "testModeTurnOn": "Activar",
+    "testModeTurnOff": "Desactivar",
+    "purgeTest": "Purgar datos de prueba",
+    "purgeHint": "Escribe PURGE para confirmar",
+    "purgeConfirm": "Purgar ahora"
   },
   "evalProfile": {
     "title": "Perfil",

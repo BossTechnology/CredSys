@@ -362,7 +362,14 @@
     "cancelEdit": "Cancel",
     "investors": "Investors",
     "noInvestorsFound": "No investors found.",
-    "investmentFocus": "Investment Focus"
+    "investmentFocus": "Investment Focus",
+    "testModeOn": "Test Mode is ON",
+    "testModeOff": "Test Mode is OFF",
+    "testModeTurnOn": "Turn On",
+    "testModeTurnOff": "Turn Off",
+    "purgeTest": "Purge test data",
+    "purgeHint": "Type PURGE to confirm",
+    "purgeConfirm": "Purge now"
   },
   "evalProfile": {
     "title": "Profile",
