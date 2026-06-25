@@ -354,7 +354,15 @@
     "avgScore": "Puntaje Promedio",
     "acceptancePending": "Pendiente de aceptación",
     "acceptanceAccepted": "Aceptada",
-    "declinedReasonLabel": "Último rechazo"
+    "declinedReasonLabel": "Último rechazo",
+    "deleteBtn": "Borrar",
+    "confirmDelete": "¿Confirmar borrado?",
+    "editEmail": "Editar",
+    "saveEmail": "Guardar",
+    "cancelEdit": "Cancelar",
+    "investors": "Inversionistas",
+    "noInvestorsFound": "No se encontraron inversionistas.",
+    "investmentFocus": "Enfoque de Inversión"
   },
   "evalProfile": {
     "title": "Perfil",

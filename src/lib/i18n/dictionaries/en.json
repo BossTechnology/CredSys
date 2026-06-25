@@ -354,7 +354,15 @@
     "avgScore": "Avg Score",
     "acceptancePending": "Pending acceptance",
     "acceptanceAccepted": "Accepted",
-    "declinedReasonLabel": "Last declined"
+    "declinedReasonLabel": "Last declined",
+    "deleteBtn": "Delete",
+    "confirmDelete": "Confirm delete?",
+    "editEmail": "Edit",
+    "saveEmail": "Save",
+    "cancelEdit": "Cancel",
+    "investors": "Investors",
+    "noInvestorsFound": "No investors found.",
+    "investmentFocus": "Investment Focus"
   },
   "evalProfile": {
     "title": "Profile",
