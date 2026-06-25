@@ -109,8 +109,8 @@ export default async function AdminAccreditationsPage({
           </div>
         ) : (
           <>
-            <div className="grid min-w-[840px] grid-cols-[1fr_100px_140px_200px_80px_80px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
-              {[t.startup, t.industry, t.status, t.evaluator, t.submitted, t.actions].map((h) => (
+            <div className="grid min-w-[760px] grid-cols-[1fr_100px_140px_200px_80px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
+              {[t.startup, t.industry, t.status, t.evaluator, t.submitted].map((h) => (
                 <div key={h} className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
               ))}
             </div>
@@ -122,7 +122,7 @@ export default async function AdminAccreditationsPage({
                 return (
                   <div
                     key={req.id}
-                    className={`grid min-w-[840px] grid-cols-[1fr_100px_140px_200px_80px_80px] gap-4 px-5 py-3 items-start ${
+                    className={`grid min-w-[760px] grid-cols-[1fr_100px_140px_200px_80px] gap-4 px-5 py-3 items-start ${
                       needsAssign ? "bg-yellow-50" : ""
                     }`}
                   >
@@ -135,10 +135,18 @@ export default async function AdminAccreditationsPage({
                       {req.industry ?? "—"}
                     </div>
 
-                    <div className="pt-0.5">
+                    <div className="pt-0.5 flex items-center gap-2">
                       <span className={`text-[10px] font-mono font-semibold uppercase tracking-widest ${STATUS_COLOR[req.status] ?? "text-cs-400"}`}>
                         {dict.status[req.status as keyof typeof dict.status] ?? req.status.replace(/_/g, " ")}
                       </span>
+                      {req.status === "rejected" && (
+                        <form action={reactivateRequest}>
+                          <input type="hidden" name="request_id" value={req.id} />
+                          <button type="submit" className="text-[10px] font-mono uppercase tracking-widest text-blue-500 hover:text-blue-700 transition-colors">
+                            {t.reactivate}
+                          </button>
+                        </form>
+                      )}
                     </div>
 
                     <div>
@@ -183,17 +191,6 @@ export default async function AdminAccreditationsPage({
                     </div>
 
                     <div className="text-[12px] font-mono text-cs-400 pt-0.5">{fmt(req.created_at)}</div>
-
-                    <div>
-                      {req.status === "rejected" && (
-                        <form action={reactivateRequest}>
-                          <input type="hidden" name="request_id" value={req.id} />
-                          <button type="submit" className="text-[10px] font-mono uppercase tracking-widest text-blue-500 hover:text-blue-700 transition-colors">
-                            {t.reactivate}
-                          </button>
-                        </form>
-                      )}
-                    </div>
                   </div>
                 );
               })}
