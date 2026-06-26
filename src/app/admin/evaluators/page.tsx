@@ -3,6 +3,7 @@ import { getAppDictionary }    from "@/lib/i18n/loader";
 import { activateEvaluator, deleteEvaluator }   from "@/app/actions/admin";
 import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
 import { TestToggle } from "@/components/admin/TestToggle";
+import { SubmitButton } from "@/components/admin/SubmitButton";
 
 export default async function AdminEvaluatorsPage({
   searchParams,
@@ -30,6 +31,8 @@ export default async function AdminEvaluatorsPage({
   }
   if (filter === "test") {
     query = query.eq("is_test", true) as typeof query;
+  } else if (filter === "hide_test") {
+    query = query.eq("is_test", false) as typeof query;
   }
 
   const { data: evaluators } = await query;
@@ -56,6 +59,7 @@ export default async function AdminEvaluatorsPage({
           {[
             { label: t.all,            href: "/admin/evaluators",                value: ""        },
             { label: t.pending,        href: "/admin/evaluators?filter=pending", value: "pending" },
+            { label: t.filterHideTest,  href: "/admin/evaluators?filter=hide_test", value: "hide_test" },
             { label: t.filterTestOnly, href: "/admin/evaluators?filter=test",    value: "test"    },
           ].map((tab) => (
             <a
@@ -128,7 +132,7 @@ export default async function AdminEvaluatorsPage({
                       {ev.is_active ? t.active : t.pending}
                     </span>
                   </div>
-                  <div className="flex flex-col items-start gap-1.5">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                     <form action={activateEvaluator}>
                       <input type="hidden" name="evaluator_id" value={ev.id} />
                       {!ev.is_active && (
@@ -137,16 +141,14 @@ export default async function AdminEvaluatorsPage({
                       {ev.is_active && (
                         <input type="hidden" name="deactivate" value="true" />
                       )}
-                      <button
-                        type="submit"
-                        className={`text-[11px] font-mono uppercase tracking-widest px-2 py-1 border transition-colors ${
+                      <SubmitButton
+                        label={ev.is_active ? t.deactivate : t.activate}
+                        className={`text-[10px] font-mono uppercase tracking-widest transition-colors ${
                           ev.is_active
-                            ? "border-red-200 text-red-500 hover:bg-red-50"
-                            : "btn-primary btn-sm"
+                            ? "text-red-500 hover:text-red-700"
+                            : "text-emerald-600 hover:text-emerald-800"
                         }`}
-                      >
-                        {ev.is_active ? t.deactivate : t.activate}
-                      </button>
+                      />
                     </form>
                     <TestToggle
                       table="evaluators"

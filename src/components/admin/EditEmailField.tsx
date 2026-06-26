@@ -55,8 +55,8 @@ export function EditEmailField({
           required
           className="text-[12px] font-mono border border-cs-200 bg-white px-1.5 py-1 focus:outline-none focus:border-black flex-1 min-w-0"
         />
-        <button type="submit" disabled={pending} className="btn-primary btn-sm shrink-0">
-          {saveLabel}
+        <button type="submit" disabled={pending} className={`btn-primary btn-sm shrink-0 ${pending ? "opacity-40 cursor-wait" : ""}`}>
+          {pending ? "…" : saveLabel}
         </button>
         <button
           type="button"

@@ -373,6 +373,7 @@
     "markTest": "Marcar prueba",
     "unmarkTest": "Quitar prueba",
     "filterTestOnly": "Prueba",
+    "filterHideTest": "Ocultar prueba",
     "reactivate": "Reactivar",
     "rejected": "Rechazados"
   },

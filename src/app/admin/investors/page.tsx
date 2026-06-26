@@ -3,6 +3,7 @@ import { activateInvestor, deleteInvestor } from "@/app/actions/admin";
 import { DeleteEntityButton }   from "@/components/admin/DeleteEntityButton";
 import { EditEmailField }       from "@/components/admin/EditEmailField";
 import { TestToggle } from "@/components/admin/TestToggle";
+import { SubmitButton }         from "@/components/admin/SubmitButton";
 import { getAppDictionary }     from "@/lib/i18n/loader";
 
 export default async function AdminInvestorsPage({
@@ -30,6 +31,8 @@ export default async function AdminInvestorsPage({
   }
   if (filter === "test") {
     query = query.eq("is_test", true) as typeof query;
+  } else if (filter === "hide_test") {
+    query = query.eq("is_test", false) as typeof query;
   }
 
   const { data: investors } = await query;
@@ -56,6 +59,7 @@ export default async function AdminInvestorsPage({
           {[
             { label: t.all,            href: "/admin/investors",                value: ""        },
             { label: t.pending,        href: "/admin/investors?filter=pending", value: "pending" },
+            { label: t.filterHideTest,  href: "/admin/investors?filter=hide_test", value: "hide_test" },
             { label: t.filterTestOnly, href: "/admin/investors?filter=test",    value: "test"    },
           ].map((tab) => (
             <a
@@ -126,20 +130,18 @@ export default async function AdminInvestorsPage({
                       {inv.is_active ? t.active : t.pending}
                     </span>
                   </div>
-                  <div className="flex flex-col items-start gap-1.5">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                     <form action={activateInvestor}>
                       <input type="hidden" name="investor_id" value={inv.id} />
                       <input type="hidden" name="deactivate" value={inv.is_active ? "true" : "false"} />
-                      <button
-                        type="submit"
-                        className={`text-[11px] font-mono uppercase tracking-widest px-2 py-1 border transition-colors ${
+                      <SubmitButton
+                        label={inv.is_active ? t.deactivate : t.activate}
+                        className={`text-[10px] font-mono uppercase tracking-widest transition-colors ${
                           inv.is_active
-                            ? "border-red-200 text-red-500 hover:bg-red-50"
-                            : "btn-primary btn-sm"
+                            ? "text-red-500 hover:text-red-700"
+                            : "text-emerald-600 hover:text-emerald-800"
                         }`}
-                      >
-                        {inv.is_active ? t.deactivate : t.activate}
-                      </button>
+                      />
                     </form>
                     <TestToggle
                       table="investors"
