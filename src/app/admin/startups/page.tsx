@@ -5,6 +5,7 @@ import { reactivateRequest }  from "@/app/actions/accreditation";
 import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
 import { EditEmailField }     from "@/components/admin/EditEmailField";
 import { TestToggle }         from "@/components/admin/TestToggle";
+import { SubmitButton }         from "@/components/admin/SubmitButton";
 import Link                    from "next/link";
 
 const STATUS_COLOR: Record<string, string> = {
@@ -46,6 +47,7 @@ export default async function AdminStartupsPage({
     { label: t.withRequest,  value: "with_request"  },
     { label: t.noRequest,    value: "no_request"    },
     { label: t.accredited,   value: "accredited"    },
+    { label: t.filterHideTest,  value: "hide_test" },
     { label: t.filterTestOnly, value: "test" },
   ];
 
@@ -111,6 +113,8 @@ export default async function AdminStartupsPage({
 
   if (filter === "test") {
     filtered = filtered.filter((s) => s.is_test);
+  } else if (filter === "hide_test") {
+    filtered = filtered.filter((s) => !s.is_test);
   }
 
   const total = filtered.length;
@@ -237,29 +241,31 @@ export default async function AdminStartupsPage({
                     </div>
 
                     {/* Actions */}
-                    <div className="flex flex-col items-start gap-1.5">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                       {canResend && (
                         <form action={resendSetupLink}>
                           <input type="hidden" name="entity_id" value={s.id} />
                           <input type="hidden" name="email" value={s.email} />
                           <input type="hidden" name="org_name" value={s.org_name} />
                           <input type="hidden" name="role" value="startup" />
-                          <button type="submit" className="text-[11px] font-mono font-semibold uppercase tracking-widest px-3 py-1 bg-black text-white hover:bg-cs-800 transition-colors">
-                            {s.account === "expired" ? t.resend : t.send}
-                          </button>
+                          <SubmitButton
+                            label={s.account === "expired" ? t.resend : t.send}
+                            className="text-[10px] font-mono uppercase tracking-widest text-black hover:text-cs-600 transition-colors"
+                          />
                         </form>
                       )}
                       {s.account === "activated" && (
-                        <span className="text-[11px] font-mono text-emerald-600 font-semibold uppercase tracking-widest">
-                          Active
+                        <span className="text-[10px] font-mono text-emerald-600 uppercase tracking-widest">
+                          ✓
                         </span>
                       )}
                       {s.request?.status === "rejected" && (
                         <form action={reactivateRequest}>
                           <input type="hidden" name="request_id" value={s.request.id} />
-                          <button type="submit" className="text-[10px] font-mono uppercase tracking-widest text-blue-500 hover:text-blue-700 transition-colors">
-                            {t.reactivate}
-                          </button>
+                          <SubmitButton
+                            label={t.reactivate}
+                            className="text-[10px] font-mono uppercase tracking-widest text-blue-500 hover:text-blue-700 transition-colors"
+                          />
                         </form>
                       )}
                       <TestToggle

@@ -373,6 +373,7 @@
     "markTest": "Mark test",
     "unmarkTest": "Unmark test",
     "filterTestOnly": "Test",
+    "filterHideTest": "Hide test",
     "reactivate": "Reactivate",
     "rejected": "Rejected"
   },

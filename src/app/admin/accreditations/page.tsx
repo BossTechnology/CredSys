@@ -2,6 +2,7 @@ import { createServiceClient }     from "@/lib/supabase/service";
 import { assignEvaluatorToRequest } from "@/app/actions/admin";
 import { reactivateRequest }       from "@/app/actions/accreditation";
 import { getAppDictionary }         from "@/lib/i18n/loader";
+import { SubmitButton }             from "@/components/admin/SubmitButton";
 
 const STATUS_COLOR: Record<string, string> = {
   pending_evaluator_assignment: "text-amber-600",
@@ -37,11 +38,13 @@ export default async function AdminAccreditationsPage({
     { label: t.active,     value: "active"     },
     { label: t.accredited, value: "accredited" },
     { label: t.rejected,   value: "rejected"   },
+    { label: t.filterHideTest,  value: "hide_test" },
+    { label: t.filterTestOnly, value: "test" },
   ];
 
   let query = service
     .from("accreditation_requests")
-    .select("id, startup_name, startup_email, industry, status, evaluator_id, acceptance_status, evaluator_decline_reason, created_at, updated_at")
+    .select("id, startup_id, startup_name, startup_email, industry, status, evaluator_id, acceptance_status, evaluator_decline_reason, created_at, updated_at, startups(is_test)")
     .order("updated_at", { ascending: false });
 
   if (filter === "unassigned") {
@@ -63,7 +66,19 @@ export default async function AdminAccreditationsPage({
   ]);
 
   const evalMap = new Map((evaluators ?? []).map((e) => [e.id, e.org_name]));
-  const total   = requests?.length ?? 0;
+
+  let filtered = (requests ?? []).map((req) => ({
+    ...req,
+    is_test: (req.startups as unknown as { is_test: boolean } | null)?.is_test ?? false,
+  }));
+
+  if (filter === "test") {
+    filtered = filtered.filter((r) => r.is_test);
+  } else if (filter === "hide_test") {
+    filtered = filtered.filter((r) => !r.is_test);
+  }
+
+  const total = filtered.length;
 
   return (
     <div className="max-w-[1060px] mx-auto px-4 sm:px-7 py-8">
@@ -115,7 +130,7 @@ export default async function AdminAccreditationsPage({
               ))}
             </div>
             <div className="divide-y divide-cs-100">
-              {(requests ?? []).map((req) => {
+              {filtered.map((req) => {
                 const assignedName = req.evaluator_id ? evalMap.get(req.evaluator_id) : null;
                 const needsAssign  = req.status === "pending_evaluator_assignment";
 
@@ -127,7 +142,12 @@ export default async function AdminAccreditationsPage({
                     }`}
                   >
                     <div>
-                      <div className="text-[13px] font-semibold">{req.startup_name}</div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[13px] font-semibold">{req.startup_name}</span>
+                        {req.is_test && (
+                          <span className="text-[9px] font-mono font-bold uppercase tracking-widest px-1 py-0.5 bg-red-600 text-white shrink-0">TEST</span>
+                        )}
+                      </div>
                       <div className="text-[12px] font-mono text-cs-400">{req.startup_email}</div>
                     </div>
 
@@ -142,9 +162,10 @@ export default async function AdminAccreditationsPage({
                       {req.status === "rejected" && (
                         <form action={reactivateRequest}>
                           <input type="hidden" name="request_id" value={req.id} />
-                          <button type="submit" className="text-[10px] font-mono uppercase tracking-widest text-blue-500 hover:text-blue-700 transition-colors">
-                            {t.reactivate}
-                          </button>
+                          <SubmitButton
+                            label={t.reactivate}
+                            className="text-[10px] font-mono uppercase tracking-widest text-blue-500 hover:text-blue-700 transition-colors"
+                          />
                         </form>
                       )}
                     </div>
@@ -175,9 +196,10 @@ export default async function AdminAccreditationsPage({
                                 <option key={e.id} value={e.id}>{e.org_name}</option>
                               ))}
                             </select>
-                            <button type="submit" className="btn-primary btn-sm shrink-0">
-                              {t.assignBtn}
-                            </button>
+                            <SubmitButton
+                              label={t.assignBtn}
+                              className="btn-primary btn-sm shrink-0"
+                            />
                           </form>
                           {req.evaluator_decline_reason && (
                             <span className="text-[10px] font-mono text-red-600">

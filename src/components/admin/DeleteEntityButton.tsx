@@ -1,33 +1,56 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useFormStatus } from "react-dom";
 
 type ServerAction = (formData: FormData) => void | Promise<void>;
 
 interface DeleteEntityButtonProps {
   action:       ServerAction;
   entityId:     string;
-  label:        string; // e.g. "Delete"
-  confirmLabel: string; // e.g. "Confirm delete?"
+  label:        string;
+  confirmLabel: string;
 }
 
-/**
- * Two-step inline confirm: first click arms (reveals the red confirm button),
- * second click submits the delete form.
- */
+function SubmitBtn({ label }: { label: string }) {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className={`text-[10px] font-mono uppercase tracking-widest transition-colors ${
+        pending
+          ? "text-red-300 cursor-wait"
+          : "text-red-600 hover:text-red-800"
+      }`}
+    >
+      {pending ? "…" : label}
+    </button>
+  );
+}
+
 export function DeleteEntityButton({ action, entityId, label, confirmLabel }: DeleteEntityButtonProps) {
   const [armed, setArmed] = useState(false);
+  const prevEntityId = useRef(entityId);
+
+  useEffect(() => {
+    if (prevEntityId.current !== entityId) {
+      setArmed(false);
+      prevEntityId.current = entityId;
+    }
+  }, [entityId]);
+
+  useEffect(() => {
+    if (!armed) return;
+    const timer = setTimeout(() => setArmed(false), 4000);
+    return () => clearTimeout(timer);
+  }, [armed]);
 
   return (
     <form action={action}>
       <input type="hidden" name="entity_id" value={entityId} />
       {armed ? (
-        <button
-          type="submit"
-          className="text-[10px] font-mono uppercase tracking-widest text-red-600 hover:text-red-800 transition-colors"
-        >
-          {confirmLabel}
-        </button>
+        <SubmitBtn label={confirmLabel} />
       ) : (
         <button
           type="button"
