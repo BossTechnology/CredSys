@@ -3,6 +3,7 @@ import { assignEvaluatorToRequest } from "@/app/actions/admin";
 import { reactivateRequest }       from "@/app/actions/accreditation";
 import { getAppDictionary }         from "@/lib/i18n/loader";
 import { SubmitButton }             from "@/components/admin/SubmitButton";
+import { ReassignEvaluatorField }   from "@/components/admin/ReassignEvaluatorField";
 
 const STATUS_COLOR: Record<string, string> = {
   pending_evaluator_assignment: "text-amber-600",
@@ -172,16 +173,20 @@ export default async function AdminAccreditationsPage({
 
                     <div>
                       {assignedName ? (
-                        <div className="flex flex-col gap-0.5">
-                          <span className="text-[12px] font-mono text-cs-500">{assignedName}</span>
-                          <span
-                            className={`text-[10px] font-mono uppercase tracking-widest ${
-                              req.acceptance_status === "accepted" ? "text-green-700" : "text-yellow-600"
-                            }`}
-                          >
-                            {req.acceptance_status === "accepted" ? t.acceptanceAccepted : t.acceptancePending}
-                          </span>
-                        </div>
+                        <ReassignEvaluatorField
+                          requestId={req.id}
+                          currentName={assignedName}
+                          acceptanceStatus={req.acceptance_status ?? undefined}
+                          evaluators={evaluators ?? []}
+                          labels={{
+                            reassign:          t.reassign,
+                            reassignBtn:       t.reassignBtn,
+                            cancelReassign:    t.cancelReassign,
+                            select:            t.select,
+                            acceptancePending: t.acceptancePending,
+                            acceptanceAccepted: t.acceptanceAccepted,
+                          }}
+                        />
                       ) : needsAssign ? (
                         <div className="flex flex-col gap-1">
                           <form action={assignEvaluatorToRequest} className="flex gap-1.5 items-center">

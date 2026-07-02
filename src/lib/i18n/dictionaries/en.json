@@ -375,7 +375,10 @@
     "filterTestOnly": "Test",
     "filterHideTest": "Hide test",
     "reactivate": "Reactivate",
-    "rejected": "Rejected"
+    "rejected": "Rejected",
+    "reassign": "Reassign",
+    "reassignBtn": "Reassign",
+    "cancelReassign": "Cancel"
   },
   "evalProfile": {
     "title": "Profile",
