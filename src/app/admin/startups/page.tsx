@@ -6,7 +6,12 @@ import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
 import { EditEmailField }     from "@/components/admin/EditEmailField";
 import { TestToggle }         from "@/components/admin/TestToggle";
 import { SubmitButton }         from "@/components/admin/SubmitButton";
+import { SortHeader }          from "@/components/admin/SortHeader";
+import { ACCREDITATION_STATUS_ORDER } from "@/lib/supabase/types";
 import Link                    from "next/link";
+
+type SortKey = "name" | "created" | "account" | "accreditation";
+type SortDir = "asc" | "desc";
 
 const STATUS_COLOR: Record<string, string> = {
   pending_evaluator_assignment: "text-amber-600",
@@ -31,9 +36,13 @@ const ACCOUNT_BADGE: Record<string, string> = {
 export default async function AdminStartupsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ filter?: string }>;
+  searchParams: Promise<{ filter?: string; sort?: string; dir?: string }>;
 }) {
-  const { filter } = await searchParams;
+  const { filter, sort, dir } = await searchParams;
+  const sortKey: SortKey = (["name", "created", "account", "accreditation"] as SortKey[]).includes(sort as SortKey)
+    ? (sort as SortKey)
+    : "created";
+  const sortDir: SortDir = dir === "asc" ? "asc" : dir === "desc" ? "desc" : sortKey === "created" ? "desc" : "asc";
   const { locale, dict } = await getAppDictionary();
   const t = dict.admin;
 
@@ -117,7 +126,28 @@ export default async function AdminStartupsPage({
     filtered = filtered.filter((s) => !s.is_test);
   }
 
+  const accreditationStep = (status: string | undefined) =>
+    status ? ACCREDITATION_STATUS_ORDER.indexOf(status as (typeof ACCREDITATION_STATUS_ORDER)[number]) : -1;
+
+  const cmp: Record<SortKey, (a: typeof filtered[number], b: typeof filtered[number]) => number> = {
+    name:          (a, b) => a.org_name.localeCompare(b.org_name),
+    created:       (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+    account:       (a, b) => a.account.localeCompare(b.account),
+    accreditation: (a, b) => accreditationStep(a.request?.status) - accreditationStep(b.request?.status),
+  };
+
+  filtered = [...filtered].sort((a, b) => (sortDir === "asc" ? 1 : -1) * cmp[sortKey](a, b));
+
   const total = filtered.length;
+
+  function sortHref(key: SortKey) {
+    const nextDir: SortDir = sortKey === key && sortDir === "asc" ? "desc" : "asc";
+    const params = new URLSearchParams();
+    if (filter) params.set("filter", filter);
+    params.set("sort", key);
+    params.set("dir", nextDir);
+    return `/admin/startups?${params.toString()}`;
+  }
 
   return (
     <div className="max-w-[1120px] mx-auto px-4 sm:px-7 py-8">
@@ -166,9 +196,11 @@ export default async function AdminStartupsPage({
         ) : (
           <>
             <div className="grid min-w-[680px] grid-cols-[1fr_90px_110px_140px_110px] gap-4 px-5 py-2 border-b border-cs-100 bg-cs-50">
-              {[t.startup, t.joined, t.account, t.accreditation, t.actions].map((h) => (
-                <div key={h} className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">{h}</div>
-              ))}
+              <SortHeader label={t.startup}       href={sortHref("name")}          active={sortKey === "name"}          dir={sortDir} />
+              <SortHeader label={t.joined}        href={sortHref("created")}       active={sortKey === "created"}       dir={sortDir} />
+              <SortHeader label={t.account}       href={sortHref("account")}       active={sortKey === "account"}       dir={sortDir} />
+              <SortHeader label={t.accreditation} href={sortHref("accreditation")} active={sortKey === "accreditation"} dir={sortDir} />
+              <div className="text-[11px] font-mono text-cs-400 uppercase tracking-widest">{t.actions}</div>
             </div>
             <div className="divide-y divide-cs-100">
               {filtered.map((s) => {

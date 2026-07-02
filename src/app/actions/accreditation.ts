@@ -1,11 +1,12 @@
 "use server";
 
+import { createClient }        from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { revalidatePath } from "next/cache";
 import { generateUniqueCode } from "@/lib/utils";
 import { sendAccredited } from "@/lib/email/templates/e4-accredited";
 import { sendRejected } from "@/lib/email/templates/e5-rejected";
-import type { AccreditationStatus } from "@/lib/supabase/types";
+import { ACCREDITATION_STATUS_ORDER, type AccreditationStatus } from "@/lib/supabase/types";
 
 export async function advanceAccreditationStatus(formData: FormData) {
   const supabase    = createServiceClient();
@@ -101,6 +102,93 @@ export async function advanceAccreditationStatus(formData: FormData) {
   revalidatePath("/admin/accreditations");
   revalidatePath("/admin/overview");
   revalidatePath("/app/startup/dashboard");
+}
+
+// Steps a request may be backed out of one at a time. Excludes
+// pending_evaluator_assignment/evaluator_assigned (would mean un-assigning)
+// and accredited (terminal — already sent emails + issued the cred_page).
+const REVERTIBLE_STATUSES: AccreditationStatus[] = ACCREDITATION_STATUS_ORDER.slice(2, -1);
+
+async function applyStatusRevert(
+  service: ReturnType<typeof createServiceClient>,
+  status: AccreditationStatus,
+  requestId: string
+): Promise<{ error?: string }> {
+  if (!REVERTIBLE_STATUSES.includes(status)) return { error: "This status cannot be reverted" };
+
+  const idx = ACCREDITATION_STATUS_ORDER.indexOf(status);
+  const prevStatus = ACCREDITATION_STATUS_ORDER[idx - 1];
+
+  await service
+    .from("accreditation_requests")
+    .update({ status: prevStatus })
+    .eq("id", requestId);
+
+  revalidatePath("/app/evaluator/dashboard");
+  revalidatePath(`/app/evaluator/assignments/${requestId}`);
+  revalidatePath("/admin/accreditations");
+  revalidatePath("/admin/overview");
+
+  return {};
+}
+
+// Evaluator-facing: only the assigned evaluator can revert their own request.
+export async function revertAccreditationStatus(
+  _prev: { error?: string },
+  formData: FormData
+): Promise<{ error?: string }> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "Unauthorized" };
+
+  const service = createServiceClient();
+
+  const { data: profile } = await service
+    .from("user_profiles")
+    .select("entity_id, role")
+    .eq("user_id", user.id)
+    .single();
+
+  if (!profile || profile.role !== "evaluator") return { error: "Unauthorized" };
+
+  const requestId = formData.get("request_id") as string;
+  if (!requestId) return { error: "Missing request_id" };
+
+  // Enforce ownership — only the assigned evaluator can revert their own request
+  const { data: request } = await service
+    .from("accreditation_requests")
+    .select("id, status")
+    .eq("id", requestId)
+    .eq("evaluator_id", profile.entity_id)
+    .single();
+
+  if (!request) return { error: "Assignment not found" };
+
+  return applyStatusRevert(service, request.status as AccreditationStatus, requestId);
+}
+
+// Admin-facing: any admin can revert any request, no ownership check.
+export async function adminRevertAccreditationStatus(
+  _prev: { error?: string },
+  formData: FormData
+): Promise<{ error?: string }> {
+  const { requireAdmin } = await import("@/lib/admin/require-admin");
+  const admin = await requireAdmin();
+  if (!admin) return { error: "Unauthorized" };
+
+  const service = createServiceClient();
+  const requestId = formData.get("request_id") as string;
+  if (!requestId) return { error: "Missing request_id" };
+
+  const { data: request } = await service
+    .from("accreditation_requests")
+    .select("id, status")
+    .eq("id", requestId)
+    .single();
+
+  if (!request) return { error: "Request not found" };
+
+  return applyStatusRevert(service, request.status as AccreditationStatus, requestId);
 }
 
 export async function reactivateRequest(formData: FormData) {

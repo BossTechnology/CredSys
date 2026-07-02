@@ -378,7 +378,9 @@
     "rejected": "Rechazados",
     "reassign": "Reasignar",
     "reassignBtn": "Reasignar",
-    "cancelReassign": "Cancelar"
+    "cancelReassign": "Cancelar",
+    "stepBack": "Retroceder",
+    "confirmStepBack": "¿Confirmar retroceso?"
   },
   "evalProfile": {
     "title": "Perfil",
@@ -471,7 +473,9 @@
     "acceptBtn": "Aceptar Asignación",
     "declineReason": "Motivo para declinar (obligatorio)",
     "declineReasonPH": "Explica por qué declinas esta asignación…",
-    "declineBtn": "Declinar"
+    "declineBtn": "Declinar",
+    "stepBack": "Retroceder",
+    "confirmStepBack": "¿Confirmar retroceso?"
   },
   "startupComps": {
     "title": "Competencias",

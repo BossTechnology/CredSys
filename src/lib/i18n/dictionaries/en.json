@@ -378,7 +378,9 @@
     "rejected": "Rejected",
     "reassign": "Reassign",
     "reassignBtn": "Reassign",
-    "cancelReassign": "Cancel"
+    "cancelReassign": "Cancel",
+    "stepBack": "Step Back",
+    "confirmStepBack": "Confirm Step Back?"
   },
   "evalProfile": {
     "title": "Profile",
@@ -471,7 +473,9 @@
     "acceptBtn": "Accept Assignment",
     "declineReason": "Reason for declining (required)",
     "declineReasonPH": "Explain why you are declining this assignment…",
-    "declineBtn": "Decline"
+    "declineBtn": "Decline",
+    "stepBack": "Step Back",
+    "confirmStepBack": "Confirm Step Back?"
   },
   "startupComps": {
     "title": "Competitions",

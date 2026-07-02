@@ -5,10 +5,11 @@ import Link                    from "next/link";
 import { Badge }               from "@/components/ui/Badge";
 import { WorkflowStatusBar }   from "@/components/ui/WorkflowStatusBar";
 import { VerificationPanel }   from "@/components/accreditation/VerificationPanel";
-import { advanceAccreditationStatus } from "@/app/actions/accreditation";
+import { advanceAccreditationStatus, revertAccreditationStatus } from "@/app/actions/accreditation";
 import { rejectWithReason, acceptAssignment, declineAssignment } from "@/app/actions/verification";
 import { getAppDictionary }    from "@/lib/i18n/loader";
-import type { AccreditationStatus, BLIPSData, ADDISData } from "@/lib/supabase/types";
+import { RevertStatusButton }  from "@/components/ui/RevertStatusButton";
+import { ACCREDITATION_STATUS_ORDER, type AccreditationStatus, type BLIPSData, type ADDISData } from "@/lib/supabase/types";
 
 // ─── Workflow map ─────────────────────────────────────────────────────────────
 
@@ -97,6 +98,8 @@ export default async function AssignmentDetailPage({
   const nextStatus = NEXT_STATUS[status];
   const actionLabel= ACTION_LABELS[status];
   const isTerminal = TERMINAL.includes(status);
+  const statusIdx  = ACCREDITATION_STATUS_ORDER.indexOf(status);
+  const canRevert  = statusIdx > 1 && statusIdx < ACCREDITATION_STATUS_ORDER.length - 1;
   const acceptancePending =
     status === "evaluator_assigned" &&
     (req as unknown as { acceptance_status?: string }).acceptance_status === "pending";
@@ -377,6 +380,14 @@ export default async function AssignmentDetailPage({
                 <span className="text-[12px] font-mono text-cs-400">
                   {t.saveVerificationFirst}
                 </span>
+              )}
+              {canRevert && (
+                <RevertStatusButton
+                  action={revertAccreditationStatus}
+                  requestId={req.id}
+                  label={t.stepBack}
+                  confirmLabel={t.confirmStepBack}
+                />
               )}
             </div>
 

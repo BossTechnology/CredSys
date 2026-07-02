@@ -1,9 +1,11 @@
 import { createServiceClient }     from "@/lib/supabase/service";
 import { assignEvaluatorToRequest } from "@/app/actions/admin";
-import { reactivateRequest }       from "@/app/actions/accreditation";
+import { reactivateRequest, adminRevertAccreditationStatus } from "@/app/actions/accreditation";
 import { getAppDictionary }         from "@/lib/i18n/loader";
 import { SubmitButton }             from "@/components/admin/SubmitButton";
 import { ReassignEvaluatorField }   from "@/components/admin/ReassignEvaluatorField";
+import { RevertStatusButton }       from "@/components/ui/RevertStatusButton";
+import { ACCREDITATION_STATUS_ORDER, type AccreditationStatus } from "@/lib/supabase/types";
 
 const STATUS_COLOR: Record<string, string> = {
   pending_evaluator_assignment: "text-amber-600",
@@ -134,6 +136,8 @@ export default async function AdminAccreditationsPage({
               {filtered.map((req) => {
                 const assignedName = req.evaluator_id ? evalMap.get(req.evaluator_id) : null;
                 const needsAssign  = req.status === "pending_evaluator_assignment";
+                const statusIdx    = ACCREDITATION_STATUS_ORDER.indexOf(req.status as AccreditationStatus);
+                const canRevert    = statusIdx > 1 && statusIdx < ACCREDITATION_STATUS_ORDER.length - 1;
 
                 return (
                   <div
@@ -156,18 +160,28 @@ export default async function AdminAccreditationsPage({
                       {req.industry ?? "—"}
                     </div>
 
-                    <div className="pt-0.5 flex items-center gap-2">
-                      <span className={`text-[10px] font-mono font-semibold uppercase tracking-widest ${STATUS_COLOR[req.status] ?? "text-cs-400"}`}>
-                        {dict.status[req.status as keyof typeof dict.status] ?? req.status.replace(/_/g, " ")}
-                      </span>
-                      {req.status === "rejected" && (
-                        <form action={reactivateRequest}>
-                          <input type="hidden" name="request_id" value={req.id} />
-                          <SubmitButton
-                            label={t.reactivate}
-                            className="text-[10px] font-mono uppercase tracking-widest text-blue-500 hover:text-blue-700 transition-colors"
-                          />
-                        </form>
+                    <div className="pt-0.5 flex flex-col gap-1">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[10px] font-mono font-semibold uppercase tracking-widest ${STATUS_COLOR[req.status] ?? "text-cs-400"}`}>
+                          {dict.status[req.status as keyof typeof dict.status] ?? req.status.replace(/_/g, " ")}
+                        </span>
+                        {req.status === "rejected" && (
+                          <form action={reactivateRequest}>
+                            <input type="hidden" name="request_id" value={req.id} />
+                            <SubmitButton
+                              label={t.reactivate}
+                              className="text-[10px] font-mono uppercase tracking-widest text-blue-500 hover:text-blue-700 transition-colors"
+                            />
+                          </form>
+                        )}
+                      </div>
+                      {canRevert && (
+                        <RevertStatusButton
+                          action={adminRevertAccreditationStatus}
+                          requestId={req.id}
+                          label={t.stepBack}
+                          confirmLabel={t.confirmStepBack}
+                        />
                       )}
                     </div>
 
