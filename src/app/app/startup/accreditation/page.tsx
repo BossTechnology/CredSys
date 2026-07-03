@@ -7,6 +7,7 @@ import { WorkflowStatusBar }     from "@/components/ui/WorkflowStatusBar";
 import { VerificationPanel }     from "@/components/accreditation/VerificationPanel";
 import { submitAccreditationRequest } from "@/app/actions/apply";
 import { getAppDictionary }      from "@/lib/i18n/loader";
+import { SubmitButton }          from "@/components/admin/SubmitButton";
 import type { AccreditationStatus, BLIPSData, ADDISData } from "@/lib/supabase/types";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -203,9 +204,7 @@ export default async function StartupAccreditationPage() {
           </div>
 
           <div className="flex items-center gap-4">
-            <button type="submit" className="btn-primary btn-lg">
-              {t.submit}
-            </button>
+            <SubmitButton label={t.submit} className="btn-primary btn-lg" />
             <Link href="/app/startup/dashboard" className="btn-ghost btn-lg">
               {t.cancelLink}
             </Link>

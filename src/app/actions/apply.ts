@@ -31,6 +31,18 @@ export async function submitAccreditationRequest(formData: FormData) {
   const startupName  = (formData.get("startup_name") as string) || startup?.org_name || "Startup";
   const startupEmail = startup?.email ?? user.email!;
 
+  // Guard against duplicate submissions (e.g. double-clicking Submit) — a
+  // startup only ever has one accreditation_request, reused across statuses.
+  const { data: existing } = await service
+    .from("accreditation_requests")
+    .select("id")
+    .eq("startup_id", userProfile.entity_id)
+    .maybeSingle();
+
+  if (existing) {
+    redirect("/app/startup/dashboard");
+  }
+
   const { data: inserted, error } = await service
     .from("accreditation_requests")
     .insert({
