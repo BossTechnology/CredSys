@@ -4,6 +4,7 @@ import { DeleteEntityButton }   from "@/components/admin/DeleteEntityButton";
 import { EditEmailField }       from "@/components/admin/EditEmailField";
 import { TestToggle } from "@/components/admin/TestToggle";
 import { SubmitButton }         from "@/components/admin/SubmitButton";
+import Link                     from "next/link";
 import { getAppDictionary }     from "@/lib/i18n/loader";
 
 export default async function AdminInvestorsPage({
@@ -120,6 +121,12 @@ export default async function AdminInvestorsPage({
                       cancelLabel={t.cancelEdit}
                     />
                     <div className="text-[12px] font-mono text-cs-300 mt-0.5">{t.since} {fmt(inv.created_at)}</div>
+                    <Link
+                      href={`/admin/entity-users?role=investor&id=${inv.id}&name=${encodeURIComponent(inv.org_name)}`}
+                      className="text-[10px] font-mono uppercase tracking-widest text-cs-400 hover:text-black transition-colors mt-0.5 inline-block"
+                    >
+                      {t.manageUsers} →
+                    </Link>
                   </div>
                   <div className="text-[12px] font-mono text-cs-500 capitalize truncate">{inv.investment_focus ?? "—"}</div>
                   <div className="text-[12px] font-mono text-cs-500">{inv.country ?? "—"}</div>

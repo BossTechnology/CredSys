@@ -75,6 +75,10 @@ export default async function AdminStartupsPage({
           .from("accreditation_requests")
           .select("id, startup_id, status, created_at, updated_at")
           .in("startup_id", startupIds)
+          // Ascending so that if a startup somehow has more than one row, the
+          // Map below (which keeps the last-seen entry per key) ends up with
+          // the most recently created request rather than an arbitrary one.
+          .order("created_at", { ascending: true })
       : { data: [] as { id: string; startup_id: string; status: string; created_at: string; updated_at: string }[] },
     startupIds.length > 0
       ? service
@@ -238,6 +242,12 @@ export default async function AdminStartupsPage({
                       <div className="text-[12px] font-mono text-cs-400">
                         {s.country ?? ""}{s.country && s.industry ? " · " : ""}{s.industry ?? ""}
                       </div>
+                      <Link
+                        href={`/admin/entity-users?role=startup&id=${s.id}&name=${encodeURIComponent(s.org_name)}`}
+                        className="text-[10px] font-mono uppercase tracking-widest text-cs-400 hover:text-black transition-colors mt-0.5 inline-block"
+                      >
+                        {t.manageUsers} →
+                      </Link>
                     </div>
 
                     {/* Joined date */}

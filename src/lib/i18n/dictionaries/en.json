@@ -380,7 +380,21 @@
     "reassignBtn": "Reassign",
     "cancelReassign": "Cancel",
     "stepBack": "Step Back",
-    "confirmStepBack": "Confirm Step Back?"
+    "confirmStepBack": "Confirm Step Back?",
+    "manageUsers": "Manage users",
+    "manageUsersHint": "Multiple people can share access to this account, each with their own login.",
+    "teamMembers": "Members",
+    "pendingInvites": "Pending invites",
+    "inviteUser": "Invite a user",
+    "userEmail": "Email",
+    "userEmailPH": "person@company.com",
+    "sendInvite": "Send invite",
+    "revoke": "Revoke",
+    "confirmRevoke": "Confirm revoke?",
+    "cancelInvite": "Cancel",
+    "confirmCancelInvite": "Confirm cancel?",
+    "noMembers": "No active members yet.",
+    "backToList": "Back"
   },
   "evalProfile": {
     "title": "Profile",

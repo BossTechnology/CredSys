@@ -380,7 +380,21 @@
     "reassignBtn": "Reasignar",
     "cancelReassign": "Cancelar",
     "stepBack": "Retroceder",
-    "confirmStepBack": "¿Confirmar retroceso?"
+    "confirmStepBack": "¿Confirmar retroceso?",
+    "manageUsers": "Gestionar usuarios",
+    "manageUsersHint": "Varias personas pueden compartir el acceso a esta cuenta, cada una con su propio inicio de sesión.",
+    "teamMembers": "Miembros",
+    "pendingInvites": "Invitaciones pendientes",
+    "inviteUser": "Invitar usuario",
+    "userEmail": "Correo",
+    "userEmailPH": "persona@empresa.com",
+    "sendInvite": "Enviar invitación",
+    "revoke": "Revocar",
+    "confirmRevoke": "¿Confirmar revocación?",
+    "cancelInvite": "Cancelar",
+    "confirmCancelInvite": "¿Confirmar cancelación?",
+    "noMembers": "Aún no hay miembros activos.",
+    "backToList": "Volver"
   },
   "evalProfile": {
     "title": "Perfil",

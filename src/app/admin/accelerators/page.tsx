@@ -4,6 +4,7 @@ import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
 import { TestToggle }          from "@/components/admin/TestToggle";
 import { SubmitButton }         from "@/components/admin/SubmitButton";
 import { getAppDictionary }     from "@/lib/i18n/loader";
+import Link                     from "next/link";
 
 export default async function AdminAcceleratorsPage({
   searchParams,
@@ -123,6 +124,12 @@ export default async function AdminAcceleratorsPage({
                     </div>
                     <div className="text-[12px] font-mono text-cs-400">{acc.email}</div>
                     <div className="text-[12px] font-mono text-cs-300 mt-0.5">{t.since} {fmt(acc.created_at)}</div>
+                    <Link
+                      href={`/admin/entity-users?role=accelerator&id=${acc.id}&name=${encodeURIComponent(acc.org_name)}`}
+                      className="text-[10px] font-mono uppercase tracking-widest text-cs-400 hover:text-black transition-colors mt-0.5 inline-block"
+                    >
+                      {t.manageUsers} →
+                    </Link>
                   </div>
                   <div className="text-[12px] font-mono text-cs-500 capitalize">{acc.industry ?? "—"}</div>
                   <div className="text-[12px] font-mono text-cs-500">{acc.country ?? "—"}</div>

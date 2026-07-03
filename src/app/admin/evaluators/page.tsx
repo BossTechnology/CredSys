@@ -4,6 +4,7 @@ import { activateEvaluator, deleteEvaluator }   from "@/app/actions/admin";
 import { DeleteEntityButton } from "@/components/admin/DeleteEntityButton";
 import { TestToggle } from "@/components/admin/TestToggle";
 import { SubmitButton } from "@/components/admin/SubmitButton";
+import Link from "next/link";
 
 export default async function AdminEvaluatorsPage({
   searchParams,
@@ -122,6 +123,12 @@ export default async function AdminEvaluatorsPage({
                     </div>
                     <div className="text-[12px] font-mono text-cs-400">{ev.email}</div>
                     <div className="text-[12px] font-mono text-cs-300 mt-0.5">{t.since} {fmt(ev.created_at)}</div>
+                    <Link
+                      href={`/admin/entity-users?role=evaluator&id=${ev.id}&name=${encodeURIComponent(ev.org_name)}`}
+                      className="text-[10px] font-mono uppercase tracking-widest text-cs-400 hover:text-black transition-colors mt-0.5 inline-block"
+                    >
+                      {t.manageUsers} →
+                    </Link>
                   </div>
                   <div className="text-[12px] font-mono text-cs-500 capitalize">{ev.industry ?? "—"}</div>
                   <div className="text-[12px] font-mono text-cs-500">{ev.country ?? "—"}</div>

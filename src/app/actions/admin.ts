@@ -134,6 +134,99 @@ export async function resendSetupLink(formData: FormData) {
   revalidatePath("/admin/startups");
 }
 
+// ─── Multi-user per entity: invite / revoke / cancel ──────────────────────────
+
+const ENTITY_ROLES = ["startup", "evaluator", "accelerator", "investor"] as const;
+type EntityRole = (typeof ENTITY_ROLES)[number];
+
+function isEntityRole(v: string): v is EntityRole {
+  return (ENTITY_ROLES as readonly string[]).includes(v);
+}
+
+/**
+ * Invite an additional user to an existing entity. The DB already allows many
+ * user_profiles per entity_id, so this just issues a fresh setup token for a
+ * new email against the same entity — the invitee sets a password and gets
+ * their own login that resolves to the same shared entity data.
+ */
+export async function inviteEntityUser(formData: FormData): Promise<void> {
+  if (!(await requireAdmin())) return;
+
+  const role     = formData.get("role")      as string;
+  const entityId = formData.get("entity_id") as string;
+  const orgName  = (formData.get("org_name") as string) || "your organization";
+  const email    = ((formData.get("email")   as string) || "").trim().toLowerCase();
+
+  if (!entityId || !isEntityRole(role)) return;
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+
+  const service = createServiceClient();
+
+  // Skip if there's already a pending (unused, unexpired) invite for this pair.
+  const { data: pending } = await service
+    .from("account_setup_tokens")
+    .select("id")
+    .eq("entity_id", entityId)
+    .eq("email", email)
+    .is("used_at", null)
+    .gt("expires_at", new Date().toISOString())
+    .maybeSingle();
+
+  if (!pending) {
+    const { data: tokenRow, error: tokenError } = await service
+      .from("account_setup_tokens")
+      .insert({ email, role, entity_id: entityId })
+      .select("token")
+      .single();
+
+    if (tokenError || !tokenRow) {
+      console.error("[inviteEntityUser] token error:", tokenError);
+      return;
+    }
+
+    const portalUrl = process.env.NEXT_PUBLIC_PORTAL_URL ?? "https://startupboss.org";
+    const setupUrl  = `${portalUrl}/en/setup?token=${tokenRow.token}`;
+
+    try {
+      await sendAccountSetup(email, orgName, setupUrl);
+    } catch (e) {
+      console.error("[inviteEntityUser] email error:", e);
+    }
+  }
+
+  revalidatePath("/admin/entity-users");
+}
+
+/** Remove one user's login/access to an entity (deletes their profile + auth user). */
+export async function revokeEntityUser(formData: FormData): Promise<void> {
+  if (!(await requireAdmin())) return;
+
+  const userId = formData.get("user_id") as string;
+  if (!userId) return;
+
+  const service = createServiceClient();
+
+  await service.from("user_profiles").delete().eq("user_id", userId);
+
+  const { error } = await service.auth.admin.deleteUser(userId);
+  if (error) console.error("[revokeEntityUser] auth delete error:", error);
+
+  revalidatePath("/admin/entity-users");
+}
+
+/** Cancel a pending (not-yet-accepted) invite for an entity. */
+export async function cancelEntityInvite(formData: FormData): Promise<void> {
+  if (!(await requireAdmin())) return;
+
+  const tokenId = formData.get("token_id") as string;
+  if (!tokenId) return;
+
+  const service = createServiceClient();
+  await service.from("account_setup_tokens").delete().eq("id", tokenId);
+
+  revalidatePath("/admin/entity-users");
+}
+
 // ─── Entity deletion ─────────────────────────────────────────────────────────
 
 type EntityTable = "startups" | "accelerators" | "evaluators" | "investors" | "competitions";
