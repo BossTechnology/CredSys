@@ -30,5 +30,14 @@ WITH ranked AS (
 DELETE FROM accreditation_requests
 WHERE id IN (SELECT id FROM ranked WHERE rn > 1);
 
-ALTER TABLE accreditation_requests
-  ADD CONSTRAINT accreditation_requests_startup_id_unique UNIQUE (startup_id);
+-- Idempotent: safe to re-run (e.g. if applied both via MCP and a later push).
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint
+    WHERE conname = 'accreditation_requests_startup_id_unique'
+  ) THEN
+    ALTER TABLE accreditation_requests
+      ADD CONSTRAINT accreditation_requests_startup_id_unique UNIQUE (startup_id);
+  END IF;
+END $$;
