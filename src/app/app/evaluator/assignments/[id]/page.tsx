@@ -142,7 +142,7 @@ export default async function AssignmentDetailPage({
           <h1 className="text-2xl font-bold tracking-tight">{req.startup_name}</h1>
           <p className="text-[13px] font-mono text-cs-500 mt-1">{req.startup_email}</p>
         </div>
-        <Badge variant={status} />
+        <Badge variant={status}>{dict.status[status]}</Badge>
       </div>
 
       {/* Workflow bar */}

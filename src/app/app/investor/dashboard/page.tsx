@@ -187,7 +187,7 @@ export default async function InvestorDashboardPage() {
                         <div className="text-[12px] font-mono text-cs-500">{startup?.country ?? "—"}</div>
                         <div>
                           <span className={`text-[14px] font-mono font-bold uppercase tracking-widest ${isAccredited ? "text-green-600" : "text-cs-400"}`}>
-                            {latestStatus ? latestStatus.replace(/_/g, " ") : t.noRequest}
+                            {latestStatus ? (dict.status[latestStatus as keyof typeof dict.status] ?? latestStatus.replace(/_/g, " ")) : t.noRequest}
                           </span>
                         </div>
                         <div>
@@ -243,7 +243,7 @@ export default async function InvestorDashboardPage() {
                       <div className="text-[12px] font-mono text-cs-400">{fmt(s.created_at, locale)}</div>
                       <div>
                         <span className={`text-[14px] font-mono font-bold uppercase tracking-widest ${STATUS_COLORS[s.status] ?? "text-cs-400"}`}>
-                          {s.status.replace(/_/g, " ")}
+                          {dict.status[s.status as keyof typeof dict.status] ?? s.status.replace(/_/g, " ")}
                         </span>
                       </div>
                       <Link

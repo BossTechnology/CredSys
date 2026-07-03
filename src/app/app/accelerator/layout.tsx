@@ -5,15 +5,19 @@ import { AcceleratorNav }      from "@/components/ui/Navigation";
 import { PendingBanner }       from "@/components/ui/Navigation";
 import { signOut }             from "@/app/actions/auth";
 import { getAppLocale }        from "@/lib/i18n/loader";
+import { ROLE_ROUTES }         from "@/lib/auth/role-routes";
+import type { UserRole }       from "@/lib/supabase/types";
 
 export default async function AcceleratorLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const locale = await getAppLocale();
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/en/login");
+  if (!user) redirect(`/${locale}/login`);
 
   const service = createServiceClient();
 
@@ -23,17 +27,14 @@ export default async function AcceleratorLayout({
     .eq("user_id", user.id)
     .single();
 
-  if (!profile || profile.role !== "accelerator") {
-    redirect("/en/login");
-  }
+  if (!profile) redirect(`/${locale}/login`);
+  if (profile.role !== "accelerator") redirect(ROLE_ROUTES[profile.role as UserRole]);
 
   const { data: accelerator } = await service
     .from("accelerators")
     .select("org_name, is_active")
     .eq("id", profile.entity_id)
     .single();
-
-  const locale = await getAppLocale();
 
   async function handleSignOut() {
     "use server";

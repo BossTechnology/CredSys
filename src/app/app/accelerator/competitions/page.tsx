@@ -4,10 +4,10 @@ import { redirect }            from "next/navigation";
 import { getAppDictionary }    from "@/lib/i18n/loader";
 
 const STATUS_COLOR: Record<string, string> = {
-  draft:   "bg-cs-100 text-cs-500",
-  active:  "bg-green-50 text-green-700",
-  scoring: "bg-yellow-50 text-yellow-700",
-  closed:  "bg-cs-100 text-cs-400",
+  draft:     "bg-cs-100 text-cs-500",
+  active:    "bg-green-50 text-green-700",
+  scoring:   "bg-yellow-50 text-yellow-700",
+  completed: "bg-cs-100 text-cs-400",
 };
 
 export default async function AcceleratorCompetitionsPage() {

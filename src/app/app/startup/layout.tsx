@@ -4,15 +4,19 @@ import { redirect }            from "next/navigation";
 import { StartupNav }          from "@/components/ui/Navigation";
 import { signOut }             from "@/app/actions/auth";
 import { getAppLocale }        from "@/lib/i18n/loader";
+import { ROLE_ROUTES }         from "@/lib/auth/role-routes";
+import type { UserRole }       from "@/lib/supabase/types";
 
 export default async function StartupLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const locale = await getAppLocale();
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/en/login");
+  if (!user) redirect(`/${locale}/login`);
 
   const service = createServiceClient();
 
@@ -22,11 +26,8 @@ export default async function StartupLayout({
     .eq("user_id", user.id)
     .single();
 
-  if (!profile || profile.role !== "startup") {
-    redirect("/en/login");
-  }
-
-  const locale = await getAppLocale();
+  if (!profile) redirect(`/${locale}/login`);
+  if (profile.role !== "startup") redirect(ROLE_ROUTES[profile.role as UserRole]);
 
   async function handleSignOut() {
     "use server";

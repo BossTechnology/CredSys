@@ -5,14 +5,7 @@ import { createServiceClient } from "@/lib/supabase/service";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import type { UserRole } from "@/lib/supabase/types";
-
-const ROLE_ROUTES: Record<UserRole, string> = {
-  startup:     "/app/startup/dashboard",
-  evaluator:   "/app/evaluator/dashboard",
-  accelerator: "/app/accelerator/dashboard",
-  investor:    "/app/investor/dashboard",
-  admin:       "/admin/overview",
-};
+import { ROLE_ROUTES } from "@/lib/auth/role-routes";
 
 async function getRoleFor(userId: string): Promise<UserRole> {
   const service = createServiceClient();

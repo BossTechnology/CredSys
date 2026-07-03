@@ -100,7 +100,7 @@ export default async function StartupDashboardPage() {
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
                 {t.accreditationStatus}
               </span>
-              {request && <Badge variant={status!} />}
+              {request && <Badge variant={status!}>{dict.status[status!]}</Badge>}
             </div>
 
             <div className="p-5">

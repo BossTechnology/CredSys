@@ -34,6 +34,25 @@ async function submitScore(formData: FormData) {
 
   if (!competitionId || !startupId || isNaN(score)) return;
 
+  // Only competitions in the "scoring" stage accept new scores
+  const { data: competitionRow } = await service
+    .from("competitions")
+    .select("status")
+    .eq("id", competitionId)
+    .single();
+
+  if (competitionRow?.status !== "scoring") return;
+
+  // Evaluator must actually be assigned to this competition
+  const { data: assignment } = await service
+    .from("competition_evaluators")
+    .select("competition_id")
+    .eq("competition_id", competitionId)
+    .eq("evaluator_id", profile.entity_id)
+    .maybeSingle();
+
+  if (!assignment) return;
+
   // Upsert score (unique constraint: competition_id + startup_id + evaluator_id)
   await service
     .from("competition_scores")
@@ -134,8 +153,12 @@ export default async function EvaluatorScoringPage() {
     ])
   );
 
+  // Only competitions in the "scoring" stage can be acted on
+  const isScoringOpen = (r: { competitions: unknown }) =>
+    (r.competitions as unknown as { status: string } | null)?.status === "scoring";
+
   const pending = (compStartups ?? []).filter(
-    (r) => !scoredMap.has(`${r.competition_id}:${r.startup_id}`)
+    (r) => !scoredMap.has(`${r.competition_id}:${r.startup_id}`) && isScoringOpen(r)
   );
   const scored = (compStartups ?? []).filter(
     (r) => scoredMap.has(`${r.competition_id}:${r.startup_id}`)

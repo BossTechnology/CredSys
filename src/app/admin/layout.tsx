@@ -5,15 +5,19 @@ import { getTestMode }         from "@/lib/admin/test-mode";
 import { redirect }            from "next/navigation";
 import { AdminNav }            from "@/components/navigation/AdminNav";
 import { signOut }             from "@/app/actions/auth";
+import { ROLE_ROUTES }         from "@/lib/auth/role-routes";
+import type { UserRole }       from "@/lib/supabase/types";
 
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const locale = await getAppLocale();
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/en/login");
+  if (!user) redirect(`/${locale}/login`);
 
   const service = createServiceClient();
   const { data: profile } = await service
@@ -22,16 +26,9 @@ export default async function AdminLayout({
     .eq("user_id", user.id)
     .single();
 
-  if (!profile || profile.role !== "admin") {
-    const dest: Record<string, string> = {
-      startup:     "/app/startup/dashboard",
-      evaluator:   "/app/evaluator/dashboard",
-      accelerator: "/app/accelerator/dashboard",
-    };
-    redirect(dest[profile?.role ?? ""] ?? "/en/login");
-  }
+  if (!profile) redirect(`/${locale}/login`);
+  if (profile.role !== "admin") redirect(ROLE_ROUTES[profile.role as UserRole]);
 
-  const locale = await getAppLocale();
   const testMode = await getTestMode();
 
   async function handleSignOut() {

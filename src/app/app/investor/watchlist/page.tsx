@@ -298,7 +298,7 @@ export default async function InvestorWatchlistPage({
                     <div className="text-[12px] font-mono text-cs-500">{startup?.country ?? "—"}</div>
                     <div>
                       <span className={`text-[14px] font-mono font-bold uppercase tracking-widest ${isAccredited ? "text-green-600" : "text-cs-400"}`}>
-                        {latestStatus ? latestStatus.replace(/_/g, " ") : t.noRequest}
+                        {latestStatus ? (dict.status[latestStatus as keyof typeof dict.status] ?? latestStatus.replace(/_/g, " ")) : t.noRequest}
                       </span>
                     </div>
                     <div className="flex flex-col gap-1">

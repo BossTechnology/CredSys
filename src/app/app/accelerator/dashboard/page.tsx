@@ -30,38 +30,49 @@ export default async function AcceleratorDashboardPage() {
 
   const acceleratorId = userProfile.entity_id;
 
-  const [
-    { data: accelerator },
-    { count: credCount },
-    { count: competitionCount },
-    { data: recentCreds },
-  ] = await Promise.all([
+  const [{ data: accelerator }, { data: competitions }] = await Promise.all([
     service
       .from("accelerators")
       .select("org_name, industry, country, created_at")
       .eq("id", acceleratorId)
       .single(),
 
-    // All active credentials in the ecosystem
-    service
-      .from("cred_pages")
-      .select("*", { count: "exact", head: true })
-      .eq("is_active", true),
-
     // Competitions owned by this accelerator
     service
       .from("competitions")
-      .select("*", { count: "exact", head: true })
+      .select("id")
       .eq("accelerator_id", acceleratorId),
-
-    // 5 most recently issued credentials
-    service
-      .from("cred_pages")
-      .select("unique_code, accredited_at, startups(org_name, industry, country)")
-      .eq("is_active", true)
-      .order("accredited_at", { ascending: false })
-      .limit(5),
   ]);
+
+  const competitionCount = competitions?.length ?? 0;
+
+  // Portfolio = startups that entered one of THIS accelerator's competitions.
+  const competitionIds = (competitions ?? []).map((c) => c.id);
+  let portfolioStartupIds: string[] = [];
+  if (competitionIds.length > 0) {
+    const { data: entries } = await service
+      .from("competition_startups")
+      .select("startup_id")
+      .in("competition_id", competitionIds);
+    portfolioStartupIds = Array.from(new Set((entries ?? []).map((e) => e.startup_id)));
+  }
+
+  const [{ count: credCount }, { data: recentCreds }] = portfolioStartupIds.length > 0
+    ? await Promise.all([
+        service
+          .from("cred_pages")
+          .select("*", { count: "exact", head: true })
+          .in("startup_id", portfolioStartupIds)
+          .eq("is_active", true),
+        service
+          .from("cred_pages")
+          .select("unique_code, accredited_at, startups(org_name, industry, country)")
+          .in("startup_id", portfolioStartupIds)
+          .eq("is_active", true)
+          .order("accredited_at", { ascending: false })
+          .limit(5),
+      ])
+    : [{ count: 0 }, { data: [] as Array<{ unique_code: string; accredited_at: string; startups: { org_name: string; industry: string | null; country: string | null } | null }> }];
 
   const portalUrl = process.env.NEXT_PUBLIC_PORTAL_URL ?? "https://startupboss.org";
 

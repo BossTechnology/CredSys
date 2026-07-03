@@ -577,7 +577,7 @@
     "portal": "Portal de Aceleradora",
     "noStartups": "Aún no hay startups acreditados.",
     "verifiedStartups": "Startups Verificados",
-    "inEcosystem": "en el ecosistema",
+    "inEcosystem": "acreditados de tus competencias",
     "colStartup": "Startup",
     "colIndustry": "Industria",
     "colCountry": "País",
@@ -742,7 +742,11 @@
     "draft": "Borrador",
     "active": "Activo",
     "scoring": "Puntuación",
-    "closed": "Cerrado"
+    "completed": "Completado",
+    "pending_startup_acceptance": "Pendiente de Aceptación",
+    "accepted": "Aceptado",
+    "declined": "Rechazado",
+    "cancelled": "Cancelado"
   },
   "common": {
     "loading": "Cargando...",

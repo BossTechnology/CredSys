@@ -279,7 +279,7 @@ export default async function AcceleratorSponsorPage() {
                 <div className="flex items-center gap-4 shrink-0">
                   <span className="text-[14px] font-mono text-cs-400">{fmt(s.created_at)}</span>
                   <span className={`text-[14px] font-mono font-bold uppercase tracking-widest ${STATUS_COLORS[s.status] ?? "text-cs-400"}`}>
-                    {s.status.replace(/_/g, " ")}
+                    {dict.status[s.status as keyof typeof dict.status] ?? s.status.replace(/_/g, " ")}
                   </span>
                 </div>
               </div>

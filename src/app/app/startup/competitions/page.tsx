@@ -229,7 +229,7 @@ export default async function StartupCompetitionsPage() {
                       </span>
                     ) : (
                       <span className="text-[12px] font-mono text-cs-400">
-                        {comp.status === "completed" || comp.status === "closed" ? t.closed : t.notOpen}
+                        {comp.status === "completed" ? t.completed : comp.status === "closed" ? t.closed : t.notOpen}
                       </span>
                     )}
                   </div>

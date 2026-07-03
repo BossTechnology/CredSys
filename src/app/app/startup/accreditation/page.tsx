@@ -256,7 +256,7 @@ export default async function StartupAccreditationPage() {
             {t.submitted} {fmt(request.created_at, locale)}
           </p>
         </div>
-        <Badge variant={status!} />
+        <Badge variant={status!}>{dict.status[status!]}</Badge>
       </div>
 
       {/* Workflow progress */}
