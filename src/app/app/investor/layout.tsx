@@ -47,7 +47,7 @@ export default async function InvestorLayout({
 
       {investor && !investor.is_active && (
         <PendingBanner
-          message="Your investor account is pending activation. Our team will notify you once you are activated."
+          entityRole="investor"
           locale={locale}
         />
       )}

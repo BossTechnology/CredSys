@@ -49,7 +49,7 @@ export default async function EvaluatorAssignmentsPage({
 
   let query = service
     .from("accreditation_requests")
-    .select("id, status, startup_name, startup_email, industry, created_at, updated_at")
+    .select("id, status, startup_name, startup_email, industry, created_at, updated_at, acceptance_status")
     .eq("evaluator_id", profile.entity_id)
     .order("updated_at", { ascending: false });
 
@@ -88,7 +88,7 @@ export default async function EvaluatorAssignmentsPage({
         {/* Filter tabs */}
         <div className="flex flex-wrap gap-2">
           {FILTERS.map((tab) => (
-            <a
+            <Link
               key={tab.label}
               href={tab.value ? `/app/evaluator/assignments?filter=${tab.value}` : "/app/evaluator/assignments"}
               className={`text-[12px] font-mono uppercase tracking-widest px-3 py-1.5 border transition-colors ${
@@ -98,7 +98,7 @@ export default async function EvaluatorAssignmentsPage({
               }`}
             >
               {tab.label}
-            </a>
+            </Link>
           ))}
         </div>
       </div>
@@ -152,6 +152,11 @@ export default async function EvaluatorAssignmentsPage({
                       <span className={`text-[11px] font-mono font-bold uppercase tracking-widest px-1.5 py-0.5 ${STATUS_COLOR[a.status] ?? "text-cs-400 bg-cs-100"}`}>
                         {dict.status[a.status as keyof typeof dict.status] ?? a.status.replace(/_/g, " ")}
                       </span>
+                      {a.acceptance_status === "pending" && (
+                        <div className="text-[10px] font-mono text-sb-text uppercase tracking-widest mt-1">
+                          {dict.evalDash.pendingAcceptance}
+                        </div>
+                      )}
                     </div>
 
                     <div className="text-[12px] font-mono text-cs-400">{fmt(a.updated_at)}</div>

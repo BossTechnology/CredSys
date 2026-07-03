@@ -53,13 +53,28 @@ export default async function StartupDashboardPage() {
   const status   = request?.status as AccreditationStatus | undefined;
   const terminal = status ? TERMINAL.includes(status) : false;
 
-  // Pending sponsorship offers
-  const { data: sponsorshipOffers } = await service
-    .from("accreditation_sponsorships")
-    .select("id, sponsor_type, sponsor_investor_id, sponsor_accelerator_id, startup_name_input, notes, created_at, investors(org_name), accelerators(org_name)")
-    .or(`startup_email_input.eq.${startup?.email ?? ""},startup_id.eq.${profile.entity_id}`)
-    .eq("status", "pending_startup_acceptance")
-    .order("created_at", { ascending: false });
+  // Pending sponsorship offers — matched by startup_id, or by email for
+  // offers made before the sponsor knew the startup_id. Queried separately
+  // (rather than a single interpolated .or() filter) so an email containing
+  // PostgREST-reserved characters can't break or bypass the filter.
+  const sponsorshipCols = "id, sponsor_type, sponsor_investor_id, sponsor_accelerator_id, startup_name_input, notes, created_at, investors(org_name), accelerators(org_name)";
+
+  const [{ data: offersById }, { data: offersByEmail }] = await Promise.all([
+    service
+      .from("accreditation_sponsorships")
+      .select(sponsorshipCols)
+      .eq("startup_id", profile.entity_id)
+      .eq("status", "pending_startup_acceptance"),
+    service
+      .from("accreditation_sponsorships")
+      .select(sponsorshipCols)
+      .eq("startup_email_input", startup?.email ?? "")
+      .eq("status", "pending_startup_acceptance"),
+  ]);
+
+  const sponsorshipOffers = Array.from(
+    new Map([...(offersById ?? []), ...(offersByEmail ?? [])].map((o) => [o.id, o])).values()
+  ).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
   // Credential page if accredited
   let credCode: string | null = null;

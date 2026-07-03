@@ -95,9 +95,9 @@ async function submitScore(formData: FormData) {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function fmt(iso: string | null | undefined) {
+function fmt(iso: string | null | undefined, locale = "en") {
   if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" });
+  return new Date(iso).toLocaleDateString(locale, { month: "short", day: "numeric", year: "numeric" });
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
@@ -108,7 +108,7 @@ export default async function EvaluatorScoringPage() {
   if (!user) redirect("/en/login");
 
   const service = createServiceClient();
-  const { dict } = await getAppDictionary();
+  const { locale, dict } = await getAppDictionary();
   const t = dict.evalScoring;
 
   const { data: profile } = await service
@@ -209,7 +209,7 @@ export default async function EvaluatorScoringPage() {
                     {startup?.org_name ?? "Unknown Startup"}
                   </div>
                   <div className="text-[12px] font-mono text-cs-400">
-                    {comp?.name ?? "—"} · {t.entered} {fmt(entry.entered_at)}
+                    {comp?.name ?? "—"} · {t.entered} {fmt(entry.entered_at, locale)}
                   </div>
                 </div>
 
@@ -286,7 +286,7 @@ export default async function EvaluatorScoringPage() {
                     <div className="text-[13px] font-bold text-sb-text">{scoreRow.score}/100</div>
                   </div>
                   <div className="text-[12px] font-mono text-cs-400">
-                    {fmt(scoreRow.scored_at)}
+                    {fmt(scoreRow.scored_at, locale)}
                   </div>
                 </div>
               </div>

@@ -48,7 +48,7 @@ export default async function EvaluatorLayout({
 
       {evaluator && !evaluator.is_active && (
         <PendingBanner
-          message="Your evaluator account is pending activation. Our team will notify you once you are activated."
+          entityRole="evaluator"
           locale={locale}
         />
       )}

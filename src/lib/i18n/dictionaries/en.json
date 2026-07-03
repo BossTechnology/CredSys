@@ -145,6 +145,7 @@
     "saving": "Saving…"
   },
   "startupAccred": {
+    "selectPH": "Select…",
     "title": "Accreditation Application",
     "applyHeading": "Apply for Accreditation",
     "requestTitle": "Accreditation Request",
@@ -497,7 +498,13 @@
     "declineReasonPH": "Explain why you are declining this assignment…",
     "declineBtn": "Decline",
     "stepBack": "Step Back",
-    "confirmStepBack": "Confirm Step Back?"
+    "confirmStepBack": "Confirm Step Back?",
+    "actionConfirmMeeting": "Confirm Meeting Scheduled",
+    "actionConfirmChass1s": "Confirm CHASS1S Framework Shared",
+    "actionMarkImplementation": "Mark Implementation In Progress",
+    "actionMarkReady": "Mark Ready for Verification",
+    "actionBeginVerification": "Begin Verification",
+    "actionApproveAccredit": "Approve & Accredit"
   },
   "startupComps": {
     "title": "Competitions",
@@ -747,6 +754,39 @@
     "accepted": "Accepted",
     "declined": "Declined",
     "cancelled": "Cancelled"
+  },
+  "credPage": {
+    "signIn": "Sign In",
+    "accreditationLabel": "Boss.Technology Accreditation",
+    "credentialExpiredTitle": "Credential Expired",
+    "verifiedCredentialTitle": "Verified Credential",
+    "credentialActiveMsg": "This credential is authentic and currently active.",
+    "credentialExpiredMsg": "This credential has expired.",
+    "credentialDetails": "Credential Details",
+    "organization": "Organization",
+    "industry": "Industry",
+    "country": "Country",
+    "credentialId": "Credential ID",
+    "issued": "Issued",
+    "expires": "Expires",
+    "doesNotExpire": "Does not expire",
+    "about": "About",
+    "evaluationSummary": "Evaluation Summary",
+    "businessModel": "Business model",
+    "legalCompliance": "Legal compliance",
+    "impact": "Impact",
+    "product": "Product",
+    "scalability": "Scalability",
+    "addressableMarket": "Addressable market",
+    "dataMetrics": "Data / metrics",
+    "differentiation": "Differentiation",
+    "investmentReadiness": "Investment readiness",
+    "stageFit": "Stage fit",
+    "evaluatingOrganization": "Evaluating Organization",
+    "embedBadge": "Embed This Badge",
+    "embedBadgeDesc": "Copy the HTML below to display this credential on your website.",
+    "sponsoredBy": "Sponsored by",
+    "poweredBy": "Powered by"
   },
   "common": {
     "loading": "Loading...",

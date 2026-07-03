@@ -22,16 +22,26 @@ const NEXT_STATUS: Partial<Record<AccreditationStatus, AccreditationStatus>> = {
   verification_in_progress:   "accredited",
 };
 
-const ACTION_LABELS: Partial<Record<AccreditationStatus, string>> = {
-  evaluator_assigned:         "Confirm Meeting Scheduled",
-  meeting_scheduled:          "Confirm CHASS1S Framework Shared",
-  chass1s_shared:             "Mark Implementation In Progress",
-  implementation_in_progress: "Mark Ready for Verification",
-  ready_for_verification:     "Begin Verification",
-  verification_in_progress:   "Approve & Accredit",
-};
-
 const TERMINAL: AccreditationStatus[] = ["accredited", "rejected", "expired"];
+
+function actionLabelFor(
+  status: AccreditationStatus,
+  t: {
+    actionConfirmMeeting: string; actionConfirmChass1s: string;
+    actionMarkImplementation: string; actionMarkReady: string;
+    actionBeginVerification: string; actionApproveAccredit: string;
+  }
+): string | undefined {
+  const labels: Partial<Record<AccreditationStatus, string>> = {
+    evaluator_assigned:         t.actionConfirmMeeting,
+    meeting_scheduled:          t.actionConfirmChass1s,
+    chass1s_shared:             t.actionMarkImplementation,
+    implementation_in_progress: t.actionMarkReady,
+    ready_for_verification:     t.actionBeginVerification,
+    verification_in_progress:   t.actionApproveAccredit,
+  };
+  return labels[status];
+}
 
 // Form action wrapper — strips the { error } return so <form action> is happy
 async function rejectAction(fd: FormData) {
@@ -51,9 +61,9 @@ async function declineAction(fd: FormData) {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function fmt(iso: string | null | undefined) {
+function fmt(iso: string | null | undefined, locale = "en") {
   if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en", {
+  return new Date(iso).toLocaleDateString(locale, {
     month: "long", day: "numeric", year: "numeric",
   });
 }
@@ -72,7 +82,7 @@ export default async function AssignmentDetailPage({
   if (!user) redirect("/en/login");
 
   const service = createServiceClient();
-  const { dict } = await getAppDictionary();
+  const { locale, dict } = await getAppDictionary();
   const t = dict.evalAssignDetail;
 
   // Resolve evaluator entity_id
@@ -96,7 +106,7 @@ export default async function AssignmentDetailPage({
 
   const status     = req.status as AccreditationStatus;
   const nextStatus = NEXT_STATUS[status];
-  const actionLabel= ACTION_LABELS[status];
+  const actionLabel= actionLabelFor(status, t);
   const isTerminal = TERMINAL.includes(status);
   const statusIdx  = ACCREDITATION_STATUS_ORDER.indexOf(status);
   const canRevert  = statusIdx > 1 && statusIdx < ACCREDITATION_STATUS_ORDER.length - 1;
@@ -258,7 +268,7 @@ export default async function AssignmentDetailPage({
             { label: t.country,    value: req.country   },
             { label: t.website,    value: req.website   },
             { label: t.teamSize,   value: req.team_size },
-            { label: t.submitted,  value: fmt(req.created_at) },
+            { label: t.submitted,  value: fmt(req.created_at, locale) },
           ].map((f) => (
             <div key={f.label}>
               <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">

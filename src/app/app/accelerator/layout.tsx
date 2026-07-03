@@ -47,7 +47,7 @@ export default async function AcceleratorLayout({
 
       {accelerator && !accelerator.is_active && (
         <PendingBanner
-          message="Your accelerator account is pending activation. Our team will notify you once you are activated."
+          entityRole="accelerator"
           locale={locale}
         />
       )}

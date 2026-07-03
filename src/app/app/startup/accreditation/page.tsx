@@ -22,7 +22,7 @@ const INDUSTRY_OPTIONS = [
   { value: "saas",       label: "SaaS / B2B"  },
   { value: "cleantech",  label: "Cleantech"   },
   { value: "logistics",  label: "Logistics"   },
-  { value: "other",      label: "Other"       },
+  { value: "other",      label: "Otro / Other" },
 ];
 
 const STAGE_OPTIONS = [
@@ -133,7 +133,7 @@ export default async function StartupAccreditationPage() {
                 <div>
                   <label className="cs-label">{t.industryReq}</label>
                   <select name="industry" defaultValue={startup?.industry ?? ""} className="cs-input" required>
-                    <option value="">Select…</option>
+                    <option value="">{t.selectPH}</option>
                     {INDUSTRY_OPTIONS.map((o) => (
                       <option key={o.value} value={o.value}>{o.label}</option>
                     ))}
@@ -142,7 +142,7 @@ export default async function StartupAccreditationPage() {
                 <div>
                   <label className="cs-label">{t.stage}</label>
                   <select name="stage" defaultValue={startup?.stage ?? ""} className="cs-input">
-                    <option value="">Select…</option>
+                    <option value="">{t.selectPH}</option>
                     {STAGE_OPTIONS.map((o) => (
                       <option key={o.value} value={o.value}>{o.label}</option>
                     ))}

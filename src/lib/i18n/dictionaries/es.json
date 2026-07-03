@@ -145,6 +145,7 @@
     "saving": "Guardando…"
   },
   "startupAccred": {
+    "selectPH": "Seleccionar…",
     "title": "Solicitud de Acreditación",
     "applyHeading": "Solicitar Acreditación",
     "requestTitle": "Solicitud de Acreditación",
@@ -497,7 +498,13 @@
     "declineReasonPH": "Explica por qué declinas esta asignación…",
     "declineBtn": "Declinar",
     "stepBack": "Retroceder",
-    "confirmStepBack": "¿Confirmar retroceso?"
+    "confirmStepBack": "¿Confirmar retroceso?",
+    "actionConfirmMeeting": "Confirmar Reunión Programada",
+    "actionConfirmChass1s": "Confirmar Framework CHASS1S Compartido",
+    "actionMarkImplementation": "Marcar Implementación En Progreso",
+    "actionMarkReady": "Marcar Listo para Verificación",
+    "actionBeginVerification": "Iniciar Verificación",
+    "actionApproveAccredit": "Aprobar y Acreditar"
   },
   "startupComps": {
     "title": "Competencias",
@@ -747,6 +754,39 @@
     "accepted": "Aceptado",
     "declined": "Rechazado",
     "cancelled": "Cancelado"
+  },
+  "credPage": {
+    "signIn": "Iniciar Sesión",
+    "accreditationLabel": "Acreditación Boss.Technology",
+    "credentialExpiredTitle": "Credencial Expirada",
+    "verifiedCredentialTitle": "Credencial Verificada",
+    "credentialActiveMsg": "Esta credencial es auténtica y está actualmente activa.",
+    "credentialExpiredMsg": "Esta credencial ha expirado.",
+    "credentialDetails": "Detalles de la Credencial",
+    "organization": "Organización",
+    "industry": "Industria",
+    "country": "País",
+    "credentialId": "ID de Credencial",
+    "issued": "Emitida",
+    "expires": "Expira",
+    "doesNotExpire": "No expira",
+    "about": "Acerca de",
+    "evaluationSummary": "Resumen de Evaluación",
+    "businessModel": "Modelo de negocio",
+    "legalCompliance": "Cumplimiento legal",
+    "impact": "Impacto",
+    "product": "Producto",
+    "scalability": "Escalabilidad",
+    "addressableMarket": "Mercado direccionable",
+    "dataMetrics": "Datos / métricas",
+    "differentiation": "Diferenciación",
+    "investmentReadiness": "Preparación para inversión",
+    "stageFit": "Ajuste de etapa",
+    "evaluatingOrganization": "Organización Evaluadora",
+    "embedBadge": "Incrustar esta Insignia",
+    "embedBadgeDesc": "Copia el HTML abajo para mostrar esta credencial en tu sitio web.",
+    "sponsoredBy": "Patrocinado por",
+    "poweredBy": "Impulsado por"
   },
   "common": {
     "loading": "Cargando...",

@@ -21,6 +21,9 @@ const NAV_DICT: Record<Locale, {
   investor: string;
   pendingActivation: string;
   menu: string;
+  pendingEvaluatorMsg: string;
+  pendingAcceleratorMsg: string;
+  pendingInvestorMsg: string;
 }> = {
   en: {
     signOut: "Sign Out",
@@ -31,6 +34,9 @@ const NAV_DICT: Record<Locale, {
     investor: "Investor",
     pendingActivation: "Pending Activation",
     menu: "Menu",
+    pendingEvaluatorMsg: "Your evaluator account is pending activation. Our team will notify you once you are activated.",
+    pendingAcceleratorMsg: "Your accelerator account is pending activation. Our team will notify you once you are activated.",
+    pendingInvestorMsg: "Your investor account is pending activation. Our team will notify you once you are activated.",
   },
   es: {
     signOut: "Cerrar Sesión",
@@ -41,6 +47,9 @@ const NAV_DICT: Record<Locale, {
     investor: "Inversionista",
     pendingActivation: "Activación Pendiente",
     menu: "Menú",
+    pendingEvaluatorMsg: "Tu cuenta de evaluador está pendiente de activación. Nuestro equipo te notificará cuando sea activada.",
+    pendingAcceleratorMsg: "Tu cuenta de aceleradora está pendiente de activación. Nuestro equipo te notificará cuando sea activada.",
+    pendingInvestorMsg: "Tu cuenta de inversionista está pendiente de activación. Nuestro equipo te notificará cuando sea activada.",
   },
 };
 
@@ -384,12 +393,14 @@ export function InvestorNav({ onSignOut, locale = "en" }: InvestorNavProps) {
 
 interface PendingBannerProps {
   role?: string;
+  entityRole?: "evaluator" | "accelerator" | "investor";
   message?: string;
   locale?: Locale;
 }
 
 export function PendingBanner({
   role,
+  entityRole,
   message,
   locale = "en",
 }: PendingBannerProps) {
@@ -397,13 +408,18 @@ export function PendingBanner({
   const defaultMsg = locale === "es"
     ? "Tu cuenta está pendiente de activación por un administrador."
     : "Your account is pending activation by an administrator.";
+  const entityMsg = entityRole && {
+    evaluator:   t.pendingEvaluatorMsg,
+    accelerator: t.pendingAcceleratorMsg,
+    investor:    t.pendingInvestorMsg,
+  }[entityRole];
 
   return (
     <div className="bg-sb-light border-b border-sb-default px-4 sm:px-7 py-2 flex flex-wrap items-center gap-x-3 gap-y-1">
       <span className="text-[13px] sm:text-[14px] font-mono text-sb-text uppercase tracking-widest font-semibold">
         {t.pendingActivation}
       </span>
-      <span className="text-[13px] text-sb-text">{message ?? defaultMsg}</span>
+      <span className="text-[13px] text-sb-text">{message ?? entityMsg ?? defaultMsg}</span>
       {role && (
         <span className="text-[14px] font-mono text-sb-dark uppercase tracking-widest sm:ml-auto">
           {role}

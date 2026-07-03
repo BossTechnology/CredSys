@@ -3,6 +3,8 @@ import { notFound }                            from "next/navigation";
 import Link                                    from "next/link";
 import Image                                   from "next/image";
 import { CredBadge }                           from "@/components/ui/CredBadge";
+import { LangDropdown }                        from "@/components/ui/LangDropdown";
+import { getAppDictionary }                    from "@/lib/i18n/loader";
 import type { Metadata }                       from "next";
 import type { BLIPSVerification, ADDISVerification, BLIPSData, ADDISData } from "@/lib/supabase/types";
 
@@ -38,9 +40,9 @@ export async function generateMetadata({
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function fmt(iso: string | null | undefined) {
+function fmt(iso: string | null | undefined, locale = "en") {
   if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en", {
+  return new Date(iso).toLocaleDateString(locale, {
     month: "long", day: "numeric", year: "numeric",
   });
 }
@@ -65,6 +67,9 @@ export default async function CredentialPage({
 }) {
   const { code } = await params;
   const upperCode = code.toUpperCase();
+
+  const { locale, dict } = await getAppDictionary();
+  const t = dict.credPage;
 
   const service = createServiceClient();
 
@@ -124,27 +129,27 @@ export default async function CredentialPage({
   const pageUrl    = `${process.env.NEXT_PUBLIC_PORTAL_URL ?? "https://startupboss.org"}/startup/${upperCode}`;
 
   const blipsItems: { key: keyof BLIPSVerification; label: string }[] = [
-    { key: "b", label: "Business model"    },
-    { key: "l", label: "Legal compliance"  },
-    { key: "i", label: "Impact"            },
-    { key: "p", label: "Product"           },
-    { key: "s", label: "Scalability"       },
+    { key: "b", label: t.businessModel    },
+    { key: "l", label: t.legalCompliance  },
+    { key: "i", label: t.impact           },
+    { key: "p", label: t.product          },
+    { key: "s", label: t.scalability      },
   ];
 
   const addisItems: { key: keyof ADDISVerification; label: string }[] = [
-    { key: "a",  label: "Addressable market"   },
-    { key: "d",  label: "Data / metrics"       },
-    { key: "d2", label: "Differentiation"      },
-    { key: "i",  label: "Investment readiness" },
-    { key: "s",  label: "Stage fit"            },
+    { key: "a",  label: t.addressableMarket   },
+    { key: "d",  label: t.dataMetrics         },
+    { key: "d2", label: t.differentiation     },
+    { key: "i",  label: t.investmentReadiness },
+    { key: "s",  label: t.stageFit            },
   ];
 
   return (
     <div className="min-h-screen bg-cs-50 text-black flex flex-col">
 
-      {/* ── NAV ── logo + startup name + sign in */}
+      {/* ── NAV ── logo + startup name + lang + sign in */}
       <nav className="h-14 bg-white border-b border-cs-200 flex items-center px-7 shrink-0">
-        <Link href="/en" className="shrink-0">
+        <Link href={`/${locale}`} className="shrink-0">
           <Image
             src="/logo.png"
             alt="StartupBoss.org"
@@ -159,12 +164,15 @@ export default async function CredentialPage({
           </span>
         )}
         <div className="flex-1" />
-        <Link
-          href="/en/login"
-          className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-cs-btn transition-colors"
-        >
-          Sign In
-        </Link>
+        <div className="flex items-center gap-4">
+          <LangDropdown />
+          <Link
+            href={`/${locale}/login`}
+            className="text-[12px] font-mono text-cs-400 uppercase tracking-widest hover:text-cs-btn transition-colors"
+          >
+            {t.signIn}
+          </Link>
+        </div>
       </nav>
 
       {/* ── MAIN ── */}
@@ -175,18 +183,18 @@ export default async function CredentialPage({
           <div className="flex items-center gap-3 mb-3">
             <div className="w-1 h-6 bg-sb-default" />
             <span className="text-[13px] font-mono text-sb-text uppercase tracking-widest">
-              Boss.Technology Accreditation
+              {t.accreditationLabel}
             </span>
           </div>
 
           {isExpired ? (
             <h1 className="text-3xl font-bold mb-1 text-red-600 flex items-center gap-3">
-              <span>⚠</span> Credential Expired
+              <span>⚠</span> {t.credentialExpiredTitle}
             </h1>
           ) : (
             <h1 className="text-3xl font-bold mb-1 text-black flex items-center gap-3">
               <Image src="/icon.png" alt="Boss.Technology" width={36} height={36} className="object-contain" />
-              Verified Credential
+              {t.verifiedCredentialTitle}
             </h1>
           )}
         </div>
@@ -205,11 +213,7 @@ export default async function CredentialPage({
             startupName={startup?.org_name ?? upperCode}
             uniqueCode={upperCode}
             accreditedAt={credPage.accredited_at}
-            statusText={
-              isExpired
-                ? "This credential has expired."
-                : "This credential is authentic and currently active."
-            }
+            statusText={isExpired ? t.credentialExpiredMsg : t.credentialActiveMsg}
           />
         </div>
 
@@ -217,18 +221,18 @@ export default async function CredentialPage({
         <div className="bg-white border border-cs-200 mb-6">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
             <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-              Credential Details
+              {t.credentialDetails}
             </span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5 p-6">
             {[
-              { label: "Organization",  value: startup?.org_name,  mono: false },
-              { label: "Industry",      value: startup?.industry,  mono: false },
-              { label: "Country",       value: startup?.country,   mono: false },
-              { label: "Credential ID", value: upperCode,          mono: true  },
-              { label: "Issued",        value: fmt(credPage.accredited_at), mono: false },
-              { label: "Expires",
-                value: credPage.expires_at ? fmt(credPage.expires_at) : "Does not expire",
+              { label: t.organization,  value: startup?.org_name,  mono: false },
+              { label: t.industry,      value: startup?.industry,  mono: false },
+              { label: t.country,       value: startup?.country,   mono: false },
+              { label: t.credentialId,  value: upperCode,          mono: true  },
+              { label: t.issued,        value: fmt(credPage.accredited_at, locale), mono: false },
+              { label: t.expires,
+                value: credPage.expires_at ? fmt(credPage.expires_at, locale) : t.doesNotExpire,
                 mono: false, alert: isExpired },
             ].map((f) => (
               <div key={f.label}>
@@ -249,7 +253,7 @@ export default async function CredentialPage({
           {/* About — includes website */}
           {(startup?.description || startup?.website) && (
             <div className="border-t border-cs-200 px-6 py-4">
-              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-2">About</div>
+              <div className="text-[14px] font-mono text-cs-400 uppercase tracking-widest mb-2">{t.about}</div>
               {startup?.description && (
                 <p className="text-cs-600 text-[13px] leading-relaxed mb-2">{startup.description}</p>
               )}
@@ -271,7 +275,7 @@ export default async function CredentialPage({
         <div className="bg-white border border-cs-200 mb-6">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
             <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-              Evaluation Summary
+              {t.evaluationSummary}
             </span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-cs-200">
@@ -376,7 +380,7 @@ export default async function CredentialPage({
           <div className="bg-white border border-cs-200 mb-6">
             <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
               <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-                Evaluating Organization
+                {t.evaluatingOrganization}
               </span>
             </div>
             <div className="p-6">
@@ -406,12 +410,12 @@ export default async function CredentialPage({
         <div className="bg-white border border-cs-200 mb-12">
           <div className="px-5 py-2 border-b border-cs-200 bg-cs-50">
             <span className="text-[12px] font-mono text-cs-400 uppercase tracking-widest">
-              Embed This Badge
+              {t.embedBadge}
             </span>
           </div>
           <div className="p-5">
             <p className="text-[13px] font-mono text-cs-500 mb-3">
-              Copy the HTML below to display this credential on your website.
+              {t.embedBadgeDesc}
             </p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <pre className="bg-cs-50 border border-cs-200 px-4 py-3 text-[12px] font-mono text-cs-600 overflow-x-auto whitespace-pre-wrap break-all select-all">
@@ -429,7 +433,7 @@ export default async function CredentialPage({
         <div className="flex items-center justify-between px-14 py-3.5 border-t border-cs-200 bg-white">
           {/* Sponsored by */}
           <div className="flex items-center gap-3.5">
-            <span className="text-[13px] text-cs-600 whitespace-nowrap">Sponsored by</span>
+            <span className="text-[13px] text-cs-600 whitespace-nowrap">{t.sponsoredBy}</span>
             <div className="w-10 h-px bg-cs-600" />
             <a href="https://boss.technology" target="_blank" rel="noopener noreferrer">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -442,7 +446,7 @@ export default async function CredentialPage({
           </div>
           {/* Powered by */}
           <div className="flex items-center gap-3.5">
-            <span className="text-[13px] text-cs-600 whitespace-nowrap">Powered by</span>
+            <span className="text-[13px] text-cs-600 whitespace-nowrap">{t.poweredBy}</span>
             <div className="w-10 h-px bg-cs-600" />
             <a href="https://newrelic.com/solutions/industry/startups" target="_blank" rel="noopener noreferrer">
               {/* eslint-disable-next-line @next/next/no-img-element */}
