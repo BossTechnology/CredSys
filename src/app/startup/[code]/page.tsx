@@ -4,7 +4,7 @@ import Link                                    from "next/link";
 import Image                                   from "next/image";
 import { CredBadge }                           from "@/components/ui/CredBadge";
 import type { Metadata }                       from "next";
-import type { BLIPSVerification, ADDISVerification } from "@/lib/supabase/types";
+import type { BLIPSVerification, ADDISVerification, BLIPSData, ADDISData } from "@/lib/supabase/types";
 
 // ─── Metadata ─────────────────────────────────────────────────────────────────
 
@@ -50,6 +50,12 @@ function countVerified(obj: BLIPSVerification | ADDISVerification | null | undef
   return Object.values(obj).filter(Boolean).length;
 }
 
+/** Flatten chassis-style category data into a single verified/total count. */
+function countRichVerified(data: BLIPSData | ADDISData | null | undefined): { verified: number; total: number } {
+  const items = (data ?? []).flatMap((cat) => cat.items ?? []);
+  return { verified: items.filter((i) => i.verified).length, total: items.length };
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function CredentialPage({
@@ -73,6 +79,8 @@ export default async function CredentialPage({
       accreditation_requests (
         blips_verification,
         addis_verification,
+        blips_data,
+        addis_data,
         evaluators ( org_name, website, description, country, org_type )
       )
     `)
@@ -90,6 +98,8 @@ export default async function CredentialPage({
   const req = credPage.accreditation_requests as unknown as {
     blips_verification: BLIPSVerification | null;
     addis_verification: ADDISVerification | null;
+    blips_data: BLIPSData | null;
+    addis_data: ADDISData | null;
     evaluators: {
       org_name: string; website: string | null;
       description: string | null; country: string | null; org_type: string | null;
@@ -98,8 +108,18 @@ export default async function CredentialPage({
 
   const evaluator  = req?.evaluators ?? null;
   const isExpired  = !!credPage.expires_at && new Date(credPage.expires_at) < new Date();
-  const blipsCount = countVerified(req?.blips_verification ?? null);
-  const addisCount = countVerified(req?.addis_verification ?? null);
+
+  // Prefer the rich chassis-style data (current verification panel) when
+  // present; fall back to the legacy 5-flag checklist for older records.
+  const blipsRich = countRichVerified(req?.blips_data);
+  const addisRich = countRichVerified(req?.addis_data);
+  const useBlipsRich = blipsRich.total > 0;
+  const useAddisRich = addisRich.total > 0;
+
+  const blipsCount = useBlipsRich ? blipsRich.verified : countVerified(req?.blips_verification ?? null);
+  const addisCount = useAddisRich ? addisRich.verified : countVerified(req?.addis_verification ?? null);
+  const blipsTotal = useBlipsRich ? blipsRich.total : 5;
+  const addisTotal = useAddisRich ? addisRich.total : 5;
   const badgeUrl   = `${process.env.NEXT_PUBLIC_PORTAL_URL ?? "https://startupboss.org"}/api/badge/${upperCode}`;
   const pageUrl    = `${process.env.NEXT_PUBLIC_PORTAL_URL ?? "https://startupboss.org"}/startup/${upperCode}`;
 
@@ -259,50 +279,94 @@ export default async function CredentialPage({
             <div className="px-6 py-5">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-[13px] font-mono font-bold uppercase tracking-widest">BLIPS</span>
-                <span className={`text-[12px] font-mono font-bold ${blipsCount === 5 ? "text-sb-text" : "text-cs-400"}`}>
-                  {blipsCount}/5
+                <span className={`text-[12px] font-mono font-bold ${blipsCount === blipsTotal && blipsTotal > 0 ? "text-sb-text" : "text-cs-400"}`}>
+                  {blipsCount}/{blipsTotal}
                 </span>
               </div>
-              <ul className="flex flex-col gap-1.5">
-                {blipsItems.map(({ key, label }) => {
-                  const checked = !!req?.blips_verification?.[key];
-                  return (
-                    <li key={key} className="flex items-center gap-2 text-[13px] font-mono">
-                      <span className={`w-3 h-3 shrink-0 flex items-center justify-center text-[14px] ${
-                        checked ? "bg-sb-default text-black font-bold" : "bg-cs-100 text-cs-400"
-                      }`}>
-                        {checked ? "✓" : "○"}
-                      </span>
-                      <span className={checked ? "text-cs-800" : "text-cs-400"}>{label}</span>
-                    </li>
-                  );
-                })}
-              </ul>
+              {useBlipsRich ? (
+                <div className="flex flex-col gap-3">
+                  {(req?.blips_data ?? []).map((cat) => (
+                    <div key={cat.name}>
+                      <div className="text-[11px] font-mono text-cs-400 uppercase tracking-widest mb-1">{cat.name}</div>
+                      <ul className="flex flex-col gap-1.5">
+                        {cat.items.map((item, idx) => (
+                          <li key={idx} className="flex items-center gap-2 text-[13px] font-mono">
+                            <span className={`w-3 h-3 shrink-0 flex items-center justify-center text-[14px] ${
+                              item.verified ? "bg-sb-default text-black font-bold" : "bg-cs-100 text-cs-400"
+                            }`}>
+                              {item.verified ? "✓" : "○"}
+                            </span>
+                            <span className={item.verified ? "text-cs-800" : "text-cs-400"}>{item.item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <ul className="flex flex-col gap-1.5">
+                  {blipsItems.map(({ key, label }) => {
+                    const checked = !!req?.blips_verification?.[key];
+                    return (
+                      <li key={key} className="flex items-center gap-2 text-[13px] font-mono">
+                        <span className={`w-3 h-3 shrink-0 flex items-center justify-center text-[14px] ${
+                          checked ? "bg-sb-default text-black font-bold" : "bg-cs-100 text-cs-400"
+                        }`}>
+                          {checked ? "✓" : "○"}
+                        </span>
+                        <span className={checked ? "text-cs-800" : "text-cs-400"}>{label}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
             </div>
 
             {/* ADDIS */}
             <div className="px-6 py-5">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-[13px] font-mono font-bold uppercase tracking-widest">ADDIS</span>
-                <span className={`text-[12px] font-mono font-bold ${addisCount === 5 ? "text-sb-text" : "text-cs-400"}`}>
-                  {addisCount}/5
+                <span className={`text-[12px] font-mono font-bold ${addisCount === addisTotal && addisTotal > 0 ? "text-sb-text" : "text-cs-400"}`}>
+                  {addisCount}/{addisTotal}
                 </span>
               </div>
-              <ul className="flex flex-col gap-1.5">
-                {addisItems.map(({ key, label }) => {
-                  const checked = !!req?.addis_verification?.[key];
-                  return (
-                    <li key={key} className="flex items-center gap-2 text-[13px] font-mono">
-                      <span className={`w-3 h-3 shrink-0 flex items-center justify-center text-[14px] ${
-                        checked ? "bg-sb-default text-black font-bold" : "bg-cs-100 text-cs-400"
-                      }`}>
-                        {checked ? "✓" : "○"}
-                      </span>
-                      <span className={checked ? "text-cs-800" : "text-cs-400"}>{label}</span>
-                    </li>
-                  );
-                })}
-              </ul>
+              {useAddisRich ? (
+                <div className="flex flex-col gap-3">
+                  {(req?.addis_data ?? []).map((cat) => (
+                    <div key={cat.name}>
+                      <div className="text-[11px] font-mono text-cs-400 uppercase tracking-widest mb-1">{cat.name}</div>
+                      <ul className="flex flex-col gap-1.5">
+                        {cat.items.map((item, idx) => (
+                          <li key={idx} className="flex items-center gap-2 text-[13px] font-mono">
+                            <span className={`w-3 h-3 shrink-0 flex items-center justify-center text-[14px] ${
+                              item.verified ? "bg-sb-default text-black font-bold" : "bg-cs-100 text-cs-400"
+                            }`}>
+                              {item.verified ? "✓" : "○"}
+                            </span>
+                            <span className={item.verified ? "text-cs-800" : "text-cs-400"}>{item.item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <ul className="flex flex-col gap-1.5">
+                  {addisItems.map(({ key, label }) => {
+                    const checked = !!req?.addis_verification?.[key];
+                    return (
+                      <li key={key} className="flex items-center gap-2 text-[13px] font-mono">
+                        <span className={`w-3 h-3 shrink-0 flex items-center justify-center text-[14px] ${
+                          checked ? "bg-sb-default text-black font-bold" : "bg-cs-100 text-cs-400"
+                        }`}>
+                          {checked ? "✓" : "○"}
+                        </span>
+                        <span className={checked ? "text-cs-800" : "text-cs-400"}>{label}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
             </div>
           </div>
         </div>

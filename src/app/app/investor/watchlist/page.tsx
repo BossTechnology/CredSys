@@ -4,6 +4,7 @@ import { redirect }            from "next/navigation";
 import { revalidatePath }      from "next/cache";
 import Link                    from "next/link";
 import { getAppDictionary }    from "@/lib/i18n/loader";
+import { WatchlistNotifyForm } from "@/components/investor/WatchlistNotifyForm";
 
 // ─── Server Actions ───────────────────────────────────────────────────────────
 
@@ -159,6 +160,17 @@ export default async function InvestorWatchlistPage({
   // Collect watched startup IDs to exclude from search
   const watchedIds = new Set((watchlistEntries ?? []).map((e) => e.startup_id));
 
+  // Resolve credential unique_codes for accredited startups (public page is
+  // keyed by unique_code, not startup_id).
+  const { data: credPages } = watchedIds.size > 0
+    ? await service
+        .from("cred_pages")
+        .select("startup_id, unique_code")
+        .in("startup_id", Array.from(watchedIds))
+        .eq("is_active", true)
+    : { data: [] as { startup_id: string; unique_code: string }[] };
+  const credCodeMap = new Map((credPages ?? []).map((c) => [c.startup_id, c.unique_code]));
+
   // Search startups
   let searchResults: Array<{ id: string; org_name: string; industry: string | null; country: string | null }> = [];
   if (q?.trim()) {
@@ -266,13 +278,14 @@ export default async function InvestorWatchlistPage({
                 const reqs = entry.accreditation_requests as unknown as Array<{ status: string }> | null;
                 const latestStatus = reqs?.[reqs.length - 1]?.status ?? null;
                 const isAccredited = latestStatus === "accredited";
+                const credCode = credCodeMap.get(entry.startup_id);
 
                 return (
                   <div key={entry.id} className="grid min-w-[760px] grid-cols-[1fr_90px_80px_110px_160px_90px] gap-3 px-5 py-3 items-center">
                     <div>
                       <div className="text-[13px] font-semibold">
-                        {isAccredited ? (
-                          <Link href={`/startup/${entry.startup_id}`} className="underline underline-offset-2 hover:opacity-70">
+                        {isAccredited && credCode ? (
+                          <Link href={`/startup/${credCode}`} className="underline underline-offset-2 hover:opacity-70">
                             {startup?.org_name ?? "—"}
                           </Link>
                         ) : (
@@ -289,35 +302,21 @@ export default async function InvestorWatchlistPage({
                       </span>
                     </div>
                     <div className="flex flex-col gap-1">
-                      <form action={updateWatchlistNotifications} className="flex flex-col gap-1">
-                        <input type="hidden" name="entry_id" value={entry.id} />
-                        {[
-                          { key: "notify_on_accredited",         label: t.notifyAccredited,  checked: entry.notify_on_accredited         },
-                          { key: "notify_on_evaluator_assigned", label: t.notifyEvaluator,   checked: entry.notify_on_evaluator_assigned },
-                          { key: "notify_on_status_change",      label: t.notifyStatus,      checked: entry.notify_on_status_change      },
-                        ].map((n) => (
-                          <label key={n.key} className="flex items-center gap-1.5 text-[14px] font-mono text-cs-500">
-                            <input
-                              type="hidden"
-                              name={n.key}
-                              value={n.checked ? "true" : "false"}
-                            />
-                            <input
-                              type="checkbox"
-                              defaultChecked={n.checked}
-                              className="w-3 h-3"
-                              onChange={(e) => {
-                                const hidden = e.target.previousElementSibling as HTMLInputElement;
-                                if (hidden) hidden.value = e.target.checked ? "true" : "false";
-                              }}
-                            />
-                            {n.label}
-                          </label>
-                        ))}
-                        <button type="submit" className="text-[14px] font-mono text-cs-400 hover:text-black uppercase tracking-widest mt-1">
-                          {t.save}
-                        </button>
-                      </form>
+                      <WatchlistNotifyForm
+                        action={updateWatchlistNotifications}
+                        entryId={entry.id}
+                        initial={{
+                          notify_on_accredited:         entry.notify_on_accredited,
+                          notify_on_evaluator_assigned: entry.notify_on_evaluator_assigned,
+                          notify_on_status_change:      entry.notify_on_status_change,
+                        }}
+                        labels={{
+                          accredited: t.notifyAccredited,
+                          evaluator:  t.notifyEvaluator,
+                          status:     t.notifyStatus,
+                          save:       t.save,
+                        }}
+                      />
                     </div>
                     <div>
                       <form action={removeFromWatchlist}>

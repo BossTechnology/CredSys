@@ -80,3 +80,59 @@ export async function submitAccreditationRequest(formData: FormData) {
   revalidatePath("/admin/overview");
   redirect("/app/startup/dashboard");
 }
+
+// ─── Re-apply after rejection/expiration ──────────────────────────────────────
+
+/**
+ * Let a startup re-enter the queue after a rejected or expired request,
+ * reusing the same row (accreditation_requests.startup_id is unique — a
+ * startup never gets a second row, its one request is reused across statuses).
+ */
+export async function reapplyAccreditation(formData: FormData): Promise<{ error?: string }> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "Unauthorized" };
+
+  const service = createServiceClient();
+
+  const { data: profile } = await service
+    .from("user_profiles")
+    .select("entity_id, role")
+    .eq("user_id", user.id)
+    .single();
+
+  if (!profile || profile.role !== "startup") return { error: "Unauthorized" };
+
+  const requestId = formData.get("request_id") as string;
+  if (!requestId) return { error: "Missing request_id" };
+
+  const { data: request } = await service
+    .from("accreditation_requests")
+    .select("id, status")
+    .eq("id", requestId)
+    .eq("startup_id", profile.entity_id)
+    .single();
+
+  if (!request) return { error: "Request not found" };
+  if (request.status !== "rejected" && request.status !== "expired") {
+    return { error: "This request cannot be re-applied" };
+  }
+
+  await service
+    .from("accreditation_requests")
+    .update({
+      status:                   "pending_evaluator_assignment",
+      evaluator_id:             null,
+      acceptance_status:        "pending",
+      rejection_reason:         null,
+      evaluator_decline_reason: null,
+    })
+    .eq("id", requestId);
+
+  revalidatePath("/app/startup/dashboard");
+  revalidatePath("/app/startup/accreditation");
+  revalidatePath("/admin/accreditations");
+  revalidatePath("/admin/overview");
+
+  return {};
+}

@@ -35,7 +35,15 @@ export async function saveVerification(formData: FormData): Promise<{ error?: st
 
   if (!req) return { error: "Assignment not found" };
 
-  // Parse BLIPS checkboxes from form
+  // Legacy 5-flag checkboxes — only present on the old manual-entry form.
+  // The current VerificationPanel submits blips_data/addis_data (rich chassis
+  // format) instead, so don't blindly overwrite these with all-false when
+  // those keys are simply absent from the form.
+  const BLIPS_KEYS = ["blips_b", "blips_l", "blips_i", "blips_p", "blips_s"] as const;
+  const ADDIS_KEYS = ["addis_a", "addis_d", "addis_d2", "addis_i", "addis_s"] as const;
+  const hasLegacyBlips = BLIPS_KEYS.some((k) => formData.has(k));
+  const hasLegacyAddis = ADDIS_KEYS.some((k) => formData.has(k));
+
   const blips: BLIPSVerification = {
     b: formData.get("blips_b") === "on",
     l: formData.get("blips_l") === "on",
@@ -44,7 +52,6 @@ export async function saveVerification(formData: FormData): Promise<{ error?: st
     s: formData.get("blips_s") === "on",
   };
 
-  // Parse ADDIS checkboxes from form
   const addis: ADDISVerification = {
     a:  formData.get("addis_a")  === "on",
     d:  formData.get("addis_d")  === "on",
@@ -68,10 +75,10 @@ export async function saveVerification(formData: FormData): Promise<{ error?: st
   }
 
   const update: Record<string, unknown> = {
-    blips_verification: blips,
-    addis_verification: addis,
-    evaluator_notes:    evaluatorNotes,
+    evaluator_notes: evaluatorNotes,
   };
+  if (hasLegacyBlips) update.blips_verification = blips;
+  if (hasLegacyAddis) update.addis_verification = addis;
   if (blipsData !== undefined) update.blips_data = blipsData;
   if (addisData !== undefined) update.addis_data = addisData;
 

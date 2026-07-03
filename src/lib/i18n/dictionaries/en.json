@@ -111,7 +111,9 @@
     "accredited": "Accredited",
     "credentialId": "Credential ID",
     "notApproved": "Application Not Approved",
-    "notApprovedMsg": "Your application was not approved at this time. Contact support or apply again after addressing the feedback.",
+    "notApprovedMsg": "Your application was not approved at this time. Review the reason below, then re-apply from the full details page.",
+    "expiredTitle": "Credential Expired",
+    "expiredMsg": "Your accreditation has expired. Re-apply from the full details page to start a new evaluation.",
     "sponsorshipOffers": "Sponsorship Offers",
     "wantsToSponsor": "wants to sponsor your accreditation",
     "accept": "Accept",
@@ -190,7 +192,13 @@
     "stageLabel": "Stage",
     "countryLabel": "Country",
     "teamSizeLabel": "Team Size",
-    "descriptionLabel": "Description"
+    "descriptionLabel": "Description",
+    "rejectedTitle": "Application Not Approved",
+    "noReasonGiven": "No specific reason was provided.",
+    "expiredTitle": "Credential Expired",
+    "expiredMsg": "Your accreditation has expired. Re-apply to start a new evaluation.",
+    "reapplyBtn": "Re-apply",
+    "confirmReapply": "Confirm re-apply?"
   },
   "evalDash": {
     "title": "Dashboard",

@@ -44,7 +44,7 @@ export default async function StartupDashboardPage() {
   // Most recent accreditation request
   const { data: request } = await service
     .from("accreditation_requests")
-    .select("id, status, startup_name, created_at, updated_at, evaluator_notes, unique_code, accredited_at")
+    .select("id, status, startup_name, created_at, updated_at, evaluator_notes, rejection_reason, unique_code, accredited_at")
     .eq("startup_id", profile.entity_id)
     .order("created_at", { ascending: false })
     .limit(1)
@@ -152,8 +152,25 @@ export default async function StartupDashboardPage() {
                       <div className="text-[14px] font-mono text-red-600 uppercase tracking-widest mb-0.5">
                         {t.notApproved}
                       </div>
-                      <p className="text-[13px] text-cs-600">
+                      <p className="text-[13px] text-cs-600 mb-2">
                         {t.notApprovedMsg}
+                      </p>
+                      {request.rejection_reason && (
+                        <p className="text-[13px] text-cs-700 leading-relaxed border-t border-red-200 pt-2">
+                          {request.rejection_reason}
+                        </p>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Expired state */}
+                  {status === "expired" && (
+                    <div className="border border-cs-300 bg-cs-50 px-4 py-3 mb-4">
+                      <div className="text-[14px] font-mono text-cs-500 uppercase tracking-widest mb-0.5">
+                        {t.expiredTitle}
+                      </div>
+                      <p className="text-[13px] text-cs-600">
+                        {t.expiredMsg}
                       </p>
                     </div>
                   )}

@@ -70,6 +70,18 @@ export default async function InvestorDashboardPage() {
       .limit(5),
   ]);
 
+  // Resolve credential unique_codes for accredited startups (public page is
+  // keyed by unique_code, not startup_id).
+  const watchedStartupIds = (watchlistEntries ?? []).map((e) => e.startup_id);
+  const { data: credPages } = watchedStartupIds.length > 0
+    ? await service
+        .from("cred_pages")
+        .select("startup_id, unique_code")
+        .in("startup_id", watchedStartupIds)
+        .eq("is_active", true)
+    : { data: [] as { startup_id: string; unique_code: string }[] };
+  const credCodeMap = new Map((credPages ?? []).map((c) => [c.startup_id, c.unique_code]));
+
   // Compute stats
   const totalWatching = watchlistEntries?.length ?? 0;
   const accreditedCount = watchlistEntries?.filter((w) => {
@@ -158,12 +170,13 @@ export default async function InvestorDashboardPage() {
                     const reqs = entry.accreditation_requests as unknown as Array<{ status: string }> | null;
                     const latestStatus = reqs?.[reqs.length - 1]?.status ?? null;
                     const isAccredited = latestStatus === "accredited";
+                    const credCode = credCodeMap.get(entry.startup_id);
 
                     return (
                       <div key={entry.id} className="grid min-w-[560px] grid-cols-[1fr_100px_80px_100px_80px] gap-3 px-5 py-3 items-center">
                         <div className="text-[13px] font-semibold">
-                          {isAccredited ? (
-                            <Link href={`/startup/${entry.startup_id}`} className="underline underline-offset-2 hover:opacity-70">
+                          {isAccredited && credCode ? (
+                            <Link href={`/startup/${credCode}`} className="underline underline-offset-2 hover:opacity-70">
                               {startup?.org_name ?? "—"}
                             </Link>
                           ) : (

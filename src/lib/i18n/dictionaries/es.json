@@ -111,7 +111,9 @@
     "accredited": "Acreditado",
     "credentialId": "ID de Credencial",
     "notApproved": "Solicitud No Aprobada",
-    "notApprovedMsg": "Tu solicitud no fue aprobada en este momento. Contacta a soporte o aplica de nuevo después de resolver las observaciones.",
+    "notApprovedMsg": "Tu solicitud no fue aprobada en este momento. Revisa el motivo abajo y vuelve a aplicar desde la página de detalles completos.",
+    "expiredTitle": "Credencial Expirada",
+    "expiredMsg": "Tu acreditación ha expirado. Vuelve a aplicar desde la página de detalles completos para iniciar una nueva evaluación.",
     "sponsorshipOffers": "Ofertas de Patrocinio",
     "wantsToSponsor": "quiere patrocinar tu acreditación",
     "accept": "Aceptar",
@@ -190,7 +192,13 @@
     "stageLabel": "Etapa",
     "countryLabel": "País",
     "teamSizeLabel": "Tamaño del Equipo",
-    "descriptionLabel": "Descripción"
+    "descriptionLabel": "Descripción",
+    "rejectedTitle": "Solicitud No Aprobada",
+    "noReasonGiven": "No se dio un motivo específico.",
+    "expiredTitle": "Credencial Expirada",
+    "expiredMsg": "Tu acreditación ha expirado. Vuelve a aplicar para iniciar una nueva evaluación.",
+    "reapplyBtn": "Volver a Aplicar",
+    "confirmReapply": "¿Confirmar reaplicación?"
   },
   "evalDash": {
     "title": "Panel",

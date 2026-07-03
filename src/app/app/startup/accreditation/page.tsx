@@ -5,9 +5,10 @@ import Link                      from "next/link";
 import { Badge }                 from "@/components/ui/Badge";
 import { WorkflowStatusBar }     from "@/components/ui/WorkflowStatusBar";
 import { VerificationPanel }     from "@/components/accreditation/VerificationPanel";
-import { submitAccreditationRequest } from "@/app/actions/apply";
+import { submitAccreditationRequest, reapplyAccreditation } from "@/app/actions/apply";
 import { getAppDictionary }      from "@/lib/i18n/loader";
 import { SubmitButton }          from "@/components/admin/SubmitButton";
+import { ConfirmActionButton }   from "@/components/admin/ConfirmActionButton";
 import type { AccreditationStatus, BLIPSData, ADDISData } from "@/lib/supabase/types";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -33,6 +34,12 @@ const STAGE_OPTIONS = [
 ];
 
 const TERMINAL: AccreditationStatus[] = ["accredited", "rejected", "expired"];
+
+// Form action wrapper — strips the { error } return so <form action> is happy
+async function reapplyAction(fd: FormData) {
+  "use server";
+  await reapplyAccreditation(fd);
+}
 
 function fmt(iso: string | null | undefined, locale = "en") {
   if (!iso) return "—";
@@ -277,6 +284,42 @@ export default async function StartupAccreditationPage() {
           <Link href={`/startup/${credCode}`} target="_blank" className="btn-accent btn-sm">
             {t.viewPublicCredential} →
           </Link>
+        </div>
+      )}
+
+      {/* Rejected banner — reason + re-apply */}
+      {status === "rejected" && (
+        <div className="border border-red-200 bg-red-50 px-5 py-4 mb-6">
+          <div className="text-[12px] font-mono text-red-600 uppercase tracking-widest mb-1">
+            {t.rejectedTitle}
+          </div>
+          {request.rejection_reason ? (
+            <p className="text-[13px] text-cs-700 leading-relaxed mb-3">{request.rejection_reason}</p>
+          ) : (
+            <p className="text-[13px] text-cs-500 leading-relaxed mb-3">{t.noReasonGiven}</p>
+          )}
+          <ConfirmActionButton
+            action={reapplyAction}
+            fields={{ request_id: request.id }}
+            label={t.reapplyBtn}
+            confirmLabel={t.confirmReapply}
+          />
+        </div>
+      )}
+
+      {/* Expired banner — reason + re-apply */}
+      {status === "expired" && (
+        <div className="border border-cs-300 bg-cs-50 px-5 py-4 mb-6">
+          <div className="text-[12px] font-mono text-cs-500 uppercase tracking-widest mb-1">
+            {t.expiredTitle}
+          </div>
+          <p className="text-[13px] text-cs-700 leading-relaxed mb-3">{t.expiredMsg}</p>
+          <ConfirmActionButton
+            action={reapplyAction}
+            fields={{ request_id: request.id }}
+            label={t.reapplyBtn}
+            confirmLabel={t.confirmReapply}
+          />
         </div>
       )}
 
