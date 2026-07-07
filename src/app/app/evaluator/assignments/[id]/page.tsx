@@ -15,7 +15,8 @@ import { ACCREDITATION_STATUS_ORDER, type AccreditationStatus, type BLIPSData, t
 
 const NEXT_STATUS: Partial<Record<AccreditationStatus, AccreditationStatus>> = {
   evaluator_assigned:         "meeting_scheduled",
-  meeting_scheduled:          "chass1s_shared",
+  meeting_scheduled:          "interview_completed",
+  interview_completed:        "chass1s_shared",
   chass1s_shared:             "implementation_in_progress",
   implementation_in_progress: "ready_for_verification",
   ready_for_verification:     "verification_in_progress",
@@ -27,14 +28,15 @@ const TERMINAL: AccreditationStatus[] = ["accredited", "rejected", "expired"];
 function actionLabelFor(
   status: AccreditationStatus,
   t: {
-    actionConfirmMeeting: string; actionConfirmChass1s: string;
+    actionConfirmMeeting: string; actionConfirmInterviewCompleted: string; actionConfirmChass1s: string;
     actionMarkImplementation: string; actionMarkReady: string;
     actionBeginVerification: string; actionApproveAccredit: string;
   }
 ): string | undefined {
   const labels: Partial<Record<AccreditationStatus, string>> = {
     evaluator_assigned:         t.actionConfirmMeeting,
-    meeting_scheduled:          t.actionConfirmChass1s,
+    meeting_scheduled:          t.actionConfirmInterviewCompleted,
+    interview_completed:        t.actionConfirmChass1s,
     chass1s_shared:             t.actionMarkImplementation,
     implementation_in_progress: t.actionMarkReady,
     ready_for_verification:     t.actionBeginVerification,

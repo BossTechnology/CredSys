@@ -6,6 +6,7 @@ export type AccreditationStatus =
   | "pending_evaluator_assignment"
   | "evaluator_assigned"
   | "meeting_scheduled"
+  | "interview_completed"
   | "chass1s_shared"
   | "implementation_in_progress"
   | "ready_for_verification"
@@ -21,6 +22,7 @@ export const ACCREDITATION_STATUS_LABELS: Record<AccreditationStatus, string> = 
   pending_evaluator_assignment: "Pending Assignment",
   evaluator_assigned:           "Evaluator Assigned",
   meeting_scheduled:            "Meeting Scheduled",
+  interview_completed:          "Interview Completed",
   chass1s_shared:               "CHASS1S Shared",
   implementation_in_progress:   "Implementation",
   ready_for_verification:       "Ready for Verification",
@@ -34,6 +36,7 @@ export const ACCREDITATION_STATUS_ORDER: AccreditationStatus[] = [
   "pending_evaluator_assignment",
   "evaluator_assigned",
   "meeting_scheduled",
+  "interview_completed",
   "chass1s_shared",
   "implementation_in_progress",
   "ready_for_verification",
