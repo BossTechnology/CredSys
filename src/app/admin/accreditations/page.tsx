@@ -11,6 +11,7 @@ const STATUS_COLOR: Record<string, string> = {
   pending_evaluator_assignment: "text-amber-600",
   evaluator_assigned:           "text-blue-600",
   meeting_scheduled:            "text-blue-600",
+  interview_completed:          "text-blue-600",
   chass1s_shared:               "text-blue-600",
   implementation_in_progress:   "text-blue-600",
   ready_for_verification:       "text-violet-600",
@@ -54,7 +55,7 @@ export default async function AdminAccreditationsPage({
     query = query.eq("status", "pending_evaluator_assignment") as typeof query;
   } else if (filter === "active") {
     query = query.in("status", [
-      "evaluator_assigned", "meeting_scheduled", "chass1s_shared",
+      "evaluator_assigned", "meeting_scheduled", "interview_completed", "chass1s_shared",
       "implementation_in_progress", "ready_for_verification", "verification_in_progress",
     ]) as typeof query;
   } else if (filter === "accredited") {

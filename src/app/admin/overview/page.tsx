@@ -31,7 +31,7 @@ export default async function AdminOverviewPage() {
     notTestReq(service.from("accreditation_requests").select("startup_id", { count: "exact", head: true }).eq("status", "accredited")),
     notTestReq(service.from("accreditation_requests").select("startup_id", { count: "exact", head: true }).eq("status", "pending_evaluator_assignment")),
     notTestReq(service.from("accreditation_requests").select("startup_id", { count: "exact", head: true })
-      .in("status", ["evaluator_assigned", "meeting_scheduled", "chass1s_shared",
+      .in("status", ["evaluator_assigned", "meeting_scheduled", "interview_completed", "chass1s_shared",
                      "implementation_in_progress", "ready_for_verification", "verification_in_progress"])),
     service.from("competitions").select("*", { count: "exact", head: true }).eq("status", "active").eq("is_test", false),
     service.from("startups").select("*", { count: "exact", head: true }).eq("is_test", false),
@@ -56,6 +56,7 @@ export default async function AdminOverviewPage() {
     pending_evaluator_assignment: "text-yellow-600",
     evaluator_assigned:           "text-blue-500",
     meeting_scheduled:            "text-blue-500",
+    interview_completed:          "text-blue-500",
     chass1s_shared:               "text-blue-500",
     implementation_in_progress:   "text-blue-500",
     ready_for_verification:       "text-blue-400",

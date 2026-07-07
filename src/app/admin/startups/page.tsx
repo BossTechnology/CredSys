@@ -17,6 +17,7 @@ const STATUS_COLOR: Record<string, string> = {
   pending_evaluator_assignment: "text-amber-600",
   evaluator_assigned:           "text-blue-600",
   meeting_scheduled:            "text-blue-600",
+  interview_completed:          "text-blue-600",
   chass1s_shared:               "text-blue-600",
   implementation_in_progress:   "text-blue-600",
   ready_for_verification:       "text-violet-600",

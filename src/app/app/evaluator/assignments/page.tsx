@@ -7,6 +7,7 @@ import { getAppDictionary }    from "@/lib/i18n/loader";
 const STATUS_COLOR: Record<string, string> = {
   evaluator_assigned:         "text-blue-600 bg-blue-50",
   meeting_scheduled:          "text-blue-600 bg-blue-50",
+  interview_completed:        "text-blue-600 bg-blue-50",
   chass1s_shared:             "text-blue-600 bg-blue-50",
   implementation_in_progress: "text-blue-600 bg-blue-50",
   ready_for_verification:     "text-purple-600 bg-purple-50",
