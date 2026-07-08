@@ -491,6 +491,7 @@
     "phone": "Teléfono",
     "address": "Dirección",
     "contactEmail": "Email de contacto",
+    "whatsapp": "WhatsApp",
     "acceptTitle": "Aceptar o Declinar Asignación",
     "acceptDesc": "Revisa el perfil de la startup abajo. Acepta para iniciar la evaluación, o declina para devolverla al admin.",
     "acceptBtn": "Aceptar Asignación",

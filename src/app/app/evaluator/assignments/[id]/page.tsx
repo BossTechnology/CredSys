@@ -70,6 +70,11 @@ function fmt(iso: string | null | undefined, locale = "en") {
   });
 }
 
+// wa.me deep link — strips everything but digits from the stored number
+function waLink(phone: string) {
+  return `https://wa.me/${phone.replace(/\D/g, "")}`;
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function AssignmentDetailPage({
@@ -96,15 +101,20 @@ export default async function AssignmentDetailPage({
 
   if (!profile?.entity_id) redirect("/en/login");
 
-  // Fetch the request — enforce ownership
+  // Fetch the request — enforce ownership. Embed the startup's current
+  // WhatsApp so the evaluator can reach out directly (not part of the snapshot).
   const { data: req } = await service
     .from("accreditation_requests")
-    .select("*")
+    .select("*, startups(phone_whatsapp)")
     .eq("id", id)
     .eq("evaluator_id", profile.entity_id)
     .single();
 
   if (!req) notFound();
+
+  const whatsapp =
+    (req as unknown as { startups?: { phone_whatsapp?: string | null } | null })
+      .startups?.phone_whatsapp ?? null;
 
   const status     = req.status as AccreditationStatus;
   const nextStatus = NEXT_STATUS[status];
@@ -264,6 +274,21 @@ export default async function AssignmentDetailPage({
               {req.startup_email}
             </a>
           </div>
+          {whatsapp && (
+            <div className="col-span-2">
+              <div className="text-[12px] font-mono text-cs-400 uppercase tracking-widest mb-0.5">
+                {t.whatsapp}
+              </div>
+              <a
+                href={waLink(whatsapp)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[13px] font-semibold cs-link underline-offset-2 break-all"
+              >
+                {whatsapp}
+              </a>
+            </div>
+          )}
           {[
             { label: t.industry,   value: req.industry  },
             { label: t.stage,      value: req.stage     },

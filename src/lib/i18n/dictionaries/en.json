@@ -491,6 +491,7 @@
     "phone": "Phone",
     "address": "Address",
     "contactEmail": "Contact email",
+    "whatsapp": "WhatsApp",
     "acceptTitle": "Accept or Decline Assignment",
     "acceptDesc": "Review the startup profile below. Accept to begin the evaluation, or decline to return it to the admin.",
     "acceptBtn": "Accept Assignment",
